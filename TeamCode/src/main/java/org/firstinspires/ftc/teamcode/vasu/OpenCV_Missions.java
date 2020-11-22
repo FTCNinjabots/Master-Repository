@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.anay.vision.OpenCVVision;
 @Disabled
 @Autonomous(name="Autonomous", group = "Autonomous")
 
-public class Test extends LinearOpMode {
+public class OpenCV_Missions extends LinearOpMode {
     OpenCVVision Test1;
     DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
     DcMotor br = hardwareMap.get(DcMotor.class, "br");
