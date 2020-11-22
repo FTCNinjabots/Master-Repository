@@ -7,13 +7,14 @@ import com.qualcomm.robotcore.hardware.Servo;
 @TeleOp(name = "Servo Test", group = "Servo Test")
 public class servo1 extends LinearOpMode {
 
-    Servo s1 = hardwareMap.get(Servo.class, "s1");
+    public Servo s1 = null;
 
     @Override
     public void runOpMode() {
+        s1 = hardwareMap.get(Servo.class, "s1");
         waitForStart();
         while (opModeIsActive()){
-            s1.setPosition(0.5);
+            s1.setPosition(1.0);
         }
     }
 }
