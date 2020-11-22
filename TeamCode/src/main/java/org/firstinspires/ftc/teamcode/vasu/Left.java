@@ -1,10 +1,11 @@
 package org.firstinspires.ftc.teamcode.vasu;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-
+@Disabled
 @Autonomous(name="L", group="L")
 public class Left  extends LinearOpMode {
 

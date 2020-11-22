@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.vasu;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 
 //first identify what type of code is this, teleop or auto
+@Disabled
 
 @TeleOp
 public class Teleop extends OpMode {
