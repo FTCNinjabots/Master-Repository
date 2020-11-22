@@ -4,8 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp(name = "Servo Test", group = "Servo Test")
-public class servo1 extends LinearOpMode {
+@TeleOp(name = "Servo 0", group = "Servo Test")
+public class servo0 extends LinearOpMode {
 
     Servo s1= null;
 
@@ -15,7 +15,7 @@ public class servo1 extends LinearOpMode {
 
         waitForStart();
         while (opModeIsActive()){
-            s1.setPosition(1.0);
+            s1.setPosition(0.0);
 
 
         }
