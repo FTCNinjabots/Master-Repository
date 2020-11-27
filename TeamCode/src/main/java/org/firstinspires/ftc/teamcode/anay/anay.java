@@ -1,8 +1,8 @@
-package org.firstinspires.ftc.teamcode.adit;
+package org.firstinspires.ftc.teamcode.anay;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 @Disabled
 
-public class Test {
+public class anay {
 }
