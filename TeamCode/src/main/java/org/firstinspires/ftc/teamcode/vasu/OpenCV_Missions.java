@@ -48,6 +48,7 @@ public class        OpenCV_Missions extends LinearOpMode {
 
             sleep(700);
             //sleep stops the robot for a 700 milliseconds and then carry's out the next task
+            //if the robot has not been stopped it will combine all movements at once
 
             bl.setPower(-0.25);
             br.setPower(-0.25);
