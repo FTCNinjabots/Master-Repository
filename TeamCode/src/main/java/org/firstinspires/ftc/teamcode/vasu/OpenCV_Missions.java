@@ -26,15 +26,18 @@ public class OpenCV_Missions extends LinearOpMode {
         Test1.runOpMode();
         if(Test1.position == OpenCVVision.SkystoneDeterminationPipeline.RingPosition.FOUR){
             telemetry.addData("Position: ", "Four Rings");
+            // Code to move to Square A
         }
 
         else if(Test1.position == OpenCVVision.SkystoneDeterminationPipeline.RingPosition.ONE){
             telemetry.addData("Position: ", "One Ring");
             telemetry.update();
+            // Code to move to Square B
         }
 
         else if(Test1.position == OpenCVVision.SkystoneDeterminationPipeline.RingPosition.NONE){
             telemetry.addData("Position: ", "No Rings");
+            // Code to move to Square C
         }
 
     }

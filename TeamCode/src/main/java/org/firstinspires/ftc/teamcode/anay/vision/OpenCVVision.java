@@ -21,10 +21,14 @@
 
 package org.firstinspires.ftc.teamcode.anay.vision;
 
+import android.graphics.Bitmap;
+
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.function.Consumer;
+import org.firstinspires.ftc.robotcore.external.function.Continuation;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -38,47 +42,49 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 import org.openftc.easyopencv.OpenCvPipeline;
 import org.openftc.easyopencv.OpenCvWebcam;
-@Disabled
 
-@TeleOp
+
+@TeleOp(name = "OpenCvVision")
+@Disabled
 public class OpenCVVision extends LinearOpMode {
-    OpenCvCamera phoneCam;
     public SkystoneDeterminationPipeline pipeline;
     public SkystoneDeterminationPipeline.RingPosition position;
+    OpenCvWebcam webcam;
 
     @Override
     public void runOpMode() {
+            int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+            webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "webcam"), cameraMonitorViewId);
 
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        phoneCam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "webcam"), cameraMonitorViewId);
-        pipeline = new SkystoneDeterminationPipeline();
-        phoneCam.setPipeline(pipeline);
+            pipeline = new SkystoneDeterminationPipeline();
 
-        // We set the viewport policy to optimized view so the preview doesn't appear 90 deg
-        // out when the RC activity is in portrait. We do our actual image processing assuming
-        // landscape orientation, though.
-        phoneCam.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
+            webcam.setPipeline(pipeline);
 
-        phoneCam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
-            @Override
-            public void onOpened() {
-                phoneCam.startStreaming(320, 240);
+
+            // We set the viewport policy to optimized view so the preview doesn't appear 90 deg
+            // out when the RC activity is in portrait. We do our actual image processing assuming
+            // landscape orientation, though
+            //webcam.setViewportRenderingPolicy(OpenCvWebcam.ViewportRenderingPolicy.OPTIMIZE_VIEW);
+            webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+                @Override
+                public void onOpened() {
+                    webcam.startStreaming(320, 240);
+                }
+            });
+
+            waitForStart();
+
+
+
+            //This should be commented out
+            while (opModeIsActive()) {
+                telemetry.addData("Analysis", pipeline.getAnalysis());
+                telemetry.addData("Position", SkystoneDeterminationPipeline.position);
+                telemetry.update();
+
+                // Don't burn CPU cycles busy-looping in this sample
+                sleep(50);
             }
-        });
-
-        //waitForStart();
-
-
-
-        //This should be commented out
-        //while (opModeIsActive()) {
-         //   telemetry.addData("Analysis", pipeline.getAnalysis());
-         //   telemetry.addData("Position", SkystoneDeterminationPipeline.position);
-         //   telemetry.update();
-
-            // Don't burn CPU cycles busy-looping in this sample
-          //  sleep(50);
-//        }
 
 
 
