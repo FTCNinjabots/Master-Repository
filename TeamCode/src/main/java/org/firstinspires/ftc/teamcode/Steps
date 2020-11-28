@@ -1,0 +1,17 @@
+How to use Github + Android Studio
+
+To import project:
+Make sure you are logged in to your github account on your Android Studio + you have accepted the collaborator invite
+Then go to the github repository, and click the green download/import button but do not click download as zip, but just copy the link that it shows.
+Go back to android studio, and "important into version control", there you should be able to paste a link and paste the github repository link. It will create a path file on your computer, so make sure to delete any files that have the same path file if it is invalid
+You click clone project and you just imported it successfully
+Export:
+I assume you have made your changes to the SDK file we imported, so first you wanna click VCS -> Commit (make sure all the boxes at the top of the commit screen are selected). Its gonna ask for a commit message, so just type in what you worked on.. This is to kind of save your changes on your own computer.
+I recommend double checking that you are logged in to your own github + made a collaborater on the project
+After that, go to VCS -> Git -> Push and make sure all files are still selected on the right hand portion of the pop-up screen. After you checked, click Push.
+You should see a success message and your done
+Tips:
+Make sure to always update your project by going to VCS -> Update as people will most likely be making changes to the repository so you want to be on the same page as them
+
+Any problems, message me (adit)
+
