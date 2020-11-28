@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.anay.vision.OpenCVVision;
 @Disabled
 @Autonomous(name="Autonomous", group = "Autonomous")
 
-public class OpenCV_Missions extends LinearOpMode {
+public class        OpenCV_Missions extends LinearOpMode {
     OpenCVVision Test1;
     DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
     DcMotor br = hardwareMap.get(DcMotor.class, "br");
@@ -26,18 +26,46 @@ public class OpenCV_Missions extends LinearOpMode {
         Test1.runOpMode();
         if(Test1.position == OpenCVVision.SkystoneDeterminationPipeline.RingPosition.FOUR){
             telemetry.addData("Position: ", "Four Rings");
-            // Code to move to Square A
+
+            //actual mission part is here
+
+            bl.setPower(1);
+            br.setPower(1);
+            fl.setPower(1);
+            fr.setPower(1);
+
+            //add the arm servo part here
         }
 
         else if(Test1.position == OpenCVVision.SkystoneDeterminationPipeline.RingPosition.ONE){
             telemetry.addData("Position: ", "One Ring");
             telemetry.update();
-            // Code to move to Square B
+
+            bl.setPower(1);
+            br.setPower(1);
+            fl.setPower(1);
+            fr.setPower(1);
+
+            sleep(700);
+            //sleep stops the robot for a 700 milliseconds and then carry's out the next task
+
+            bl.setPower(-0.25);
+            br.setPower(-0.25);
+            fl.setPower(0.25);
+            fr.setPower(0.25);
+
+            //arm servo goes here
         }
 
         else if(Test1.position == OpenCVVision.SkystoneDeterminationPipeline.RingPosition.NONE){
             telemetry.addData("Position: ", "No Rings");
-            // Code to move to Square C
+
+            bl.setPower(1);
+            br.setPower(1);
+            fl.setPower(1);
+            fr.setPower(1);
+
+            //arm servo goes here
         }
 
     }
