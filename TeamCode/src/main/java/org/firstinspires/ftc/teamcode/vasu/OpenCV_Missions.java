@@ -29,10 +29,10 @@ public class        OpenCV_Missions extends LinearOpMode {
 
             //actual mission part is here
 
-            bl.setPower(1);
-            br.setPower(1);
-            fl.setPower(1);
-            fr.setPower(1);
+            bl.setPower(4);
+            br.setPower(4);
+            fl.setPower(4);
+            fr.setPower(4);
 
             //add the arm servo part here
         }
@@ -41,19 +41,19 @@ public class        OpenCV_Missions extends LinearOpMode {
             telemetry.addData("Position: ", "One Ring");
             telemetry.update();
 
-            bl.setPower(1);
-            br.setPower(1);
-            fl.setPower(1);
-            fr.setPower(1);
+            bl.setPower(4);
+            br.setPower(4);
+            fl.setPower(4);
+            fr.setPower(4);
 
             sleep(700);
             //sleep stops the robot for a 700 milliseconds and then carry's out the next task
             //if the robot has not been stopped it will combine all movements at once
 
-            bl.setPower(-0.25);
-            br.setPower(-0.25);
-            fl.setPower(0.25);
-            fr.setPower(0.25);
+            bl.setPower(-1);
+            br.setPower(-1);
+            fl.setPower(1);
+            fr.setPower(1);
 
             //arm servo goes here
         }
@@ -61,10 +61,12 @@ public class        OpenCV_Missions extends LinearOpMode {
         else if(Test1.position == OpenCVVision.SkystoneDeterminationPipeline.RingPosition.NONE){
             telemetry.addData("Position: ", "No Rings");
 
-            bl.setPower(1);
-            br.setPower(1);
-            fl.setPower(1);
-            fr.setPower(1);
+            bl.setPower(6);
+            br.setPower(6);
+            fl.setPower(6);
+            fr.setPower(6);
+
+            sleep(700);
 
             //arm servo goes here
         }
