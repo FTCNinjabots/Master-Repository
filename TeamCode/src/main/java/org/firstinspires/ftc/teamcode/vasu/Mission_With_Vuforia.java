@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.anay.vision.OpenCVVision;
 @Disabled
 @Autonomous(name="Autonomous", group = "Autonomous")
 
-public class        OpenCV_Missions extends LinearOpMode {
+public class Mission_With_Vuforia extends LinearOpMode {
     OpenCVVision Test1;
     Vuforia_Webcam Vu1;
     DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
@@ -22,8 +22,8 @@ public class        OpenCV_Missions extends LinearOpMode {
     public void runOpMode() {
 
 
-         br.setDirection(DcMotor.Direction.REVERSE);
-         fr.setDirection(DcMotor.Direction.REVERSE);
+        br.setDirection(DcMotor.Direction.REVERSE);
+        fr.setDirection(DcMotor.Direction.REVERSE);
 
         Test1.runOpMode();
         Vu1.runOpMode();
