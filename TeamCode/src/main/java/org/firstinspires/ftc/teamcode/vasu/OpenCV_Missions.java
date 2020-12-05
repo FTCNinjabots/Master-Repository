@@ -9,9 +9,9 @@ import org.firstinspires.ftc.teamcode.anay.vision.Vuforia_Webcam;
 import org.firstinspires.ftc.teamcode.anay.vision.OpenCVVision;
 
 @Disabled
-@Autonomous(name="Autonomous", group = "Autonomous")
+@Autonomous(name="Autonomous1", group = "Autonomous")
 
-public class        OpenCV_Missions extends LinearOpMode {
+public class OpenCV_Missions extends LinearOpMode {
     OpenCVVision Test1;
     Vuforia_Webcam Vu1;
     DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
