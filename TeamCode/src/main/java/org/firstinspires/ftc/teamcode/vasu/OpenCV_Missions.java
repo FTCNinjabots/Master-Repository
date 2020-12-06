@@ -18,8 +18,23 @@ public class OpenCV_Missions extends LinearOpMode {
     DcMotor br = hardwareMap.get(DcMotor.class, "br");
     DcMotor fl = hardwareMap.get(DcMotor.class, "fl");
     DcMotor fr = hardwareMap.get(DcMotor.class, "fr");
+
+
+
     @Override
     public void runOpMode() {
+
+        waitForStart();
+
+        bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
          br.setDirection(DcMotor.Direction.REVERSE);
@@ -33,10 +48,21 @@ public class OpenCV_Missions extends LinearOpMode {
 
             //actual mission part is here
 
-            bl.setPower(4);
-            br.setPower(4);
-            fl.setPower(4);
-            fr.setPower(4);
+            bl.setTargetPosition(1440);
+            br.setTargetPosition(1440);
+            fl.setTargetPosition(1440);
+            fr.setTargetPosition(1440);
+
+            //add the arm servo part here
+
+            sleep(700);
+
+            bl.setTargetPosition(1440);
+            br.setTargetPosition(1440);
+            fl.setTargetPosition(1440);
+            fr.setTargetPosition(1440);
+
+
 
             //add the arm servo part here
         }
@@ -45,32 +71,52 @@ public class OpenCV_Missions extends LinearOpMode {
             telemetry.addData("Position: ", "One Ring");
             telemetry.update();
 
-            bl.setPower(4);
-            br.setPower(4);
-            fl.setPower(4);
-            fr.setPower(4);
+            bl.setTargetPosition(1440);
+            br.setTargetPosition(1440);
+            fl.setTargetPosition(1440);
+            fr.setTargetPosition(1440);
 
             sleep(700);
-            //sleep stops the robot for a 700 milliseconds and then carry's out the next task
-            //if the robot has not been stopped it will combine all movements at once
 
-            bl.setPower(-1);
-            br.setPower(-1);
-            fl.setPower(1);
-            fr.setPower(1);
+            bl.setTargetPosition(-360);
+            br.setTargetPosition(-360);
+            fl.setTargetPosition(360);
+            fr.setTargetPosition(360);
 
             //arm servo goes here
+
+            sleep(700);
+
+            bl.setTargetPosition(360);
+            br.setTargetPosition(360);
+            fl.setTargetPosition(-360);
+            fr.setTargetPosition(-360);
+
+            sleep(700);
+
+            bl.setTargetPosition(-1440);
+            br.setTargetPosition(-1440);
+            fl.setTargetPosition(-1440);
+            fr.setTargetPosition(-1440);
+
         }
 
         else if(Test1.position == OpenCVVision.SkystoneDeterminationPipeline.RingPosition.NONE){
             telemetry.addData("Position: ", "No Rings");
 
-            bl.setPower(6);
-            br.setPower(6);
-            fl.setPower(6);
-            fr.setPower(6);
+            bl.setTargetPosition(1620);
+            br.setTargetPosition(1620);
+            fl.setTargetPosition(1620);
+            fr.setTargetPosition(1620);
 
             sleep(700);
+
+            bl.setTargetPosition(-1620);
+            br.setTargetPosition(-1620);
+            fl.setTargetPosition(-1620);
+            fr.setTargetPosition(-1620);
+
+
 
             //arm servo goes here
         }
