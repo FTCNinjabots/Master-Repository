@@ -57,10 +57,10 @@ public class OpenCV_Missions extends LinearOpMode {
 
             sleep(700);
 
-            bl.setTargetPosition(1440);
-            br.setTargetPosition(1440);
-            fl.setTargetPosition(1440);
-            fr.setTargetPosition(1440);
+            bl.setTargetPosition(-1440);
+            br.setTargetPosition(-1440);
+            fl.setTargetPosition(-1440);
+            fr.setTargetPosition(-1440);
 
 
 
