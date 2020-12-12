@@ -3,8 +3,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import org.firstinspires.ftc.teamcode.anay.vision.Vuforia_Webcam;
 
 import org.firstinspires.ftc.teamcode.anay.vision.OpenCVVision;
 
@@ -13,7 +11,7 @@ import org.firstinspires.ftc.teamcode.anay.vision.OpenCVVision;
 
 public class Mission_With_Vuforia extends LinearOpMode {
     OpenCVVision Test1;
-    Vuforia_Webcam Vu1;
+    //Vuforia_Webcam Vu1;
     DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
     DcMotor br = hardwareMap.get(DcMotor.class, "br");
     DcMotor fl = hardwareMap.get(DcMotor.class, "fl");
@@ -26,7 +24,7 @@ public class Mission_With_Vuforia extends LinearOpMode {
         fr.setDirection(DcMotor.Direction.REVERSE);
 
         Test1.runOpMode();
-        Vu1.runOpMode();
+        //Vu1.runOpMode();
 
         if(Test1.position == OpenCVVision.SkystoneDeterminationPipeline.RingPosition.FOUR){
             telemetry.addData("Position: ", "Four Rings");

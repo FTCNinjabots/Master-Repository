@@ -45,7 +45,6 @@ import org.openftc.easyopencv.OpenCvWebcam;
 
 
 @TeleOp(name = "OpenCvVision")
-@Disabled
 public class OpenCVVision extends LinearOpMode {
     public SkystoneDeterminationPipeline pipeline;
     public SkystoneDeterminationPipeline.RingPosition position;
@@ -112,13 +111,17 @@ public class OpenCVVision extends LinearOpMode {
         /*
          * The core values which define the location and size of the sample regions
          */
-        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(181, 98);
+        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(150, 110);
+        //static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(181, 98);
 
-        static final int REGION_WIDTH = 35;
-        static final int REGION_HEIGHT = 25;
+        static final int REGION_WIDTH = 50;
+        static final int REGION_HEIGHT = 100;
 
-        final int FOUR_RING_THRESHOLD = 150;
-        final int ONE_RING_THRESHOLD = 135;
+        final int FOUR_RING_THRESHOLD = 133;
+        final int ONE_RING_THRESHOLD = 129;
+
+        //final int FOUR_RING_THRESHOLD = 150;
+        //final int ONE_RING_THRESHOLD = 135;
 
         Point region1_pointA = new Point(
                 REGION1_TOPLEFT_ANCHOR_POINT.x,
