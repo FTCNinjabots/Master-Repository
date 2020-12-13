@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.anay.vision;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.vuforia.HINT;
 import com.vuforia.Vuforia;
 // IMPORTANT: X is left - right, Y is up and down, Z if forward and back
@@ -26,16 +27,20 @@ import org.firstinspires.ftc.teamcode.R;
 public class Vuforia_2 extends LinearOpMode
 {
     // Variables to be used for later
+    private DcMotor bl;
+    private DcMotor br;
+    private DcMotor fl;
+    private DcMotor fr;
     private WebcamName webcam;
     private VuforiaLocalizer vuforiaLocalizer;
     private VuforiaLocalizer.Parameters parameters;
     private VuforiaTrackables visionTargets;
     private VuforiaTrackable target;
     private VuforiaTrackable target1;
-    private VuforiaTrackableDefaultListener listener;
-    private VuforiaTrackableDefaultListener listener1;
+    public VuforiaTrackableDefaultListener listener;
+    public VuforiaTrackableDefaultListener listener1;
 
-    private OpenGLMatrix lastKnownLocation;
+    public OpenGLMatrix lastKnownLocation;
     private OpenGLMatrix phoneLocation;
 
     private static final String VUFORIA_KEY = "AVf/E1n/////AAABmdmpK/BSpk2CsqjNWH2CbgJ3vzF4yBNs8E23FuAgf6bxJDLaISLFPXcVK2zFti6+PvQexl9t9tSP87VXP8rCgkgVzsMEfKLrU1/Lw37iyCp0ItD+DgXoRE0vEIEML77Zpl5Y3FifVaR5iZ4iVrpQ1T1tX2vIBndVAZmLxaTNZkcgDxwl/f5lxdJZ0ukhi2SRB8xc2MAMzJN4Sh0jUDGzncgajNXg6qJqwLGdEDrogl3lKc8/ddVZk4ELZ/5Ws+VDAM8lvJHWMFzc8sALnJtQfGKA4cIxfy25hTFwIu6KgjVypQgQKj2TgEyBKPwHdDdXuPm8M4Da1a3T7h/NTDXrmxi4YMz0wiZZ0ft4+4BiL3Az"; // Insert your own key here
@@ -52,15 +57,23 @@ public class Vuforia_2 extends LinearOpMode
         // If we don't include this, it would be null, which would cause errors later on
         lastKnownLocation = createMatrix(0, 0, 0, 0, 0, 0);
 
-        waitForStart();
+        //waitForStart();
 
         // Start tracking the targets
         visionTargets.activate();
-
+        /*
         while(opModeIsActive())
         {
             // Ask the listener for the latest information on where the robot is
-            OpenGLMatrix latestLocation = listener.getUpdatedRobotLocation();
+            OpenGLMatrix latestLocation = null;
+            if (listener.isVisible())
+            {
+                latestLocation = listener.getUpdatedRobotLocation();
+            }
+            else if (listener1.isVisible()){
+                latestLocation = listener1.getUpdatedRobotLocation();
+            }
+
 
             // The listener will sometimes return null, so we check for that to prevent errors
             if(latestLocation != null)
@@ -90,10 +103,10 @@ public class Vuforia_2 extends LinearOpMode
             // Send telemetry and idle to let hardware catch up
             telemetry.update();
             idle();
-        }
+        } */
     }
 
-    private void setupVuforia()
+    public void setupVuforia()
     {
         // Setup parameters to create localizer
         webcam = hardwareMap.get(WebcamName.class, "webcam");
@@ -132,7 +145,7 @@ public class Vuforia_2 extends LinearOpMode
 
     // Creates a matrix for determining the locations and orientations of objects
     // Units are millimeters for x, y, and z, and degrees for u, v, and w
-    private OpenGLMatrix createMatrix(float x, float y, float z, float u, float v, float w)
+    public OpenGLMatrix createMatrix(float x, float y, float z, float u, float v, float w)
     {
         return OpenGLMatrix.translation(x, y, z).
                 multiplied(Orientation.getRotationMatrix(
@@ -140,8 +153,94 @@ public class Vuforia_2 extends LinearOpMode
     }
 
     // Formats a matrix into a readable string
-    private String formatMatrix(OpenGLMatrix matrix)
+    public String formatMatrix(OpenGLMatrix matrix)
     {
         return matrix.formatAsTransform();
+    }
+    public void Vuforia_Move(OpenGLMatrix current_pos, OpenGLMatrix target_pos)
+    {
+        bl = hardwareMap.get(DcMotor.class, "bl");
+        br = hardwareMap.get(DcMotor.class, "br");
+        fl = hardwareMap.get(DcMotor.class, "fl");
+        fr = hardwareMap.get(DcMotor.class, "fr");
+
+        br.setDirection(DcMotor.Direction.REVERSE);
+        fr.setDirection(DcMotor.Direction.REVERSE);
+
+
+        // We want to make code to strafe the x and move forward untill the Z's are the same
+        float[] current_coordinates = current_pos.getTranslation().getData();
+        int current_x_pos = (int) current_coordinates[0];
+        int current_z_pos = (int) current_coordinates[2];
+
+        float[] target_coordinates = target_pos.getTranslation().getData();
+        int target_x_pos = (int) target_coordinates[0];
+        int target_z_pos = (int) current_coordinates[2];
+
+        int strafeleft = -1;
+        if (current_x_pos > target_x_pos){
+            strafeleft = 1;
+        }
+
+        while (current_x_pos != target_x_pos){
+            //strafe
+            bl.setPower(0.25 * strafeleft);
+            br.setPower(0.25 * strafeleft);
+            fl.setPower(0.25 * -1 * strafeleft);
+            fr.setPower(0.25 * -1 * strafeleft);
+
+            OpenGLMatrix latestLocation = null;
+            if (listener.isVisible())
+            {
+                latestLocation = listener.getUpdatedRobotLocation();
+            }
+            else if (listener1.isVisible()){
+                latestLocation = listener.getUpdatedRobotLocation();
+            }
+
+
+            // The listener will sometimes return null, so we check for that to prevent errors
+            if(latestLocation != null)
+                lastKnownLocation = latestLocation;
+
+            float[] coordinates = lastKnownLocation.getTranslation().getData();
+
+            current_x_pos = (int) coordinates[0];
+
+
+
+        }
+
+        int forward = 1;
+        if (current_z_pos < target_z_pos) {
+            forward = -1;
+        }
+        while (current_z_pos != target_z_pos){
+            bl.setPower(0.5 * forward);
+            br.setPower(0.5 * forward);
+            fl.setPower(0.5 * forward);
+            fr.setPower(0.5 * forward);
+
+            OpenGLMatrix latestLocation = null;
+            if (listener.isVisible())
+            {
+                latestLocation = listener.getUpdatedRobotLocation();
+            }
+            else if (listener1.isVisible()){
+                latestLocation = listener.getUpdatedRobotLocation();
+            }
+
+
+            // The listener will sometimes return null, so we check for that to prevent errors
+            if(latestLocation != null)
+                lastKnownLocation = latestLocation;
+
+            float[] coordinates = lastKnownLocation.getTranslation().getData();
+
+            current_z_pos = (int) coordinates[2];
+
+
+
+        }
     }
 }
