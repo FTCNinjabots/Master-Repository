@@ -54,6 +54,10 @@ public class OpenCV_Missions extends LinearOpMode {
             br.setTargetPosition(1440);
             fl.setTargetPosition(1440);
             fr.setTargetPosition(1440);
+            br.setPower(0.5);
+            bl.setPower(0.5);
+            fl.setPower(0.5);
+            fr.setPower(0.5);
 
             //add the arm servo part here
 
@@ -63,7 +67,10 @@ public class OpenCV_Missions extends LinearOpMode {
             br.setTargetPosition(-1440);
             fl.setTargetPosition(-1440);
             fr.setTargetPosition(-1440);
-
+            br.setPower(-0.5);
+            bl.setPower(-0.5);
+            fl.setPower(-0.5);
+            fr.setPower(-0.5);
 
 
             //add the arm servo part here
@@ -77,14 +84,20 @@ public class OpenCV_Missions extends LinearOpMode {
             br.setTargetPosition(1440);
             fl.setTargetPosition(1440);
             fr.setTargetPosition(1440);
-
+            br.setPower(0.5);
+            bl.setPower(0.5);
+            fl.setPower(0.5);
+            fr.setPower(0.5);
             sleep(700);
 
             bl.setTargetPosition(-360);
             br.setTargetPosition(-360);
             fl.setTargetPosition(360);
             fr.setTargetPosition(360);
-
+            br.setPower(-0.5);
+            bl.setPower(-0.5);
+            fl.setPower(0.5);
+            fr.setPower(0.5);
             //arm servo goes here
 
             sleep(700);
@@ -93,6 +106,10 @@ public class OpenCV_Missions extends LinearOpMode {
             br.setTargetPosition(360);
             fl.setTargetPosition(-360);
             fr.setTargetPosition(-360);
+            br.setPower(0.5);
+            bl.setPower(0.5);
+            fl.setPower(-0.5);
+            fr.setPower(-0.5);
 
             sleep(700);
 
@@ -100,7 +117,10 @@ public class OpenCV_Missions extends LinearOpMode {
             br.setTargetPosition(-1440);
             fl.setTargetPosition(-1440);
             fr.setTargetPosition(-1440);
-
+            br.setPower(-0.5);
+            bl.setPower(-0.5);
+            fl.setPower(-0.5);
+            fr.setPower(-0.5);
         }
 
         else if(Test1.position == OpenCVVision.SkystoneDeterminationPipeline.RingPosition.NONE){
@@ -110,14 +130,20 @@ public class OpenCV_Missions extends LinearOpMode {
             br.setTargetPosition(1620);
             fl.setTargetPosition(1620);
             fr.setTargetPosition(1620);
-
+            br.setPower(0.5);
+            bl.setPower(0.5);
+            fl.setPower(0.5);
+            fr.setPower(0.5);
             sleep(700);
 
             bl.setTargetPosition(-1620);
             br.setTargetPosition(-1620);
             fl.setTargetPosition(-1620);
             fr.setTargetPosition(-1620);
-
+            br.setPower(-0.5);
+            bl.setPower(-0.5);
+            fl.setPower(-0.5);
+            fr.setPower(-0.5);
 
 
             //arm servo goes here
