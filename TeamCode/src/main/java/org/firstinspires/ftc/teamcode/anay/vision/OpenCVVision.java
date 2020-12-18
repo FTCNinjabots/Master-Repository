@@ -76,14 +76,14 @@ public class OpenCVVision extends LinearOpMode {
 
 
             //This should be commented out
-            while (opModeIsActive()) {
-                telemetry.addData("Analysis", pipeline.getAnalysis());
-                telemetry.addData("Position", SkystoneDeterminationPipeline.position);
-                telemetry.update();
+            //while (opModeIsActive()) {
+             //   telemetry.addData("Analysis", pipeline.getAnalysis());
+              //  telemetry.addData("Position", SkystoneDeterminationPipeline.position);
+             //   telemetry.update();
 
                 // Don't burn CPU cycles busy-looping in this sample
-                sleep(50);
-            }
+             //   sleep(50);
+
 
 
 

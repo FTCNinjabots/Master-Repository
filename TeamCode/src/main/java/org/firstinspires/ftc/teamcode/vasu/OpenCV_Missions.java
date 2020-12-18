@@ -10,12 +10,14 @@ import org.firstinspires.ftc.teamcode.anay.vision.OpenCVVision;
 @Autonomous(name="Autonomous1", group = "Autonomous")
 
 public class OpenCV_Missions extends LinearOpMode {
-    OpenCVVision Test1;
+
     //Vuforia_Webcam Vu1;
     DcMotor bl = null;
     DcMotor br = null;
     DcMotor fl = null;
     DcMotor fr = null;
+    OpenCVVision Test1;
+
 
 
 
