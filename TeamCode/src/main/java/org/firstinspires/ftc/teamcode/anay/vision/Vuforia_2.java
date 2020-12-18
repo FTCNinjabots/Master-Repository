@@ -197,13 +197,20 @@ public class Vuforia_2 extends LinearOpMode
             else if (listener1.isVisible()){
                 latestLocation = listener.getUpdatedRobotLocation();
             }
+            else{ // Predicting Extended Tracking
+                float[] temp_coordinates = lastKnownLocation.getTranslation().getData();
+                temp_coordinates[0] += strafeleft * -1;
+                latestLocation = createMatrix(temp_coordinates[0], temp_coordinates[1], temp_coordinates[2], temp_coordinates[3], temp_coordinates[4], temp_coordinates[5]);
+
+            }
 
 
             // The listener will sometimes return null, so we check for that to prevent errors
-            if(latestLocation != null)
-                lastKnownLocation = latestLocation;
 
+            lastKnownLocation = latestLocation;
             float[] coordinates = lastKnownLocation.getTranslation().getData();
+
+
 
             current_x_pos = (int) coordinates[0];
 

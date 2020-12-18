@@ -44,6 +44,14 @@ public class Mission_With_Vuforia extends LinearOpMode {
         if(Test1.position == OpenCVVision.SkystoneDeterminationPipeline.RingPosition.FOUR){
             telemetry.addData("Position: ", "Four Rings");
 
+            //Move forward x degrees, turn 180
+
+            //Shoot Rings, turn 180
+
+            //Move forward, collect rings
+
+            //turn 180, shoot again
+
             //actual mission part is here
             OpenGLMatrix Ninja_latestLocation = null;
             if (NinjaVuforia.listener.isVisible())
