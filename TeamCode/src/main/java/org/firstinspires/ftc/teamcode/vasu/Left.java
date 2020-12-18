@@ -17,7 +17,7 @@ public class Left  extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         bl = hardwareMap.get(DcMotor.class, "bl");
         br = hardwareMap.get(DcMotor.class, "br");
-        fl = hardwareMap.get(DcMotor.class, "fl");
+       // fl = hardwareMap.get(DcMotor.class, "fl");
         fr = hardwareMap.get(DcMotor.class, "fr");
 
         waitForStart();

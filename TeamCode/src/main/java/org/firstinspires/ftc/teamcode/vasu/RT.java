@@ -9,8 +9,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 //DON'T KNOW IF THIS WORKS
 
 
-@Disabled
-
 @TeleOp
 public class RT extends OpMode {
 
