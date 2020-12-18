@@ -8,8 +8,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 //DON'T KNOW IF THIS WORKS
 
+//hfdsjfsd
 
-@Disabled
 
 @TeleOp
 public class RT extends OpMode {
