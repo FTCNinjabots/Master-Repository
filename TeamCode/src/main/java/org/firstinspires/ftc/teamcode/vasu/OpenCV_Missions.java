@@ -20,7 +20,6 @@ public class OpenCV_Missions extends LinearOpMode {
 
 
 
-
     @Override
     public void runOpMode() {
          bl = hardwareMap.get(DcMotor.class, "bl");
