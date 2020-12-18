@@ -12,15 +12,19 @@ import org.firstinspires.ftc.teamcode.anay.vision.OpenCVVision;
 public class OpenCV_Missions extends LinearOpMode {
     OpenCVVision Test1;
     //Vuforia_Webcam Vu1;
-    DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
-    DcMotor br = hardwareMap.get(DcMotor.class, "br");
-    DcMotor fl = hardwareMap.get(DcMotor.class, "fl");
-    DcMotor fr = hardwareMap.get(DcMotor.class, "fr");
+    DcMotor bl = null;
+    DcMotor br = null;
+    DcMotor fl = null;
+    DcMotor fr = null;
 
 
 
     @Override
     public void runOpMode() {
+         bl = hardwareMap.get(DcMotor.class, "bl");
+         br = hardwareMap.get(DcMotor.class, "br");
+         fl = hardwareMap.get(DcMotor.class, "fl");
+         fr = hardwareMap.get(DcMotor.class, "fr");
 
         waitForStart();
 
