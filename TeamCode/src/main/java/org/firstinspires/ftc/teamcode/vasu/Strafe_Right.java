@@ -26,9 +26,9 @@ public class Strafe_Right extends LinearOpMode {
         fr.setDirection(DcMotorSimple.Direction.REVERSE);
         while (opModeIsActive()) {
             bl.setPower(-0.25);
-            br.setPower(-0.25);
+            br.setPower(0.25);
             fl.setPower(0.25);
-            fr.setPower(0.25);
+            fr.setPower(-0.25);
         }
     }
 }
