@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.anay.vision.OpenCVVision;
 
-@Disabled
+
 @Autonomous(name="Autonomous1", group = "Autonomous")
 
 public class OpenCV_Missions extends LinearOpMode {

@@ -26,10 +26,21 @@ public class C_Site extends LinearOpMode {
         fl = hardwareMap.get(DcMotor.class, "fl");
         fr = hardwareMap.get(DcMotor.class, "fr");
 
+        bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        br.setDirection(DcMotor.Direction.REVERSE);
+        fr.setDirection(DcMotor.Direction.REVERSE);
+        bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
         waitForStart();
 
-        br.setDirection(DcMotorSimple.Direction.REVERSE);
-        fr.setDirection(DcMotorSimple.Direction.REVERSE);
 
         while (opModeIsActive()) {
 
@@ -37,6 +48,14 @@ public class C_Site extends LinearOpMode {
             br.setTargetPosition(1620);
             fl.setTargetPosition(1620);
             fr.setTargetPosition(1620);
+            bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            bl.setPower(0.5);
+            br.setPower(0.5);
+            fl.setPower(0.5);
+            fr.setPower(0.5);
 
             sleep(700);
 
@@ -44,6 +63,14 @@ public class C_Site extends LinearOpMode {
             br.setTargetPosition(-1620);
             fl.setTargetPosition(-1620);
             fr.setTargetPosition(-1620);
+            bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            bl.setPower(0.5);
+            br.setPower(0.5);
+            fl.setPower(0.5);
+            fr.setPower(0.5);
         }
     }
 }
