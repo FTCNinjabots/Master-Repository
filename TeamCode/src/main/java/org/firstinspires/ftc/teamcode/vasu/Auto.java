@@ -35,9 +35,12 @@ public class Auto extends LinearOpMode {
 
         sleep(500);
 
-        for (int i = 0; i < 4; i++) {
-            telemetry.addData("Mode", "driving side " + (i + 1));
-            telemetry.update();
+        bl.setPower(0.25);
+        br.setPower(0.25);
+        fl.setPower(-0.25);
+        fr.setPower(-0.25);
+
+        sleep(2000);
 
             fr.setPower(0.25);
             fl.setPower(0.25);
@@ -45,7 +48,7 @@ public class Auto extends LinearOpMode {
             bl.setPower(0.25);
 
 
-            sleep(1000);
-        }
+            sleep(10000);
+
     }
 }
