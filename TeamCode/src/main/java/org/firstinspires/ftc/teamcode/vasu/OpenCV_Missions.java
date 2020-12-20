@@ -18,11 +18,11 @@ public class OpenCV_Missions extends LinearOpMode {
     C_Site c_motor;
     B_Site b_motor;
     A_Site a_motor;
-    DcMotor bl = null;
-    DcMotor br = null;
-    DcMotor fl = null;
-    DcMotor fr = null;
-    OpenCVVision Test1;
+    private DcMotor bl = null;
+    private DcMotor br = null;
+    private DcMotor fl = null;
+    private DcMotor fr = null;
+    OpenCVVision Test1 = new OpenCVVision();
 
 
 

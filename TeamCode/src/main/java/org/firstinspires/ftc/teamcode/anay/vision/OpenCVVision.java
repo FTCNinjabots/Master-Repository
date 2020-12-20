@@ -43,7 +43,7 @@ import org.openftc.easyopencv.OpenCvInternalCamera;
 import org.openftc.easyopencv.OpenCvPipeline;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-
+@Disabled
 @TeleOp(name = "OpenCvVision")
 public class OpenCVVision extends LinearOpMode {
     public SkystoneDeterminationPipeline pipeline;
