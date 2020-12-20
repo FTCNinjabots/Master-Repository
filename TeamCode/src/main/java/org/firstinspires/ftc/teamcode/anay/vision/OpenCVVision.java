@@ -111,11 +111,11 @@ public class OpenCVVision extends LinearOpMode {
         /*
          * The core values which define the location and size of the sample regions
          */
-        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(150, 110);
+        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(220, 40);
         //static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(181, 98);
 
         static final int REGION_WIDTH = 50;
-        static final int REGION_HEIGHT = 100;
+        static final int REGION_HEIGHT = 50;
 
         final int FOUR_RING_THRESHOLD = 133;
         final int ONE_RING_THRESHOLD = 129;
