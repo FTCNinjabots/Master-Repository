@@ -67,10 +67,10 @@ public class C_Site extends LinearOpMode {
             br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            bl.setPower(0.5);
-            br.setPower(0.5);
-            fl.setPower(0.5);
-            fr.setPower(0.5);
+            bl.setPower(-0.5);
+            br.setPower(-0.5);
+            fl.setPower(-0.5);
+            fr.setPower(-0.5);
         }
     }
 }
