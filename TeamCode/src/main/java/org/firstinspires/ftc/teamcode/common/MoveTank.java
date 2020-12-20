@@ -1,29 +1,27 @@
-package org.firstinspires.ftc.teamcode.vasu;
+package org.firstinspires.ftc.teamcode.common;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
+//import com.qualcomm.robotcore.hardware;
 
-
-@Autonomous(name="CS", group="CS")
-
-public class C_Site extends LinearOpMode {
-
-    //MoveTank motor = new MoveTank();
+public class MoveTank{
+    public int target_position = 1; // in cps, NeveRest 40 has 1120 Degrees per rotation
+    boolean has_stopped = false;
     private DcMotor bl = null;
     private DcMotor br = null;
     private DcMotor fl = null;
     private DcMotor fr = null;
+    public double motorPower = 0.5;
+    int current_position = 0;
 
-
-
+    /*
     public void MoveTank(int target_position, double motorPower) throws InterruptedException {
         float current_position;
         boolean has_stopped = false;
 
-        bl = hardwareMap.get(DcMotor.class, "bl");
+        bl = ardwareMap.get(DcMotor.class, "bl");
         br = hardwareMap.get(DcMotor.class, "br");
         fl = hardwareMap.get(DcMotor.class, "fl");
         fr = hardwareMap.get(DcMotor.class, "fr");
@@ -64,16 +62,5 @@ public class C_Site extends LinearOpMode {
 
 
     }
-
-    public void runOpMode() throws InterruptedException {
-
-
-
-
-            waitForStart();
-            MoveTank(9500, 0.5);
-            //After Move Tank, we may have to end up turning
-            // to do
-            //Move back
-    }
+        */
 }
