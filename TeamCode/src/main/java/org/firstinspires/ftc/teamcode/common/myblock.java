@@ -18,10 +18,10 @@ public class myblock {
     //private Servo swivel = null;
     //private Servo arm_servo = null;
 
-    public DcMotor bl = null;
-    public DcMotor br = null;
-    public DcMotor fl = null;
-    public DcMotor fr = null;
+    private DcMotor bl = null;
+    private DcMotor br = null;
+    private DcMotor fl = null;
+    private DcMotor fr = null;
     HardwareMap hwm;
 
 
