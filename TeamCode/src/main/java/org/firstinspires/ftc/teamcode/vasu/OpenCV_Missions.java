@@ -27,7 +27,7 @@ public class OpenCV_Missions extends LinearOpMode {
 
 
     @Override
-    public void runOpMode() {
+    public void runOpMode() throws InterruptedException {
          bl = hardwareMap.get(DcMotor.class, "bl");
          br = hardwareMap.get(DcMotor.class, "br");
          fl = hardwareMap.get(DcMotor.class, "fl");
@@ -54,16 +54,19 @@ public class OpenCV_Missions extends LinearOpMode {
 
         if(Test1.position == OpenCVVision.SkystoneDeterminationPipeline.RingPosition.FOUR){
             telemetry.addData("Position: ", "Four Rings");
-
+            c_motor.runOpMode();
             //add the arm servo part here
         }
 
         else if(Test1.position == OpenCVVision.SkystoneDeterminationPipeline.RingPosition.ONE) {
             telemetry.addData("Position: ", "One Ring");
+            b_motor.runOpMode();
+
             telemetry.update();
         }
 
         else if(Test1.position == OpenCVVision.SkystoneDeterminationPipeline.RingPosition.NONE){
+            a_motor.runOpMode();
             telemetry.addData("Position: ", "No Rings");
 
             //arm servo goes here
