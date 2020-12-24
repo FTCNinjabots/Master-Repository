@@ -8,12 +8,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.anay.Dcmotor;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 @Disabled
-public class myblock {
+public class myblock{
 
     //private Servo swivel = null;
     //private Servo arm_servo = null;
@@ -23,7 +20,7 @@ public class myblock {
     private DcMotor fl = null;
     private DcMotor fr = null;
     HardwareMap hwm;
-
+    Telemetry telemetry;
 
     public void MoveTank(int targetposition, double motorpower) throws InterruptedException{
         int starting_position = 0;
@@ -108,7 +105,6 @@ public class myblock {
         }
 
         boolean has_stopped = false;
-        int current_position = 0;
 
         bl = hwm.get(DcMotor.class, "bl");
         br = hwm.get(DcMotor.class, "br");
@@ -133,7 +129,7 @@ public class myblock {
         fr.setPower(frpower);
 
         while (!has_stopped) {
-            current_position = fl.getCurrentPosition();
+            int current_position = fl.getCurrentPosition();
             if (current_position >= target_position && frpower == -1 * motorpower) {
                 bl.setPower(0.0);
                 br.setPower(0.0);
