@@ -21,10 +21,6 @@ public class myblock{
     public void MoveTank(int targetposition, double motorpower) throws InterruptedException{
         int starting_position = 0;
         boolean going_backwards = false;
-        DcMotor bl;
-        DcMotor br;
-        DcMotor fl;
-        DcMotor fr;
         if (targetposition < 0){
             //we are going backwards
             going_backwards = true;
@@ -33,10 +29,10 @@ public class myblock{
 
         boolean has_stopped = false;
 
-        bl = hardwareMap.get(DcMotor.class, "bl");
-        br = hardwareMap.get(DcMotor.class, "br");
-        fl = hardwareMap.get(DcMotor.class, "fl");
-        fr = hardwareMap.get(DcMotor.class, "fr");
+        DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
+        DcMotor br = hardwareMap.get(DcMotor.class, "br");
+        DcMotor fl = hardwareMap.get(DcMotor.class, "fl");
+        DcMotor fr = hardwareMap.get(DcMotor.class, "fr");
 
         bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
