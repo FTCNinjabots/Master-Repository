@@ -1,21 +1,27 @@
 package org.firstinspires.ftc.teamcode.common;
 
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.anay.Dcmotor;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
-public class myblock{
+@Disabled
+public class myblock extends LinearOpMode {
 
     //private Servo swivel = null;
     //private Servo arm_servo = null;
 
+    private DcMotor bl = null;
+    private DcMotor br = null;
+    private DcMotor fl = null;
+    private DcMotor fr = null;
 
 
     public void MoveTank(int targetposition, double motorpower) throws InterruptedException{
@@ -29,10 +35,10 @@ public class myblock{
 
         boolean has_stopped = false;
 
-        DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
-        DcMotor br = hardwareMap.get(DcMotor.class, "br");
-        DcMotor fl = hardwareMap.get(DcMotor.class, "fl");
-        DcMotor fr = hardwareMap.get(DcMotor.class, "fr");
+        bl = hardwareMap.get(DcMotor.class, "bl");
+        br = hardwareMap.get(DcMotor.class, "br");
+        fl = hardwareMap.get(DcMotor.class, "fl");
+        fr = hardwareMap.get(DcMotor.class, "fr");
 
         bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -103,10 +109,10 @@ public class myblock{
         boolean has_stopped = false;
         int current_position = 0;
 
-        DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
-        DcMotor br = hardwareMap.get(DcMotor.class, "br");
-        DcMotor fl = hardwareMap.get(DcMotor.class, "fl");
-        DcMotor fr = hardwareMap.get(DcMotor.class, "fr");
+        bl = hardwareMap.get(DcMotor.class, "bl");
+        br = hardwareMap.get(DcMotor.class, "br");
+        fl = hardwareMap.get(DcMotor.class, "fl");
+        fr = hardwareMap.get(DcMotor.class, "fr");
 
         bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -148,14 +154,9 @@ public class myblock{
 
     }
 
-    //public void ActivateArm(){
-     //   swivel = hardwareMap.get(Servo.class, "swivel");
-      //  swivel.setPosition(1.0);
 
-    //}
-
-    public void MoveArm(double servoposition){
-        //0 is bottom, 1 is top
-        //We move the servo to that position, starting from 0
+    @Override
+    public void runOpMode() throws InterruptedException {
+        //
     }
 }
