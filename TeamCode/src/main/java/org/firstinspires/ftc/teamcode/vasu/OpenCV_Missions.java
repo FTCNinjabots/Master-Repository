@@ -55,6 +55,7 @@ public class OpenCV_Missions extends LinearOpMode {
 
         if(Test1.position == OpenCVVision.SkystoneDeterminationPipeline.RingPosition.FOUR){
             telemetry.addData("Position: ", "Four Rings");
+            telemetry.update();
             c_motor.runOpMode();
             //add the arm servo part here
         }
@@ -67,8 +68,10 @@ public class OpenCV_Missions extends LinearOpMode {
         }
 
         else if(Test1.position == OpenCVVision.SkystoneDeterminationPipeline.RingPosition.NONE){
-            a_motor.runOpMode();
             telemetry.addData("Position: ", "No Rings");
+            telemetry.update();
+            a_motor.runOpMode();
+
 
             //arm servo goes here
         }

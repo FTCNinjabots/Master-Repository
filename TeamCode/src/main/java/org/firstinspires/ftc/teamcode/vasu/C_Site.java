@@ -12,10 +12,10 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 public class C_Site extends LinearOpMode {
 
     //MoveTank motor = new MoveTank();
-    private DcMotor bl = null;
-    private DcMotor br = null;
-    private DcMotor fl = null;
-    private DcMotor fr = null;
+    private DcMotor bl;
+    private DcMotor br;
+    private DcMotor fl;
+    private DcMotor fr;
     myblock robot = new myblock();
 
 

@@ -11,10 +11,10 @@ import org.firstinspires.ftc.teamcode.common.myblock;
 
 public class B_Site extends LinearOpMode {
 
-    private DcMotor bl = null;
-    private DcMotor br = null;
-    private DcMotor fl = null;
-    private DcMotor fr = null;
+    private DcMotor bl;
+    private DcMotor br;
+    private DcMotor fl;
+    private DcMotor fr;
     myblock robot = new myblock();
 
     /*public void MoveTank(int target_position, double motorPower) throws InterruptedException {
