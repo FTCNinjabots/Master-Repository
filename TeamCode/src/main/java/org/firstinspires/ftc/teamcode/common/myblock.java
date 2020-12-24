@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.anay.Dcmotor;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 @Disabled
-public class myblock extends LinearOpMode {
+public class myblock {
 
     //private Servo swivel = null;
     //private Servo arm_servo = null;
@@ -156,8 +156,4 @@ public class myblock extends LinearOpMode {
     }
 
 
-    @Override
-    public void runOpMode() throws InterruptedException {
-        //
-    }
 }
