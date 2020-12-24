@@ -12,10 +12,6 @@ import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.har
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 public class myblock{
-    private DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
-    private DcMotor br = hardwareMap.get(DcMotor.class, "br");
-    private DcMotor fl  = hardwareMap.get(DcMotor.class, "fl");
-    private DcMotor fr = hardwareMap.get(DcMotor.class, "fr");
 
     //private Servo swivel = null;
     //private Servo arm_servo = null;
@@ -111,10 +107,10 @@ public class myblock{
         boolean has_stopped = false;
         int current_position = 0;
 
-        bl = hardwareMap.get(DcMotor.class, "bl");
-        br = hardwareMap.get(DcMotor.class, "br");
-        fl = hardwareMap.get(DcMotor.class, "fl");
-        fr = hardwareMap.get(DcMotor.class, "fr");
+        DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
+        DcMotor br = hardwareMap.get(DcMotor.class, "br");
+        DcMotor fl = hardwareMap.get(DcMotor.class, "fl");
+        DcMotor fr = hardwareMap.get(DcMotor.class, "fr");
 
         bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
