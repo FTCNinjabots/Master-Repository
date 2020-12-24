@@ -17,8 +17,8 @@ public class myblock{
     private DcMotor fl  = hardwareMap.get(DcMotor.class, "fl");
     private DcMotor fr = hardwareMap.get(DcMotor.class, "fr");
 
-    private Servo swivel = null;
-    private Servo arm_servo = null;
+    //private Servo swivel = null;
+    //private Servo arm_servo = null;
 
 
 
@@ -156,11 +156,11 @@ public class myblock{
 
     }
 
-    public void ActivateArm(){
-        swivel = hardwareMap.get(Servo.class, "swivel");
-        swivel.setPosition(1.0);
+    //public void ActivateArm(){
+     //   swivel = hardwareMap.get(Servo.class, "swivel");
+      //  swivel.setPosition(1.0);
 
-    }
+    //}
 
     public void MoveArm(double servoposition){
         //0 is bottom, 1 is top
