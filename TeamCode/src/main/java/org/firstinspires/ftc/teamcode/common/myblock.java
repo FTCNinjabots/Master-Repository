@@ -22,6 +22,7 @@ public class myblock extends LinearOpMode {
     private DcMotor br = null;
     private DcMotor fl = null;
     private DcMotor fr = null;
+    HardwareMap hwm;
 
 
     public void MoveTank(int targetposition, double motorpower) throws InterruptedException{
@@ -35,10 +36,10 @@ public class myblock extends LinearOpMode {
 
         boolean has_stopped = false;
 
-        bl = hardwareMap.get(DcMotor.class, "bl");
-        br = hardwareMap.get(DcMotor.class, "br");
-        fl = hardwareMap.get(DcMotor.class, "fl");
-        fr = hardwareMap.get(DcMotor.class, "fr");
+        bl = hwm.get(DcMotor.class, "bl");
+        br = hwm.get(DcMotor.class, "br");
+        fl = hwm.get(DcMotor.class, "fl");
+        fr = hwm.get(DcMotor.class, "fr");
 
         bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -109,10 +110,10 @@ public class myblock extends LinearOpMode {
         boolean has_stopped = false;
         int current_position = 0;
 
-        bl = hardwareMap.get(DcMotor.class, "bl");
-        br = hardwareMap.get(DcMotor.class, "br");
-        fl = hardwareMap.get(DcMotor.class, "fl");
-        fr = hardwareMap.get(DcMotor.class, "fr");
+        bl = hwm.get(DcMotor.class, "bl");
+        br = hwm.get(DcMotor.class, "br");
+        fl = hwm.get(DcMotor.class, "fl");
+        fr = hwm.get(DcMotor.class, "fr");
 
         bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
