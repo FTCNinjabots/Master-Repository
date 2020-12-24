@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-
+import org.firstinspires.ftc.teamcode.common.myblock;
 
 @Autonomous(name="AS", group="AS")
 
@@ -15,9 +15,10 @@ public class A_Site extends LinearOpMode {
     private DcMotor br = null;
     private DcMotor fl = null;
     private DcMotor fr = null;
+    myblock robot = new myblock();
 
 
-    public void MoveTank(int target_position, double motorPower) throws InterruptedException {
+    /*public void MoveTank(int target_position, double motorPower) throws InterruptedException {
         float current_position;
         boolean has_stopped = false;
 
@@ -59,12 +60,16 @@ public class A_Site extends LinearOpMode {
         }
 
 
-    }
+    }*/
 
     @Override
 
     public void runOpMode() throws InterruptedException {
         waitForStart();
+        robot.MoveTank(6400, 0.5);
+        robot.Strafe(1500, 0.25);
+
+        /*
         MoveTank(6400, 0.5);
 
         //Drop Wobble Goal Here
@@ -100,7 +105,7 @@ public class A_Site extends LinearOpMode {
                 has_stopped = true;
 
             }
-        }
+        }*/
     }
 
 }

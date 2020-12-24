@@ -1,5 +1,5 @@
 package org.firstinspires.ftc.teamcode.vasu;
-
+import org.firstinspires.ftc.teamcode.common.myblock;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -16,9 +16,10 @@ public class C_Site extends LinearOpMode {
     private DcMotor br = null;
     private DcMotor fl = null;
     private DcMotor fr = null;
+    myblock robot = new myblock();
 
 
-
+/*
     public void MoveTank(int target_position, double motorPower) throws InterruptedException {
         float current_position;
         boolean has_stopped = false;
@@ -64,16 +65,14 @@ public class C_Site extends LinearOpMode {
 
 
     }
-
+*/
     public void runOpMode() throws InterruptedException {
 
 
 
 
             waitForStart();
-            MoveTank(9500, 0.5);
-            //After Move Tank, we may have to end up turning
-            // to do
-            //Move back
+           robot.MoveTank(9500, 0.5);
+
     }
 }

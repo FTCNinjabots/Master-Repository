@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 
 //first identify what type of code is this, teleop or auto
-@Disabled
 
 @TeleOp
 public class Teleop extends OpMode {
@@ -33,10 +32,12 @@ public class Teleop extends OpMode {
     public void loop() {
 
         //last but not least, we give each motor a joystick pattern
-        br.setPower(gamepad1.left_stick_y);
+        br.setPower(gamepad1.right_stick_y);
         fl.setPower(-gamepad1.left_stick_y);
-        fr.setPower(gamepad1.left_stick_y);
+        fr.setPower(gamepad1.right_stick_y);
         bl.setPower(-gamepad1.left_stick_y);
+
+
 
 
     }
