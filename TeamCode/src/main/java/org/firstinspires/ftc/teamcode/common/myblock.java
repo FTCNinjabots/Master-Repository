@@ -12,10 +12,11 @@ import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.har
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 public class myblock{
-    private DcMotor bl = null;
-    private DcMotor br = null;
-    private DcMotor fl = null;
-    private DcMotor fr = null;
+    private DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
+    private DcMotor br = hardwareMap.get(DcMotor.class, "br");
+    private DcMotor fl  = hardwareMap.get(DcMotor.class, "fl");
+    private DcMotor fr = hardwareMap.get(DcMotor.class, "fr");
+
     private Servo swivel = null;
     private Servo arm_servo = null;
 

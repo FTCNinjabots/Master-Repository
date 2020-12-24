@@ -10,11 +10,6 @@ import org.firstinspires.ftc.teamcode.common.myblock;
 @Autonomous(name="AS", group="AS")
 
 public class A_Site extends LinearOpMode {
-
-    private DcMotor bl;
-    private DcMotor br;
-    private DcMotor fl;
-    private DcMotor fr;
     myblock robot = new myblock();
 
 

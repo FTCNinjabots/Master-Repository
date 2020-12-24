@@ -1,4 +1,5 @@
 package org.firstinspires.ftc.teamcode.vasu;
+import org.firstinspires.ftc.teamcode.anay.Dcmotor;
 import org.firstinspires.ftc.teamcode.common.myblock;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -12,10 +13,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 public class C_Site extends LinearOpMode {
 
     //MoveTank motor = new MoveTank();
-    private DcMotor bl;
-    private DcMotor br;
-    private DcMotor fl;
-    private DcMotor fr;
     myblock robot = new myblock();
 
 
