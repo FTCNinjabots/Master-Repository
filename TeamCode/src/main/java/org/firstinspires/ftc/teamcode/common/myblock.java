@@ -12,13 +12,11 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 @Disabled
 public class myblock{
 
-    //private Servo swivel = null;
-    //private Servo arm_servo = null;
 
-    private DcMotor bl = null;
-    private DcMotor br = null;
-    private DcMotor fl = null;
-    private DcMotor fr = null;
+    private DcMotor bl;
+    private DcMotor br;
+    private DcMotor fl;
+    private DcMotor fr;
     HardwareMap hwm;
     Telemetry telemetry;
 
