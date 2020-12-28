@@ -9,18 +9,14 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-@Disabled
-public abstract class myblock extends LinearOpMode{
 
-    //private Servo swivel = null;
-    //private Servo arm_servo = null;
+@Disabled
+public class myblock extends LinearOpMode{
 
     private DcMotor bl = null;
     private DcMotor br = null;
     private DcMotor fl = null;
     private DcMotor fr = null;
-    
-    Telemetry telemetry;
 
     public void MoveTank(int targetposition, double motorpower) throws InterruptedException{
         int starting_position = 0;
@@ -152,4 +148,8 @@ public abstract class myblock extends LinearOpMode{
     }
 
 
+    @Override
+    public void runOpMode() throws InterruptedException {
+        //
+    }
 }
