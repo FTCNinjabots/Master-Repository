@@ -14,7 +14,6 @@ import org.firstinspires.ftc.teamcode.common.myblock;
 
 public class OpenCV_Missions extends OpenCVVision {
 
-    //Vuforia_Webcam Vu1;
     C_Site c_motor = new C_Site();
     B_Site b_motor = new B_Site();
     A_Site a_motor = new A_Site();
