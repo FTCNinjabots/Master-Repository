@@ -9,8 +9,7 @@ import org.firstinspires.ftc.teamcode.common.myblock;
 
 @Autonomous(name="BS", group="BS")
 
-public class B_Site extends LinearOpMode {
-    myblock robot = new myblock();
+public class B_Site extends myblock {
 
     /*public void MoveTank(int target_position, double motorPower) throws InterruptedException {
         float current_position;
@@ -56,13 +55,11 @@ public class B_Site extends LinearOpMode {
 
     }*/
 
-    @Override
 
-    public void runOpMode() throws InterruptedException {
-        waitForStart();
-        robot.MoveTank(6400, 0.5);
-        robot.Strafe(2300, 0.25);
-        robot.MoveTank(-2000, -0.5);
+    public void run() throws InterruptedException {
+        MoveTank(6400, 0.5);
+        Strafe(2300, 0.25);
+        MoveTank(-2000, -0.5);
 
 
         /*

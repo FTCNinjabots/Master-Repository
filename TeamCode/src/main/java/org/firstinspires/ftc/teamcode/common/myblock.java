@@ -9,16 +9,14 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+
 @Disabled
-public class myblock{
+public class myblock extends LinearOpMode{
 
-
-    private DcMotor bl;
-    private DcMotor br;
-    private DcMotor fl;
-    private DcMotor fr;
-    HardwareMap hwm;
-    Telemetry telemetry;
+    private DcMotor bl = null;
+    private DcMotor br = null;
+    private DcMotor fl = null;
+    private DcMotor fr = null;
 
     public void MoveTank(int targetposition, double motorpower) throws InterruptedException{
         int starting_position = 0;
@@ -31,10 +29,10 @@ public class myblock{
 
         boolean has_stopped = false;
 
-        bl = hwm.get(DcMotor.class, "bl");
-        br = hwm.get(DcMotor.class, "br");
-        fl = hwm.get(DcMotor.class, "fl");
-        fr = hwm.get(DcMotor.class, "fr");
+        bl = hardwareMap.get(DcMotor.class, "bl");
+        br = hardwareMap.get(DcMotor.class, "br");
+        fl = hardwareMap.get(DcMotor.class, "fl");
+        fr = hardwareMap.get(DcMotor.class, "fr");
 
         bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -104,10 +102,10 @@ public class myblock{
 
         boolean has_stopped = false;
 
-        bl = hwm.get(DcMotor.class, "bl");
-        br = hwm.get(DcMotor.class, "br");
-        fl = hwm.get(DcMotor.class, "fl");
-        fr = hwm.get(DcMotor.class, "fr");
+        bl = hardwareMap.get(DcMotor.class, "bl");
+        br = hardwareMap.get(DcMotor.class, "br");
+        fl = hardwareMap.get(DcMotor.class, "fl");
+        fr = hardwareMap.get(DcMotor.class, "fr");
 
         bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -150,4 +148,8 @@ public class myblock{
     }
 
 
+    @Override
+    public void runOpMode() throws InterruptedException {
+        //
+    }
 }
