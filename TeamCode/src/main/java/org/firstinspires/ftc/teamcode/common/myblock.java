@@ -150,6 +150,7 @@ public class myblock extends LinearOpMode{
 
     @Override
     public void runOpMode() throws InterruptedException {
+        waitForStart();
         MoveTank(6400, 0.5);
         Strafe(1500, 0.25);
     }
