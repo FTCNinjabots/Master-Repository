@@ -10,7 +10,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 
-@Disabled
 public class myblock extends LinearOpMode{
 
     private DcMotor bl = null;
@@ -150,6 +149,7 @@ public class myblock extends LinearOpMode{
 
     @Override
     public void runOpMode() throws InterruptedException {
-        //
+        MoveTank(6400, 0.5);
+        Strafe(1500, 0.25);
     }
 }

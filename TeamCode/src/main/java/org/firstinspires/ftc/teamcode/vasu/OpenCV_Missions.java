@@ -1,14 +1,8 @@
 package org.firstinspires.ftc.teamcode.vasu;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import org.firstinspires.ftc.teamcode.vasu.A_Site;
-import org.firstinspires.ftc.teamcode.vasu.C_Site;
-import org.firstinspires.ftc.teamcode.vasu.B_Site;
 
 import org.firstinspires.ftc.teamcode.anay.vision.OpenCVVision;
-import org.firstinspires.ftc.teamcode.common.myblock;
 
 @Autonomous(name="Autonomous1", group = "Autonomous")
 
