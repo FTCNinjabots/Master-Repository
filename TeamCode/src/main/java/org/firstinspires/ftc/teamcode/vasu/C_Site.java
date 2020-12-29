@@ -10,10 +10,9 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @Autonomous(name="CS", group="CS")
 
-public class C_Site extends LinearOpMode {
+public class C_Site extends myblock {
 
     //MoveTank motor = new MoveTank();
-    myblock robot = new myblock();
 
 
 /*
@@ -69,7 +68,7 @@ public class C_Site extends LinearOpMode {
 
 
             waitForStart();
-           robot.MoveTank(9500, 0.5);
+           MoveTank(9500, 0.5);
 
     }
 }
