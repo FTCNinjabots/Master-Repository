@@ -12,27 +12,20 @@ import org.firstinspires.ftc.teamcode.common.myblock;
 
 @Autonomous(name="Autonomous1", group = "Autonomous")
 
-public class OpenCV_Missions extends LinearOpMode {
+public class OpenCV_Missions extends OpenCVVision {
 
     //Vuforia_Webcam Vu1;
-    C_Site c_motor;
-    B_Site b_motor;
-    A_Site a_motor;
-    private DcMotor bl = null;
-    private DcMotor br = null;
-    private DcMotor fl = null;
-    private DcMotor fr = null;
-    OpenCVVision Test1 = new OpenCVVision();
-
-
+    C_Site c_motor = new C_Site();
+    B_Site b_motor = new B_Site();
+    A_Site a_motor = new A_Site();
 
 
     @Override
-    public void runOpMode() throws InterruptedException {
-         bl = hardwareMap.get(DcMotor.class, "bl");
-         br = hardwareMap.get(DcMotor.class, "br");
-         fl = hardwareMap.get(DcMotor.class, "fl");
-         fr = hardwareMap.get(DcMotor.class, "fr");
+    public void runOpMode(){
+        DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
+        DcMotor br = hardwareMap.get(DcMotor.class, "br");
+        DcMotor fl = hardwareMap.get(DcMotor.class, "fl");
+        DcMotor fr = hardwareMap.get(DcMotor.class, "fr");
 
         waitForStart();
 
@@ -50,27 +43,39 @@ public class OpenCV_Missions extends LinearOpMode {
          br.setDirection(DcMotor.Direction.REVERSE);
          fr.setDirection(DcMotor.Direction.REVERSE);
 
-        Test1.runOpMode();
+        detect();
         //Vu1.runOpMode();
 
-        if(Test1.position == OpenCVVision.SkystoneDeterminationPipeline.RingPosition.FOUR){
+        if(position == OpenCVVision.SkystoneDeterminationPipeline.RingPosition.FOUR){
             telemetry.addData("Position: ", "Four Rings");
             telemetry.update();
-            c_motor.runOpMode();
+            try {
+                c_motor.run();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             //add the arm servo part here
         }
 
-        else if(Test1.position == OpenCVVision.SkystoneDeterminationPipeline.RingPosition.ONE) {
+        else if(position == OpenCVVision.SkystoneDeterminationPipeline.RingPosition.ONE) {
             telemetry.addData("Position: ", "One Ring");
-            b_motor.runOpMode();
-
             telemetry.update();
+            try {
+                b_motor.run();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
         }
 
-        else if(Test1.position == OpenCVVision.SkystoneDeterminationPipeline.RingPosition.NONE){
+        else if(position == OpenCVVision.SkystoneDeterminationPipeline.RingPosition.NONE){
             telemetry.addData("Position: ", "No Rings");
             telemetry.update();
-            a_motor.runOpMode();
+            try {
+                a_motor.run();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
 
             //arm servo goes here

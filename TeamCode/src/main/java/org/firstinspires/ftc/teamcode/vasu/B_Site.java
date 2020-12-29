@@ -55,10 +55,8 @@ public class B_Site extends myblock {
 
     }*/
 
-    @Override
 
-    public void runOpMode() throws InterruptedException {
-        waitForStart();
+    public void run() throws InterruptedException {
         MoveTank(6400, 0.5);
         Strafe(2300, 0.25);
         MoveTank(-2000, -0.5);

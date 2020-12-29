@@ -62,13 +62,8 @@ public class C_Site extends myblock {
 
     }
 */
-    public void runOpMode() throws InterruptedException {
-
-
-
-
-            waitForStart();
-           MoveTank(9500, 0.5);
+    public void run() throws InterruptedException {
+        MoveTank(9500, 0.5);
 
     }
 }

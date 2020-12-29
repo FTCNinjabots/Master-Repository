@@ -50,8 +50,13 @@ public class OpenCVVision extends LinearOpMode {
     public SkystoneDeterminationPipeline.RingPosition position;
     OpenCvWebcam webcam;
 
+
     @Override
     public void runOpMode() {
+        //Blank
+    }
+
+    public void detect() {
             int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
             webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "webcam"), cameraMonitorViewId);
 
