@@ -1,11 +1,7 @@
 package org.firstinspires.ftc.teamcode.vasu;
-import org.firstinspires.ftc.teamcode.anay.Dcmotor;
 import org.firstinspires.ftc.teamcode.common.myblock;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 
 @Autonomous(name="CS", group="CS")

@@ -37,6 +37,26 @@ public class Teleop extends OpMode {
         fr.setPower(gamepad1.right_stick_y);
         bl.setPower(-gamepad1.left_stick_y);
 
+        br.setPower(-gamepad1.right_trigger);
+        bl.setPower(-gamepad1.right_trigger);
+        br.setPower(-gamepad1.right_trigger);
+        bl.setPower(-gamepad1.right_trigger);
+
+        fr.setPower(gamepad1.right_trigger);
+        fl.setPower(gamepad1.right_trigger);
+        fr.setPower(gamepad1.right_trigger);
+        fl.setPower(gamepad1.right_trigger);
+
+        br.setPower(gamepad1.left_trigger);
+        bl.setPower(gamepad1.left_trigger);
+        br.setPower(gamepad1.left_trigger);
+        bl.setPower(gamepad1.left_trigger);
+
+        fr.setPower(-gamepad1.left_trigger);
+        fl.setPower(-gamepad1.left_trigger);
+        fr.setPower(-gamepad1.left_trigger);
+        fl.setPower(-gamepad1.left_trigger);
+
 
 
 

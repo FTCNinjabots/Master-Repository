@@ -26,10 +26,7 @@ public class RT extends OpMode {
         fr = hardwareMap.dcMotor.get("fr");
         bl = hardwareMap.dcMotor.get("bl");
 
-        bl.setPower(-0.25);
-        br.setPower(-0.25);
-        fl.setPower(0.25);
-        fr.setPower(0.25);
+
 
     }
     public void loop() {
@@ -38,6 +35,7 @@ public class RT extends OpMode {
         fl.setPower(gamepad1.right_trigger);
         fr.setPower(-gamepad1.right_trigger);
         bl.setPower(gamepad1.right_trigger);
+
 
 
     }

@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 
 
-@Disabled
+//@Disabled
 
 @TeleOp
 public class LT extends OpMode {
@@ -29,10 +29,10 @@ public class LT extends OpMode {
         fr = hardwareMap.dcMotor.get("fr");
         bl = hardwareMap.dcMotor.get("bl");
 
-        bl.setPower(0.25);
-        br.setPower(0.25);
-        fl.setPower(-0.25);
-        fr.setPower(-0.25);
+        //bl.setPower(0.25);
+        //br.setPower(0.25);
+        //fl.setPower(-0.25);
+        //fr.setPower(-0.25);
 
     }
     public void loop() {
