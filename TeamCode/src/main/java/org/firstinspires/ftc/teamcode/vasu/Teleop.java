@@ -31,7 +31,7 @@ public class Teleop extends OpMode {
     }
     public void loop() {
 
-        //last but not least, we give each motor a joystick pattern
+        //last but not least we give each motor a joystick pattern
         br.setPower(gamepad1.right_stick_y);
         fl.setPower(-gamepad1.left_stick_y);
         fr.setPower(gamepad1.right_stick_y);
