@@ -1,9 +1,10 @@
 package org.firstinspires.ftc.teamcode.anay;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
-
+@Disabled
 @Autonomous
 public class crservo extends LinearOpMode{
    private CRServo main = null;

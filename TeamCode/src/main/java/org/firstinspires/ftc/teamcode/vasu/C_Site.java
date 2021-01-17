@@ -1,11 +1,12 @@
 package org.firstinspires.ftc.teamcode.vasu;
 import org.firstinspires.ftc.teamcode.common.myblock;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 
 @Autonomous(name="CS", group="CS")
-
+@Disabled
 public class C_Site extends myblock {
 
     //MoveTank motor = new MoveTank();

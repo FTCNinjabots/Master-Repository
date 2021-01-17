@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 
 //first identify what type of code is this, teleop or auto
-
+@Disabled
 @TeleOp
 public class Teleop extends OpMode {
 

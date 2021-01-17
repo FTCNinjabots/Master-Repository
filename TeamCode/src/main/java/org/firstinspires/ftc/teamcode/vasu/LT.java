@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 
 //@Disabled
-
+@Disabled
 @TeleOp
 public class LT extends OpMode {
 

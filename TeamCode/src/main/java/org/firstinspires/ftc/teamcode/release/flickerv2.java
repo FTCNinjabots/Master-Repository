@@ -5,11 +5,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
-
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 @Disabled
 @Autonomous
-public class testFlicker extends LinearOpMode {
+public class flickerv2 extends LinearOpMode {
     private DcMotor flicker = null;
     private DcMotor shooter = null;
     Gamepad shoot_gamepad = null;
@@ -30,26 +28,8 @@ public class testFlicker extends LinearOpMode {
         while (opModeIsActive()) {
             sleep(2000);
 
-            int encoder_value = 300;
+            int encoder_value = -250;
             int target_position = flicker.getCurrentPosition();
-            flicker.setPower(0.2);
-            while (target_position <= encoder_value) {
-
-
-                target_position = flicker.getCurrentPosition();
-                telemetry.addData("Current Position: ", target_position);
-                telemetry.update();
-
-                if (target_position > encoder_value) {
-                    flicker.setPower(0);
-                }
-
-            }
-            telemetry.addData("position right now", target_position);
-            telemetry.update();
-
-            encoder_value = -250;
-            target_position = flicker.getCurrentPosition();
             flicker.setPower(-0.2);
             while (target_position >= encoder_value) {
 
@@ -63,13 +43,26 @@ public class testFlicker extends LinearOpMode {
                 }
 
             }
+            telemetry.addData("position right now", target_position);
+            telemetry.update();
+
+            encoder_value = 0;
+            target_position = flicker.getCurrentPosition();
+            flicker.setPower(0.2);
+            while (target_position <= encoder_value) {
+
+
+                target_position = flicker.getCurrentPosition();
+                telemetry.addData("Current Position: ", target_position);
+                telemetry.update();
+
+                if (target_position > encoder_value) {
+                    flicker.setPower(0);
+                }
+
+            }
 
 
         }
-
-
-
     }
 }
-
-

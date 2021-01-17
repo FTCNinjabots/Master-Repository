@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.anay.vision;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.vuforia.HINT;
@@ -23,6 +24,7 @@ import org.firstinspires.ftc.teamcode.R;
  * This OpMode was written for the VuforiaDemo Basics video. This demonstrates basic principles of
  * using VuforiaDemo in FTC.
  */
+@Disabled
 @Autonomous(name = "Vuforia_2")
 public class Vuforia_2 extends LinearOpMode
 {

@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode.vasu;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.common.myblock;
 
 @Autonomous(name="BS", group="BS")
-
+@Disabled
 public class B_Site extends myblock {
 
     /*public void MoveTank(int target_position, double motorPower) throws InterruptedException {
