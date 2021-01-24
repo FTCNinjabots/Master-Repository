@@ -29,7 +29,7 @@ public class Release_TeleOp extends LinearOpMode {
 
         waitForStart();
         while (opModeIsActive()) {
-            /*
+
             br.setPower(gamepad1.right_stick_y);
             fl.setPower(gamepad1.left_stick_y);
             fr.setPower(gamepad1.right_stick_y);
@@ -49,7 +49,7 @@ public class Release_TeleOp extends LinearOpMode {
                 fl.setPower(gamepad1.right_trigger);
                 fr.setPower(-gamepad1.right_trigger);
             }
-            */
+
             if (gamepad1.a) {
 
                 intake_motor.setPower(1.0);

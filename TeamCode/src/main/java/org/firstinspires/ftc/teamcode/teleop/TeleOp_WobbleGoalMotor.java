@@ -28,15 +28,8 @@ public class TeleOp_WobbleGoalMotor extends LinearOpMode {
                 wobble_goal_motor.setPower(0.0);
             }
 
-            if (gamepad1.right_trigger != 0) {
-                main.setPosition(1.0);
-            } else if (gamepad1.left_trigger != 0) {
-                main.setPosition(0.0);
-            }
 
 
-            if (gamepad1.x) {
-                main.setPosition(main.getPosition());
             }
         }
         /*
@@ -59,5 +52,5 @@ public class TeleOp_WobbleGoalMotor extends LinearOpMode {
 
 
 
-    }
+
 }
