@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 //Control 0 - br
@@ -35,6 +36,8 @@ public class TeleOp_Ninjabots extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+
+
         bl = hardwareMap.get(DcMotor.class, "bl");
         br = hardwareMap.get(DcMotor.class, "br");
         fl = hardwareMap.get(DcMotor.class, "fl");
@@ -61,30 +64,58 @@ public class TeleOp_Ninjabots extends LinearOpMode {
         wobble.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         flicker.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        br.setDirection(DcMotorSimple.Direction.REVERSE);
+        fr.setDirection(DcMotorSimple.Direction.REVERSE);
+        int strafe_value = 0;
 
         waitForStart();
         while(opModeIsActive()){
 
-            //Moving
-            br.setPower(gamepad1.right_stick_y);
-            fl.setPower(gamepad1.left_stick_y);
-            fr.setPower(gamepad1.right_stick_y);
-            bl.setPower(gamepad1.left_stick_y);
 
-            if (gamepad1.left_trigger != 0){
+            if (gamepad1.left_trigger > 0.5){
+                strafe_value = 1;
+            }
+            else if (gamepad1.right_trigger > 0.5){
+                strafe_value = 2;
+            }
+            else if (gamepad1.left_stick_y != 0 || gamepad1.right_stick_y != 0){
+                strafe_value = 0;
+            }
+            else{
+                strafe_value = 4;
+            }
+
+            if (strafe_value == 1) {
                 //strafe left - LT
                 bl.setPower(gamepad1.left_trigger);
                 br.setPower(-gamepad1.left_trigger);
                 fl.setPower(-gamepad1.left_trigger);
                 fr.setPower(gamepad1.left_trigger);
+
             }
-            else if (gamepad1.right_trigger != 0){
+            else if (strafe_value == 2) {
                 //strafe right - RT
                 bl.setPower(-gamepad1.right_trigger);
                 br.setPower(gamepad1.right_trigger);
                 fl.setPower(gamepad1.right_trigger);
                 fr.setPower(-gamepad1.right_trigger);
             }
+            else if (strafe_value == 0){
+                //Moving
+                br.setPower(-gamepad1.right_stick_y);
+                fl.setPower(-gamepad1.left_stick_y);
+                fr.setPower(-gamepad1.right_stick_y);
+                bl.setPower(-gamepad1.left_stick_y);
+
+            }
+            else if (strafe_value == 4){
+                br.setPower(0.0);
+                fl.setPower(0.0);
+                fr.setPower(0.0);
+                bl.setPower(0.0);
+
+            }
+
 
             //Wobble Goal - LB to go inside, RB to go outside, a to stop motor power
             if (gamepad1.left_bumper) {
@@ -99,12 +130,13 @@ public class TeleOp_Ninjabots extends LinearOpMode {
 
             //Wobble Goal Gate - DPAD Down to open, DPAD Up to Close
 
-            if (gamepad1.dpad_down){
+            if (gamepad1.x){
                 wobble_gate.setPosition(1.0);
             }
-            else if (gamepad1.dpad_up){
+            else if (gamepad1.b){
                 wobble_gate.setPosition(0.0);
             }
+
 
 
 
@@ -112,13 +144,15 @@ public class TeleOp_Ninjabots extends LinearOpMode {
 
             //Intake - A to start, Y to stop
             if (gamepad2.a){
+                //intake.setPower(1.0);
                 intake.setPower(1.0);
-            }
+        }
             else if (gamepad2.y){
                 intake.setPower(0.0);
             }
 
             //Rack + Pinion - LB and RB, b to stop
+            // continues until stopped
             if (gamepad2.left_bumper){
                 rack_pinion.setPower(1.0);
             }
@@ -131,10 +165,10 @@ public class TeleOp_Ninjabots extends LinearOpMode {
             }
 
             //FLicker - LT + RT
-            if (gamepad1.left_trigger > 0 /*&& current_value > -250*/) {
+            if (gamepad2.left_trigger > 0 /*&& current_value > -250*/) {
                 flicker.setPower(-0.2);
             }
-            else if (gamepad1.right_trigger > 0 /*&& current_value < 0*/){
+            else if (gamepad2.right_trigger > 0 /*&& current_value < 0*/){
                 flicker.setPower(0.2);
 
             }
@@ -144,7 +178,7 @@ public class TeleOp_Ninjabots extends LinearOpMode {
 
             //Shooter - DPAD UP TO START, DPAD DOWN TO STOP
             if (gamepad2.dpad_up){
-                shooter.setPower(1.0);
+                shooter.setPower(-1.0);
             }
             else if (gamepad2.dpad_down){
                 shooter.setPower(0.0);
