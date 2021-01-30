@@ -1,12 +1,16 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
 
+import android.view.Display;
+
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsUsbDcMotorController;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 //Control 0 - br
 //Control 1 - bl
@@ -33,6 +37,7 @@ public class TeleOp_Ninjabots extends LinearOpMode {
 
     private Servo wobble_gate = null;
     private CRServo rack_pinion = null;
+    //private ModernRoboticsUsbDcMotorController voltage = null;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -50,6 +55,7 @@ public class TeleOp_Ninjabots extends LinearOpMode {
         wobble_gate = hardwareMap.get(Servo.class, "wobble_gate");
         rack_pinion = hardwareMap.get(CRServo.class, "rack_pinion");
 
+        //voltage = hardwareMap.get(ModernRoboticsUsbDcMotorController.class, "Control Hub Portal");
         bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -166,10 +172,10 @@ public class TeleOp_Ninjabots extends LinearOpMode {
 
             //FLicker - LT + RT
             if (gamepad2.left_trigger > 0 /*&& current_value > -250*/) {
-                flicker.setPower(-0.2);
+                flicker.setPower(-1.0);
             }
             else if (gamepad2.right_trigger > 0 /*&& current_value < 0*/){
-                flicker.setPower(0.2);
+                flicker.setPower(1.0);
 
             }
             else{
@@ -178,7 +184,11 @@ public class TeleOp_Ninjabots extends LinearOpMode {
 
             //Shooter - DPAD UP TO START, DPAD DOWN TO STOP
             if (gamepad2.dpad_up){
-                shooter.setPower(-1.0);
+                //shooter.setPower(0.1 * voltage.getVoltage() - 1.9);
+                //telemetry.addData("Voltage: ", voltage.getVoltage());
+                //telemetry.addData("Speed: ", 0.1 * voltage.getVoltage() - 1.9);
+                //telemetry.update();
+                shooter.setPower(-0.7);
             }
             else if (gamepad2.dpad_down){
                 shooter.setPower(0.0);
