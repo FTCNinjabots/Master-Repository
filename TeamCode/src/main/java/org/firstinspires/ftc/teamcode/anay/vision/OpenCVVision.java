@@ -43,7 +43,6 @@ import org.openftc.easyopencv.OpenCvInternalCamera;
 import org.openftc.easyopencv.OpenCvPipeline;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-@Disabled
 @TeleOp(name = "OpenCvVision")
 public class OpenCVVision extends LinearOpMode {
     public SkystoneDeterminationPipeline pipeline;
@@ -53,51 +52,43 @@ public class OpenCVVision extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        //Blank
-    }
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "webcam"), cameraMonitorViewId);
 
-    public void detect() {
-            int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-            webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "webcam"), cameraMonitorViewId);
+        pipeline = new SkystoneDeterminationPipeline();
 
-            pipeline = new SkystoneDeterminationPipeline();
-
-            webcam.setPipeline(pipeline);
+        webcam.setPipeline(pipeline);
 
 
-            // We set the viewport policy to optimized view so the preview doesn't appear 90 deg
-            // out when the RC activity is in portrait. We do our actual image processing assuming
-            // landscape orientation, though
-            //webcam.setViewportRenderingPolicy(OpenCvWebcam.ViewportRenderingPolicy.OPTIMIZE_VIEW);
-            webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
-                @Override
-                public void onOpened() {
-                    webcam.startStreaming(320, 240);
-                }
-            });
+        // We set the viewport policy to optimized view so the preview doesn't appear 90 deg
+        // out when the RC activity is in portrait. We do our actual image processing assuming
+        // landscape orientation, though
+        //webcam.setViewportRenderingPolicy(OpenCvWebcam.ViewportRenderingPolicy.OPTIMIZE_VIEW);
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() {
+                webcam.startStreaming(320, 240);
+            }
+        });
 
-            waitForStart();
-
-
-
-            //This should be commented out
-            //while (opModeIsActive()) {
-             //   telemetry.addData("Analysis", pipeline.getAnalysis());
-              //  telemetry.addData("Position", SkystoneDeterminationPipeline.position);
-             //   telemetry.update();
-
-                // Don't burn CPU cycles busy-looping in this sample
-             //   sleep(50);
+        waitForStart();
 
 
+        while (opModeIsActive()) {
+            telemetry.addData("Analysis", pipeline.getAnalysis());
+            telemetry.addData("Position", SkystoneDeterminationPipeline.position);
+            telemetry.update();
+
+            // Don't burn CPU cycles busy-looping in this sample
+            sleep(50);
 
 
-
-
+        }
 
     }
 
-    public static class SkystoneDeterminationPipeline extends OpenCvPipeline {
+
+public static class SkystoneDeterminationPipeline extends OpenCvPipeline {
         /*
          * An enum to define the skystone position
          */
@@ -116,7 +107,7 @@ public class OpenCVVision extends LinearOpMode {
         /*
          * The core values which define the location and size of the sample regions
          */
-        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(220, 40);
+        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(100, 40);
         //static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(181, 98);
 
         static final int REGION_WIDTH = 50;

@@ -37,6 +37,8 @@ public class OpenCV_Missions extends myblock {
         if(position == OpenCVVision.SkystoneDeterminationPipeline.RingPosition.FOUR){
             telemetry.addData("Position: ", "Four Rings");
             telemetry.update();
+
+            //find value and assign here
             //add the arm servo part here
                     }
 

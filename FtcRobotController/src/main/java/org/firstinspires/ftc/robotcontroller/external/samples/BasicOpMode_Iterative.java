@@ -32,7 +32,10 @@ package org.firstinspires.ftc.robotcontroller.external.samples;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -50,35 +53,54 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Basic: Iterative OpMode", group="Iterative Opmode")
+@TeleOp(name="TeleOp Release")
 @Disabled
 public class BasicOpMode_Iterative extends OpMode
 {
-    // Declare OpMode members.
-    private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor leftDrive = null;
-    private DcMotor rightDrive = null;
+    private DcMotor br = null;
+    private DcMotor bl = null;
+    private DcMotor fl = null;
+    private DcMotor fr = null;
+    private DcMotor intake = null;
+    private DcMotor wobble = null;
+    private DcMotor flicker = null;
+    private DcMotor shooter = null;
 
-    /*
-     * Code to run ONCE when the driver hits INIT
-     */
+    private Servo wobble_gate = null;
+    private CRServo rack_pinion = null;
+
     @Override
     public void init() {
-        telemetry.addData("Status", "Initialized");
+        bl = hardwareMap.get(DcMotor.class, "bl");
+        br = hardwareMap.get(DcMotor.class, "br");
+        fl = hardwareMap.get(DcMotor.class, "fl");
+        fr = hardwareMap.get(DcMotor.class, "fr");
+        intake = hardwareMap.get(DcMotor.class, "intake");
+        wobble = hardwareMap.get(DcMotor.class, "wobble");
+        flicker = hardwareMap.get(DcMotor.class, "flicker");
+        shooter = hardwareMap.get(DcMotor.class, "shooter");
 
-        // Initialize the hardware variables. Note that the strings used here as parameters
-        // to 'get' must correspond to the names assigned during the robot configuration
-        // step (using the FTC Robot Controller app on the phone).
-        leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
-        rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
+        wobble_gate = hardwareMap.get(Servo.class, "wobble_gate");
+        rack_pinion = hardwareMap.get(CRServo.class, "rack_pinion");
 
-        // Most robots need the motor on one side to be reversed to drive forward
-        // Reverse the motor that runs backwards when connected directly to the battery
-        leftDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightDrive.setDirection(DcMotor.Direction.REVERSE);
+        //voltage = hardwareMap.get(ModernRoboticsUsbDcMotorController.class, "Control Hub Portal");
+        bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        wobble.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        flicker.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        // Tell the driver that initialization is complete.
-        telemetry.addData("Status", "Initialized");
+        bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        wobble.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        flicker.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        br.setDirection(DcMotorSimple.Direction.REVERSE);
+        fr.setDirection(DcMotorSimple.Direction.REVERSE);
+
     }
 
     /*
@@ -86,6 +108,7 @@ public class BasicOpMode_Iterative extends OpMode
      */
     @Override
     public void init_loop() {
+
     }
 
     /*
@@ -93,40 +116,124 @@ public class BasicOpMode_Iterative extends OpMode
      */
     @Override
     public void start() {
-        runtime.reset();
+
     }
 
-    /*
-     * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
-     */
+    int strafe_value = 0;
+    boolean flicker_resetting = false;
+    int flicker_timer = 0;
     @Override
     public void loop() {
-        // Setup a variable for each drive wheel to save power level for telemetry
-        double leftPower;
-        double rightPower;
+        if (gamepad1.left_trigger > 0.5) {
+            strafe_value = 1;
+        } else if (gamepad1.right_trigger > 0.5) {
+            strafe_value = 2;
+        } else if (gamepad1.left_stick_y != 0 || gamepad1.right_stick_y != 0) {
+            strafe_value = 0;
+        } else {
+            strafe_value = 4;
+        }
 
-        // Choose to drive using either Tank Mode, or POV Mode
-        // Comment out the method that's not used.  The default below is POV.
+        if (strafe_value == 1) {
+            //strafe left - LT
+            bl.setPower(gamepad1.left_trigger);
+            br.setPower(-gamepad1.left_trigger);
+            fl.setPower(-gamepad1.left_trigger);
+            fr.setPower(gamepad1.left_trigger);
 
-        // POV Mode uses left stick to go forward, and right stick to turn.
-        // - This uses basic math to combine motions and is easier to drive straight.
-        double drive = -gamepad1.left_stick_y;
-        double turn  =  gamepad1.right_stick_x;
-        leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
-        rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
+        } else if (strafe_value == 2) {
+            //strafe right - RT
+            bl.setPower(-gamepad1.right_trigger);
+            br.setPower(gamepad1.right_trigger);
+            fl.setPower(gamepad1.right_trigger);
+            fr.setPower(-gamepad1.right_trigger);
+        } else if (strafe_value == 0) {
+            //Moving
+            br.setPower(-gamepad1.right_stick_y);
+            fl.setPower(-gamepad1.left_stick_y);
+            fr.setPower(-gamepad1.right_stick_y);
+            bl.setPower(-gamepad1.left_stick_y);
 
-        // Tank Mode uses one stick to control each wheel.
-        // - This requires no math, but it is hard to drive forward slowly and keep straight.
-        // leftPower  = -gamepad1.left_stick_y ;
-        // rightPower = -gamepad1.right_stick_y ;
+        } else if (strafe_value == 4) {
+            br.setPower(0.0);
+            fl.setPower(0.0);
+            fr.setPower(0.0);
+            bl.setPower(0.0);
 
-        // Send calculated power to wheels
-        leftDrive.setPower(leftPower);
-        rightDrive.setPower(rightPower);
+        }
 
-        // Show the elapsed game time and wheel power.
-        telemetry.addData("Status", "Run Time: " + runtime.toString());
-        telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+
+        //Wobble Goal - LB to go inside, RB to go outside, a to stop motor power
+        if (gamepad1.left_bumper) {
+            wobble.setPower(0.4);
+        } else if (gamepad1.right_bumper) {
+            wobble.setPower(-0.4);
+        }
+
+        if (gamepad1.a) {
+            wobble.setPower(0.0);
+        }
+
+        //Wobble Goal Gate - DPAD Down to open, DPAD Up to Close
+
+        if (gamepad1.x) {
+            wobble_gate.setPosition(1.0);
+        } else if (gamepad1.b) {
+            wobble_gate.setPosition(0.0);
+        }
+
+
+        ///CONTROLLER 2
+
+        if (gamepad2.x) {
+            flicker.setPower(-1);
+        }
+
+        //Intake - A to start, Y to stop
+
+
+        if (gamepad2.a) {
+            //intake.setPower(1.0);
+            intake.setPower(1.0);
+        } else if (gamepad2.y) {
+            intake.setPower(0.0);
+        }
+
+        //Rack + Pinion - LB and RB, b to stop
+        // continues until stopped
+        if (gamepad2.left_bumper) {
+            rack_pinion.setPower(1.0);
+
+        } else if (gamepad2.right_bumper) {
+            rack_pinion.setPower(-1.0);
+
+        }
+
+        if (gamepad2.b) { // come back to this later if we want to use joystick
+            rack_pinion.setPower(0.0);
+        }
+
+        //FLicker - LT + RT
+        if (gamepad2.left_trigger > 0 /*&& current_value > -250*/) {
+            flicker.setPower(-1.0);
+        } else if (gamepad2.right_trigger > 0 /*&& current_value < 0*/) {
+            flicker.setPower(1.0);
+
+
+        } else {
+            flicker.setPower(0);
+        }
+
+        //Shooter - DPAD UP TO START, DPAD DOWN TO STOP
+        if (gamepad2.dpad_up) {
+            //shooter.setPower(0.1 * voltage.getVoltage() - 1.9);
+            //telemetry.addData("Voltage: ", voltage.getVoltage());
+            //telemetry.addData("Speed: ", 0.1 * voltage.getVoltage() - 1.9);
+            //telemetry.update();
+            shooter.setPower(-0.7);
+        } else if (gamepad2.dpad_down) {
+            shooter.setPower(0.0);
+        }
     }
 
     /*

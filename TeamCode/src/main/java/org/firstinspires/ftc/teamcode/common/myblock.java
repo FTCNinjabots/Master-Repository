@@ -5,10 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.anay.vision.OpenCVVision;
 import org.opencv.core.Core;
@@ -165,7 +162,7 @@ public class myblock extends LinearOpMode{
     }
 
 
-    public void detect() {
+    public SkystoneDeterminationPipeline.RingPosition detect() {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "webcam"), cameraMonitorViewId);
 
@@ -184,8 +181,8 @@ public class myblock extends LinearOpMode{
                 webcam.startStreaming(320, 240);
             }
         });
+        return pipeline.position;
 
-        waitForStart();
 
 
 
@@ -204,6 +201,7 @@ public class myblock extends LinearOpMode{
 
 
 
+
     }
 
     @Override
@@ -211,7 +209,8 @@ public class myblock extends LinearOpMode{
         //null
     }
 
-    public static class SkystoneDeterminationPipeline extends OpenCvPipeline {
+public static class SkystoneDeterminationPipeline extends OpenCvPipeline {
+
         /*
          * An enum to define the skystone position
          */
@@ -258,7 +257,7 @@ public class myblock extends LinearOpMode{
         int avg1;
 
         // Volatile since accessed by OpMode thread w/o synchronization
-        public static volatile OpenCVVision.SkystoneDeterminationPipeline.RingPosition position = OpenCVVision.SkystoneDeterminationPipeline.RingPosition.FOUR;
+        public volatile OpenCVVision.SkystoneDeterminationPipeline.RingPosition position = OpenCVVision.SkystoneDeterminationPipeline.RingPosition.FOUR;
 
         /*
          * This function takes the RGB frame, converts to YCrCb,
