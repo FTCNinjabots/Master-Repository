@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.anay.vision.OpenCVVision;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
@@ -23,8 +22,8 @@ import org.openftc.easyopencv.OpenCvWebcam;
 @TeleOp
 public class myblock extends LinearOpMode{
 
-    public OpenCVVision.SkystoneDeterminationPipeline pipeline;
-    public OpenCVVision.SkystoneDeterminationPipeline.RingPosition position;
+    public SkystoneDeterminationPipeline pipeline;
+    public SkystoneDeterminationPipeline.RingPosition position;
     OpenCvWebcam webcam;
 
     private DcMotor bl = null;
@@ -55,6 +54,7 @@ public class myblock extends LinearOpMode{
 
         br.setDirection(DcMotor.Direction.REVERSE);
         fr.setDirection(DcMotor.Direction.REVERSE);
+
         bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -121,17 +121,18 @@ public class myblock extends LinearOpMode{
         fl = hardwareMap.get(DcMotor.class, "fl");
         fr = hardwareMap.get(DcMotor.class, "fr");
 
-        bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        //bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         br.setDirection(DcMotor.Direction.REVERSE);
         fr.setDirection(DcMotor.Direction.REVERSE);
-        bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         bl.setPower(blpower);
         br.setPower(brpower);
@@ -140,6 +141,7 @@ public class myblock extends LinearOpMode{
 
         while (!has_stopped) {
             int current_position = fl.getCurrentPosition();
+            telemetry.update();
             if (current_position >= target_position && frpower == -1 * motorpower) {
                 bl.setPower(0.0);
                 br.setPower(0.0);
@@ -166,7 +168,7 @@ public class myblock extends LinearOpMode{
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "webcam"), cameraMonitorViewId);
 
-        pipeline = new OpenCVVision.SkystoneDeterminationPipeline();
+        pipeline = new SkystoneDeterminationPipeline();
 
         webcam.setPipeline(pipeline);
 
@@ -229,7 +231,7 @@ public static class SkystoneDeterminationPipeline extends OpenCvPipeline {
         /*
          * The core values which define the location and size of the sample regions
          */
-        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(220, 40);
+        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(100, 40);
         //static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(181, 98);
 
         static final int REGION_WIDTH = 50;
@@ -257,7 +259,7 @@ public static class SkystoneDeterminationPipeline extends OpenCvPipeline {
         int avg1;
 
         // Volatile since accessed by OpMode thread w/o synchronization
-        public volatile OpenCVVision.SkystoneDeterminationPipeline.RingPosition position = OpenCVVision.SkystoneDeterminationPipeline.RingPosition.FOUR;
+        public volatile SkystoneDeterminationPipeline.RingPosition position = SkystoneDeterminationPipeline.RingPosition.FOUR;
 
         /*
          * This function takes the RGB frame, converts to YCrCb,
@@ -288,13 +290,13 @@ public static class SkystoneDeterminationPipeline extends OpenCvPipeline {
                     BLUE, // The color the rectangle is drawn in
                     2); // Thickness of the rectangle lines
 
-            position = OpenCVVision.SkystoneDeterminationPipeline.RingPosition.FOUR; // Record our analysis
+            position = SkystoneDeterminationPipeline.RingPosition.FOUR; // Record our analysis
             if (avg1 > FOUR_RING_THRESHOLD) {
-                position = OpenCVVision.SkystoneDeterminationPipeline.RingPosition.FOUR;
+                position = SkystoneDeterminationPipeline.RingPosition.FOUR;
             } else if (avg1 > ONE_RING_THRESHOLD) {
-                position = OpenCVVision.SkystoneDeterminationPipeline.RingPosition.ONE;
+                position = SkystoneDeterminationPipeline.RingPosition.ONE;
             } else {
-                position = OpenCVVision.SkystoneDeterminationPipeline.RingPosition.NONE;
+                position = SkystoneDeterminationPipeline.RingPosition.NONE;
             }
 
             Imgproc.rectangle(

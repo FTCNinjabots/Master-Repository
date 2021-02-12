@@ -23,19 +23,19 @@ public class Optimize_Shooter extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()){
             shooter.setPower(power);
-            if (gamepad1.a){
+            if (gamepad2.a){
                 power -= 0.001;
             }
-            else if (gamepad1.b){
+            else if (gamepad2.b){
                 power += 0.001;
             }
 
             if (power > 0){
                 power = 0;
             }
-            if (gamepad1.left_trigger > 0 /*&& current_value > -250*/) {
+            if (gamepad2.left_trigger > 0 /*&& current_value > -250*/) {
                 flicker.setPower(-1.0);
-            } else if (gamepad1.right_trigger > 0 /*&& current_value < 0*/) {
+            } else if (gamepad2.right_trigger > 0 /*&& current_value < 0*/) {
                 flicker.setPower(1.0);
 
 

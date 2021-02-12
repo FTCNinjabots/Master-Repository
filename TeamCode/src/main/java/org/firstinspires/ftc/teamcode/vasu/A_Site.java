@@ -3,12 +3,16 @@ package org.firstinspires.ftc.teamcode.vasu;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.common.myblock;
 
 @Autonomous(name="AS", group="AS")
-@Disabled
 public class A_Site extends myblock {
+    DcMotor bl;
+    DcMotor fr;
+    DcMotor fl;
+    DcMotor br;
 
 
     /*public void MoveTank(int target_position, double motorPower) throws InterruptedException {
@@ -56,47 +60,43 @@ public class A_Site extends myblock {
     }*/
 
 
-    public void run() throws InterruptedException {
-        MoveTank(6400, 0.5);
-        Strafe(1500, 0.25);
+    public void runOpMode() throws InterruptedException {
 
-        /*
-        MoveTank(6400, 0.5);
+        bl = hardwareMap.get(DcMotor.class, "bl");
+        br = hardwareMap.get(DcMotor.class, "br");
+        fl = hardwareMap.get(DcMotor.class, "fl");
+        fr = hardwareMap.get(DcMotor.class, "fr");
 
-        //Drop Wobble Goal Here
-
-        int target2 = 1500;
-        int current_position = 0;
-        boolean has_stopped = false;
-
-        bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         br.setDirection(DcMotor.Direction.REVERSE);
         fr.setDirection(DcMotor.Direction.REVERSE);
-        bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        bl.setPower(-0.25);
-        br.setPower(0.25);
-        fl.setPower(0.25);
-        fr.setPower(-0.25);
+        //bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        waitForStart();
+        while (opModeIsActive()) {
+            MoveTank(6400, 0.5);
+            telemetry.addData("BR:", br.getCurrentPosition());
+            telemetry.addData("BL:", bl.getCurrentPosition());
+            telemetry.addData("FL:", fl.getCurrentPosition());
+            telemetry.addData("FR:", fr.getCurrentPosition());
 
-        while (!has_stopped) {
-            current_position = fl.getCurrentPosition();
-            if (current_position >= target2) {
-                bl.setPower(0.0);
-                br.setPower(0.0);
-                fl.setPower(0.0);
-                fr.setPower(0.0);
-                has_stopped = true;
 
-            }
-        }*/
+
+            Strafe(1500, 0.25);
+
+
+            MoveTank(6400, 0.5);
+
+            //Drop Wobble Goal Here
+
+        }
     }
 
 }
