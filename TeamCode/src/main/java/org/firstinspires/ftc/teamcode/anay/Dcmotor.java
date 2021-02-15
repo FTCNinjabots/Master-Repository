@@ -8,10 +8,10 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 public class Dcmotor extends LinearOpMode {
 
     public DcMotor Motor = null;
-    public double power = -0.4 ;
+    public double power = 0.7 ;
     @Override
     public void runOpMode() throws InterruptedException {
-        Motor = hardwareMap.get(DcMotor.class, "wobble");//This needs to be changed to the name of whatever port the motor is on
+        Motor = hardwareMap.get(DcMotor.class, "flicker");//This needs to be changed to the name of whatever port the motor is on
         waitForStart();
         while (opModeIsActive()){
             Motor.setPower(power);

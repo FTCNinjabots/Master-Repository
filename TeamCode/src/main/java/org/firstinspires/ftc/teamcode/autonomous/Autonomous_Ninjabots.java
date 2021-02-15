@@ -23,7 +23,7 @@ public class Autonomous_Ninjabots extends myblock {
         DcMotor fr = hardwareMap.get(DcMotor.class, "fr");
         DcMotor wobble = hardwareMap.get(DcMotor.class, "wobble");
         DcMotor shooter = hardwareMap.get(DcMotor.class, "shooter");
-        CRServo flicker = hardwareMap.get(CRServo.class, "flicker");
+        DcMotor flicker = hardwareMap.get(DcMotor.class, "flicker");
         Servo wobble_gate = hardwareMap.get(Servo.class, "wobble_gate");
 
 
@@ -52,6 +52,7 @@ public class Autonomous_Ninjabots extends myblock {
         fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         wobble.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         shooter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        flicker.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
         bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -60,6 +61,7 @@ public class Autonomous_Ninjabots extends myblock {
         fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         wobble.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         shooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        flicker.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
 
@@ -73,14 +75,15 @@ public class Autonomous_Ninjabots extends myblock {
 
             MoveTank(300, 0.5);
             sleep(2000);
-            int wobble_target = -300;
+            int wobble_target = -500;
             int current_wobble = wobble.getCurrentPosition();
             while(current_wobble > wobble_target){
                 wobble.setPower(-0.35);
-                wobble_gate.setPosition(1.0);
+                wobble_gate.setPosition(0.0);
                 current_wobble = wobble.getCurrentPosition();
             }
-            wobble.setPower(0.0);
+            telemetry.addData("Position: ", ringposition);
+            telemetry.update();
             sleep(2000);
 
 
@@ -88,7 +91,7 @@ public class Autonomous_Ninjabots extends myblock {
             if (ringposition == SkystoneDeterminationPipeline.RingPosition.FOUR) {
                 telemetry.addData("Position: ", "Four Rings"); // C Site
                 telemetry.addData("Detected: ", ringposition);
-                shooter.setPower(0.7);
+                shooter.setPower(-0.7);
                 flicker.setPower(1.0);
 
                 telemetry.update();
@@ -112,7 +115,7 @@ public class Autonomous_Ninjabots extends myblock {
                 //wobble goes here
             } else if (ringposition == SkystoneDeterminationPipeline.RingPosition.NONE) {
                 telemetry.addData("Position: ", "No Rings"); // A Site
-                telemetry.addData("Detecte: ", ringposition);
+                telemetry.addData("Detected: ", ringposition);
                 shooter.setPower(-0.7);
                 flicker.setPower(1.0);
 
@@ -127,15 +130,25 @@ public class Autonomous_Ninjabots extends myblock {
             shooter.setPower(-0.7);
 
             int num_flicks = 0;
-            while(num_flicks < 3){
-                flicker.setPower(-1.0);
-                sleep(4000);
-                flicker.setPower(1.0);
-                sleep(4000);
+            double motorpower = 1.0;
+            while (num_flicks < 1) {
+                flicker.setPower(motorpower);
+                sleep(75);//180, 135, 100
+                flicker.setPower(0);
+                sleep(27);//30
+                flicker.setPower(-motorpower + 0.5);
+                sleep(190);//300, 225
+                flicker.setPower(0);
+                sleep(27);//30
                 num_flicks += 1;
             }
 
-            telemetry.addData("Status:", "Reached");
+            //flicker.setPower(-motorpower + 0.5);
+
+            //sleep(225);
+            flicker.setPower(0.0);
+
+            telemetry.addData("Status:", "Completed");
             telemetry.update();
 
             sleep(100000);

@@ -13,6 +13,7 @@ public class Encoder_Test extends LinearOpMode {
     private DcMotor fr = null;
 
 
+
     @Override
     public void runOpMode() throws InterruptedException {
         bl = hardwareMap.get(DcMotor.class, "bl");

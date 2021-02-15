@@ -39,7 +39,11 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.teamcode.anay.Dcmotor;
+
 import java.security.CryptoPrimitive;
+
+import static java.lang.Thread.sleep;
 
 
 @TeleOp(name="TeleOp Release")
@@ -51,7 +55,7 @@ public class TeleOp_Ninjabots extends OpMode
     private DcMotor fr = null;
     private DcMotor intake = null;
     private DcMotor wobble = null;
-    private CRServo flicker = null;
+    private DcMotor flicker = null;
     private DcMotor shooter = null;
 
     private Servo wobble_gate = null;
@@ -65,7 +69,7 @@ public class TeleOp_Ninjabots extends OpMode
         fr = hardwareMap.get(DcMotor.class, "fr");
         intake = hardwareMap.get(DcMotor.class, "intake");
         wobble = hardwareMap.get(DcMotor.class, "wobble");
-        flicker = hardwareMap.get(CRServo.class, "flicker");
+        flicker = hardwareMap.get(DcMotor.class, "flicker");
         shooter = hardwareMap.get(DcMotor.class, "shooter");
 
         wobble_gate = hardwareMap.get(Servo.class, "wobble_gate");
@@ -79,6 +83,8 @@ public class TeleOp_Ninjabots extends OpMode
         wobble.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         shooter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        flicker.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
 
         bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -87,6 +93,7 @@ public class TeleOp_Ninjabots extends OpMode
         wobble.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         shooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        flicker.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         br.setDirection(DcMotorSimple.Direction.REVERSE);
         fr.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -113,6 +120,7 @@ public class TeleOp_Ninjabots extends OpMode
     int strafe_value = 0;
     boolean flicker_resetting = false;
     boolean flicker_setup = false;
+    boolean flicker_override = false;
     @Override
     public void loop() {
         if (gamepad1.left_trigger > 0.5) {
@@ -210,10 +218,16 @@ public class TeleOp_Ninjabots extends OpMode
 
         //FLicker - LT + RT
         if (gamepad2.left_trigger > 0 /*&& current_value > -250*/) {
-            flicker.setPower(-1.0);
+            flicker.setPower(-0.75);
+            flicker_override = true;
+            telemetry.addData("left trigger:", "pressed");
+            telemetry.update();
         }
         else if (gamepad2.right_trigger > 0 /*&& current_value < 0*/) {
-            flicker.setPower(1.0);
+            flicker.setPower(0.75);
+            telemetry.addData("right trigger", "pressed");
+            telemetry.update();
+            flicker_override = true;
         }
 
         else{
@@ -231,7 +245,7 @@ public class TeleOp_Ninjabots extends OpMode
             //telemetry.addData("Speed: ", 0.1 * voltage.getVoltage() - 1.9);
             //telemetry.update();
 
-            shooter.setPower(-0.7);
+            shooter.setPower(0.7);
         } else if (gamepad2.dpad_down) {
             shooter.setPower(0.0);
         }
@@ -239,7 +253,12 @@ public class TeleOp_Ninjabots extends OpMode
 
 
 
+
+
     }
+
+
+
 
     /*
      * Code to run ONCE after the driver hits STOP
