@@ -25,6 +25,7 @@ public class Autonomous_Ninjabots extends myblock {
         DcMotor shooter = hardwareMap.get(DcMotor.class, "shooter");
         DcMotor flicker = hardwareMap.get(DcMotor.class, "flicker");
         Servo wobble_gate = hardwareMap.get(Servo.class, "wobble_gate");
+        DcMotor intake = hardwareMap.get(DcMotor.class, "intake");
 
 
 
@@ -146,6 +147,13 @@ public class Autonomous_Ninjabots extends myblock {
 
             //sleep(225);
             flicker.setPower(0.0);
+            sleep(2000);
+            Turn(30, 0.5);
+            sleep(1000);
+            intake.setPower(1.0);
+            sleep(1000);
+            MoveTank(400, 0.2);
+
 
             telemetry.addData("Status:", "Completed");
             telemetry.update();
