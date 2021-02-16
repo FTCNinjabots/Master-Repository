@@ -114,6 +114,25 @@ public class myblock extends LinearOpMode{
 
         }
 
+        if (target_position > 0){ // right
+            blpower = -1 * motorpower;
+            flpower = motorpower;
+            brpower = motorpower;
+            frpower = -1 * motorpower;
+
+        }
+        else{
+            blpower = motorpower;
+            flpower = -1 * motorpower;
+            brpower = -1 * motorpower;
+            frpower = motorpower;
+
+        }
+
+
+
+
+
         boolean has_stopped = false;
 
         bl = hardwareMap.get(DcMotor.class, "bl");
@@ -162,6 +181,85 @@ public class myblock extends LinearOpMode{
 
 
     }
+
+
+
+    public void Turn (int degrees, double motorpower){
+        // negative targetposition is left, positive is right
+        // in order to strafe left, we must have the left two go towards, and the right two go away
+        // Also, in order to strafe right, we must have the right two go towards, and the left two go away
+        double frpower;
+        double blpower;
+        double brpower;
+        double flpower;
+        boolean going_right = false;
+        if (degrees > 0){ // right
+            blpower = motorpower;
+            flpower = motorpower;
+            brpower = -1 * motorpower;
+            frpower = -1 * motorpower;
+            going_right = true;
+
+        }
+        else{
+            blpower = -1 * motorpower;
+            flpower = -1 * motorpower;
+            brpower = motorpower;
+            frpower = motorpower;
+
+        }
+
+
+
+        degrees = (degrees/90) * 360;
+        boolean has_stopped = false;
+
+        bl = hardwareMap.get(DcMotor.class, "bl");
+        br = hardwareMap.get(DcMotor.class, "br");
+        fl = hardwareMap.get(DcMotor.class, "fl");
+        fr = hardwareMap.get(DcMotor.class, "fr");
+
+
+        bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        br.setDirection(DcMotor.Direction.REVERSE);
+        fr.setDirection(DcMotor.Direction.REVERSE);
+        bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+
+        while (!has_stopped) {
+            int current_position = fl.getCurrentPosition();
+            telemetry.update();
+            if (current_position <= degrees && going_right) {
+                bl.setPower(blpower);
+                br.setPower(brpower);
+                fl.setPower(flpower);
+                fr.setPower(frpower);
+
+
+            }
+            else if (current_position >= degrees && !going_right ) {
+                bl.setPower(blpower);
+                br.setPower(brpower);
+                fl.setPower(flpower);
+                fr.setPower(frpower);
+
+            }
+            else{
+                has_stopped = true;
+            }
+        }
+
+
+    }
+
 
 
     public SkystoneDeterminationPipeline.RingPosition detect() {
