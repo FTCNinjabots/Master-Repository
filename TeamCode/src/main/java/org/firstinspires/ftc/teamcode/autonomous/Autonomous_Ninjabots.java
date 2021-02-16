@@ -92,7 +92,7 @@ public class Autonomous_Ninjabots extends myblock {
             if (ringposition == SkystoneDeterminationPipeline.RingPosition.FOUR) {
                 telemetry.addData("Position: ", "Four Rings"); // C Site
                 telemetry.addData("Detected: ", ringposition);
-                shooter.setPower(0.7);
+                shooter.setPower(0.723);
 
 
                 telemetry.update();
@@ -103,7 +103,7 @@ public class Autonomous_Ninjabots extends myblock {
             } else if (ringposition == SkystoneDeterminationPipeline.RingPosition.ONE) {
                 telemetry.addData("Position: ", "One Ring"); // B Site
                 telemetry.addData("Detected: ", ringposition);
-                shooter.setPower(0.7);
+                shooter.setPower(0.723);
 
 
                 telemetry.update();
@@ -117,7 +117,7 @@ public class Autonomous_Ninjabots extends myblock {
             } else if (ringposition == SkystoneDeterminationPipeline.RingPosition.NONE) {
                 telemetry.addData("Position: ", "No Rings"); // A Site
                 telemetry.addData("Detected: ", ringposition);
-                shooter.setPower(0.7);
+                shooter.setPower(0.723);
 
 
                 telemetry.update();
@@ -148,11 +148,17 @@ public class Autonomous_Ninjabots extends myblock {
             //sleep(225);
             flicker.setPower(0.0);
             sleep(2000);
-            Turn(30, 0.5);
+            Turn(44, 0.5); // We need to change degrees
             sleep(1000);
+            intake.setPower(-0.75);
+            sleep(1000);
+            MoveTank(2000, 0.3);
+            sleep(1000);
+            MoveTank(-1000, -0.5);
             intake.setPower(1.0);
             sleep(1000);
-            MoveTank(400, 0.2);
+            MoveTank(1500, 0.35);
+
 
 
             telemetry.addData("Status:", "Completed");

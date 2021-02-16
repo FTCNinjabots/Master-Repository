@@ -21,8 +21,8 @@ public class Optimize_Shooter extends LinearOpMode {
         shooter = hardwareMap.get(DcMotor.class, "shooter");
         flicker = hardwareMap.get(DcMotor.class, "flicker");
 
-        //shooter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //shooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        shooter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        shooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         double power = -0.05;
         waitForStart();

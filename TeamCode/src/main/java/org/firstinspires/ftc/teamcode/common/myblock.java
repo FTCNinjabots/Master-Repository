@@ -211,8 +211,8 @@ public class myblock extends LinearOpMode{
 
 
 
-        degrees = (degrees/90) * 360;
-        boolean has_stopped = false;
+        degrees *= 20.5;
+        boolean turn_has_stopped = false;
 
         bl = hardwareMap.get(DcMotor.class, "bl");
         br = hardwareMap.get(DcMotor.class, "br");
@@ -234,14 +234,15 @@ public class myblock extends LinearOpMode{
 
 
 
-        while (!has_stopped) {
+        while (!turn_has_stopped) {
             int current_position = fl.getCurrentPosition();
-            telemetry.update();
             if (current_position <= degrees && going_right) {
                 bl.setPower(blpower);
                 br.setPower(brpower);
                 fl.setPower(flpower);
                 fr.setPower(frpower);
+                telemetry.addData("Target Degrees:", degrees);
+                telemetry.update();
 
 
             }
@@ -253,7 +254,12 @@ public class myblock extends LinearOpMode{
 
             }
             else{
-                has_stopped = true;
+                turn_has_stopped = true;
+
+                br.setPower(0.0);
+                bl.setPower(0.0);
+                fl.setPower(0.0);
+                fr.setPower(0.0);
             }
         }
 

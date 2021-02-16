@@ -245,7 +245,7 @@ public class TeleOp_Ninjabots extends OpMode
             //telemetry.addData("Speed: ", 0.1 * voltage.getVoltage() - 1.9);
             //telemetry.update();
 
-            shooter.setPower(0.7);
+            shooter.setPower(0.723);
         } else if (gamepad2.dpad_down) {
             shooter.setPower(0.0);
         }
