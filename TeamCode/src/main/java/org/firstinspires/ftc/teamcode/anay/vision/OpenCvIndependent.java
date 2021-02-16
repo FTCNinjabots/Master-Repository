@@ -37,7 +37,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvPipeline;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-@Disabled
+//Disabled
 @TeleOp(name = "OpenCvVision1")
 public class OpenCvIndependent extends LinearOpMode {
     SkystoneDeterminationPipeline pipeline;
@@ -98,7 +98,7 @@ public class OpenCvIndependent extends LinearOpMode {
             /*
              * The core values which define the location and size of the sample regions
              */
-            static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(20, 40); // 40, 220
+            static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(100, 40); // 40, 220
             //static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(, 98);
 
             /*
@@ -110,11 +110,11 @@ public class OpenCvIndependent extends LinearOpMode {
 
              */
 
-            static final int REGION_WIDTH = 75;
-            static final int REGION_HEIGHT = 60;
+            static final int REGION_WIDTH = 50;
+            static final int REGION_HEIGHT = 50;
 
-            final int FOUR_RING_THRESHOLD = 132;
-            final int ONE_RING_THRESHOLD = 128;
+            final int FOUR_RING_THRESHOLD = 133;
+            final int ONE_RING_THRESHOLD = 129;
 
             //final int FOUR_RING_THRESHOLD = 150;
             //final int ONE_RING_THRESHOLD = 135;

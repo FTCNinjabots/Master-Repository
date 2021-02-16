@@ -25,15 +25,15 @@ public class Flicker extends LinearOpMode {
 
             int num_flicks = 0;
             double motorpower = 1.0;
-            while (num_flicks < 1) {
+            while (num_flicks < 3) {
                 flicker.setPower(motorpower);
-                sleep(75);//180, 135, 100
+                sleep(100);//180, 135, 100
                 flicker.setPower(0);
-                sleep(27);//30
-                flicker.setPower(-motorpower + 0.5);
-                sleep(190);//300, 225
+                sleep(1000);//30
+                flicker.setPower(-motorpower + 0.4);
+                sleep(225);//300, 225
                 flicker.setPower(0);
-                sleep(27);//30
+                sleep(1000);//30
                 num_flicks += 1;
             }
 

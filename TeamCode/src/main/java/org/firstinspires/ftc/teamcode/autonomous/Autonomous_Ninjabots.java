@@ -91,55 +91,54 @@ public class Autonomous_Ninjabots extends myblock {
             if (ringposition == SkystoneDeterminationPipeline.RingPosition.FOUR) {
                 telemetry.addData("Position: ", "Four Rings"); // C Site
                 telemetry.addData("Detected: ", ringposition);
-                shooter.setPower(-0.7);
-                flicker.setPower(1.0);
+                shooter.setPower(0.7);
+
 
                 telemetry.update();
                 //MoveTank(9500, 0.5);
-                MoveTank(2200, 0.5);
+                MoveTank(1700, 0.5);
 
                 //wobble goes here
             } else if (ringposition == SkystoneDeterminationPipeline.RingPosition.ONE) {
                 telemetry.addData("Position: ", "One Ring"); // B Site
                 telemetry.addData("Detected: ", ringposition);
-                shooter.setPower(-0.7);
-                flicker.setPower(1.0);
+                shooter.setPower(0.7);
+
 
                 telemetry.update();
 
                 //MoveTank(6400, 0.5);
                 //Strafe(2300, 0.25);
                 //MoveTank(-2000, -0.5);
-                MoveTank(2200, 0.5);
+                MoveTank(1700, 0.5);
 
                 //wobble goes here
             } else if (ringposition == SkystoneDeterminationPipeline.RingPosition.NONE) {
                 telemetry.addData("Position: ", "No Rings"); // A Site
                 telemetry.addData("Detected: ", ringposition);
-                shooter.setPower(-0.7);
-                flicker.setPower(1.0);
+                shooter.setPower(0.7);
+
 
                 telemetry.update();
                 //MoveTank(6400, 0.5);
                 //Strafe(1500, 0.25);
-                MoveTank(2200, 0.5);
+                MoveTank(1700, 0.5);
 
                 //wobble goes here
             }
 
-            shooter.setPower(-0.7);
 
             int num_flicks = 0;
             double motorpower = 1.0;
-            while (num_flicks < 1) {
+            while (num_flicks < 3) {
                 flicker.setPower(motorpower);
-                sleep(75);//180, 135, 100
+                sleep(100);//180, 135, 100
                 flicker.setPower(0);
-                sleep(27);//30
-                flicker.setPower(-motorpower + 0.5);
-                sleep(190);//300, 225
+                sleep(1000);//30
+                flicker.setPower(-motorpower + 0.4);
+                sleep(225);//300, 225
                 flicker.setPower(0);
-                sleep(27);//30
+                sleep(1000);//30
                 num_flicks += 1;
             }
 
