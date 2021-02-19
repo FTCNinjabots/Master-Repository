@@ -150,14 +150,15 @@ public class Autonomous_Ninjabots extends myblock {
                     num_flicks += 1;
                 }
                 flicker.setPower(0.0);
+                shooter.setPower(0.67);
                 sleep(500);
-                Turn(47, 0.5); // We need to change degrees  anay has officially poopied his pants
+                Turn(41, 0.5); // We need to change degrees  anay has officially poopied his pants
                 sleep(300);
                 intake.setPower(1.0);
                 sleep(100);
-                MoveTank(2500, 0.5);
+                MoveTank(3300, 0.5);
                 sleep(100);
-                Turn(-47, -0.5);
+                Turn(-48, -0.5);
 
                 sleep(1000);
                 num_flicks = 0;
@@ -174,6 +175,21 @@ public class Autonomous_Ninjabots extends myblock {
                     num_flicks += 1;
                 }
                 flicker.setPower(0.0);
+                shooter.setPower(0.0);
+                intake.setPower(0.0);
+                //Turn(-3, -0.5);
+                MoveTank(4000, 0.5);;
+                Turn(180, 0.5);
+                wobble_gate.setPosition(1.0);
+                sleep(500);
+                Turn(-8, -0.1);
+                MoveTank(6900, 0.5);
+                sleep(200);
+                Strafe(200, 0.5);
+                //MoveTank(2300, 0.5);
+                //Turn(190, 1.0);
+
+
                 sleep(10000000);
 
 

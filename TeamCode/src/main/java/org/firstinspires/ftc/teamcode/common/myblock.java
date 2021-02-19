@@ -214,7 +214,7 @@ public class myblock extends LinearOpMode{
 
 
 
-        degrees *= 20.5;
+        degrees *= 20;
         boolean turn_has_stopped = false;
 
         bl = hardwareMap.get(DcMotor.class, "bl");
@@ -297,7 +297,7 @@ public class myblock extends LinearOpMode{
         });
         //pipeline.processFrame();
 
-        return SkystoneDeterminationPipeline.RingPosition.NONE;
+        return SkystoneDeterminationPipeline.RingPosition.ONE;
 
 
 
