@@ -135,17 +135,17 @@ public class TeleOp_Ninjabots extends OpMode
 
         if (strafe_value == 1) {
             //strafe left - LT
-            bl.setPower(gamepad1.left_trigger);
-            br.setPower(-gamepad1.left_trigger);
-            fl.setPower(-gamepad1.left_trigger);
-            fr.setPower(gamepad1.left_trigger);
+            bl.setPower(0.25);
+            br.setPower(-0.25);
+            fl.setPower(-0.25);
+            fr.setPower(0.25);
 
         } else if (strafe_value == 2) {
             //strafe right - RT
-            bl.setPower(-gamepad1.right_trigger);
-            br.setPower(gamepad1.right_trigger);
-            fl.setPower(gamepad1.right_trigger);
-            fr.setPower(-gamepad1.right_trigger);
+            bl.setPower(-0.25);
+            br.setPower(0.25);
+            fl.setPower(0.25);
+            fr.setPower(-0.25);
         } else if (strafe_value == 0) {
             //Moving
             br.setPower(-gamepad1.right_stick_y);

@@ -11,7 +11,7 @@ public class MoveTest extends myblock {
     public void runOpMode() throws InterruptedException {
         waitForStart();
         while(opModeIsActive()){
-            Turn(45, 0.5);
+            Strafe(-2000, 0.75);
             sleep(100000000);
         }
 

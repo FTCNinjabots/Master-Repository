@@ -141,17 +141,17 @@ public class myblock extends LinearOpMode{
         fr = hardwareMap.get(DcMotor.class, "fr");
 
 
-        //bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         br.setDirection(DcMotor.Direction.REVERSE);
         fr.setDirection(DcMotor.Direction.REVERSE);
-        //bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         bl.setPower(blpower);
         br.setPower(brpower);
@@ -193,6 +193,7 @@ public class myblock extends LinearOpMode{
         double brpower;
         double flpower;
         boolean going_right = false;
+
         if (degrees > 0){ // right
             blpower = motorpower;
             flpower = motorpower;
@@ -202,10 +203,12 @@ public class myblock extends LinearOpMode{
 
         }
         else{
-            blpower = -1 * motorpower;
-            flpower = -1 * motorpower;
-            brpower = motorpower;
-            frpower = motorpower;
+            blpower = motorpower;
+            flpower = motorpower;
+            brpower = -motorpower;
+            frpower = -motorpower;
+            telemetry.addData("Going Left", "True");
+            telemetry.update();
 
         }
 
@@ -232,10 +235,9 @@ public class myblock extends LinearOpMode{
         fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-
+        int current_position = fr.getCurrentPosition();
 
         while (!turn_has_stopped) {
-            int current_position = fl.getCurrentPosition();
             if (current_position <= degrees && going_right) {
                 bl.setPower(blpower);
                 br.setPower(brpower);
@@ -243,6 +245,8 @@ public class myblock extends LinearOpMode{
                 fr.setPower(frpower);
                 telemetry.addData("Target Degrees:", degrees);
                 telemetry.update();
+                current_position = fl.getCurrentPosition();
+
 
 
             }
@@ -251,20 +255,24 @@ public class myblock extends LinearOpMode{
                 br.setPower(brpower);
                 fl.setPower(flpower);
                 fr.setPower(frpower);
-
+                telemetry.addData("Target Degrees:", degrees);
+                telemetry.update();
+                current_position = fl.getCurrentPosition();
             }
             else{
-                turn_has_stopped = true;
 
-                br.setPower(0.0);
-                bl.setPower(0.0);
-                fl.setPower(0.0);
-                fr.setPower(0.0);
+                    bl.setPower(0.0);
+                    br.setPower(0.0);
+                    fl.setPower(0.0);
+                    fr.setPower(0.0);
+                    turn_has_stopped = true;
+                }
             }
+
         }
 
 
-    }
+
 
 
 
@@ -287,7 +295,9 @@ public class myblock extends LinearOpMode{
                 webcam.startStreaming(320, 240);
             }
         });
-        return pipeline.position;
+        //pipeline.processFrame();
+
+        return SkystoneDeterminationPipeline.RingPosition.NONE;
 
 
 

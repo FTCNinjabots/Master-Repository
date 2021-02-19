@@ -29,22 +29,20 @@ public class Autonomous_Ninjabots extends myblock {
 
 
 
-        //Tmr Do wobble goal
+        //vasu is smelling anay's poopies
 
-        //DISSABLE ALL ENCODERS FOR MOVEMENT
-        //DISSABLE ALL ENCODERS FOR MOVEMENT
-        //DISSABLE ALL ENCODERS FOR MOVEMENT
-        //DISSABLE ALL ENCODERS FOR MOVEMENT
-        //DISSABLE ALL ENCODERS FOR MOVEMENT
-        //DISSABLE ALL ENCODERS FOR MOVEMENT
-        //DISSABLE ALL ENCODERS FOR MOVEMENT
-        //DISSABLE ALL ENCODERS FOR MOVEMENT
-        //DISSABLE ALL ENCODERS FOR MOVEMENT
-        //DISSABLE ALL ENCODERS FOR MOVEMENT
-        //DISSABLE ALL ENCODERS FOR MOVEMENT
-        //DISSABLE ALL ENCODERS FOR MOVEMENT
-        //DISSABLE ALL ENCODERS FOR MOVEMENT
-        //DISSABLE ALL ENCODERS FOR MOVEMENT//DISSABLE ALL ENCODERS FOR MOVEMENT
+        //anay has done the POOPIES
+
+        //SHARVA FARTED
+
+        //MAURYA IS VERY SAD
+
+        //AUM IS CALLING GIRLFRIEND'S MOTHER
+
+        //ADIT HAS BEEN KICKED OUT OF ninjabots, no longer needed, waste
+
+
+
 
 
         bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -75,8 +73,8 @@ public class Autonomous_Ninjabots extends myblock {
             ringposition = detect();
 
             MoveTank(300, 0.5);
-            sleep(2000);
-            int wobble_target = -500;
+            sleep(1);
+            int wobble_target = -400;
             int current_wobble = wobble.getCurrentPosition();
             while(current_wobble > wobble_target){
                 wobble.setPower(-0.35);
@@ -85,13 +83,13 @@ public class Autonomous_Ninjabots extends myblock {
             }
             telemetry.addData("Position: ", ringposition);
             telemetry.update();
-            sleep(2000);
+            sleep(1);
+            wobble.setPower(0.0);
 
 
 
             if (ringposition == SkystoneDeterminationPipeline.RingPosition.FOUR) {
-                telemetry.addData("Position: ", "Four Rings"); // C Site
-                telemetry.addData("Detected: ", ringposition);
+
                 shooter.setPower(0.723);
 
 
@@ -100,55 +98,117 @@ public class Autonomous_Ninjabots extends myblock {
                 MoveTank(1700, 0.5);
 
                 //wobble goes here
+                int num_flicks = 0;
+                double motorpower = 1.0;
+                while (num_flicks < 3) {
+                    flicker.setPower(motorpower);
+                    sleep(100);//180, 135, 100
+                    flicker.setPower(0);
+                    sleep(1000);//30
+                    flicker.setPower(-motorpower + 0.4);
+                    sleep(225);//300, 225
+                    flicker.setPower(0);
+                    sleep(1000);//30
+                    num_flicks += 1;
+                }
+                flicker.setPower(0.0);
+                sleep(500);
+                MoveTank(4700, 0.5);
+                sleep(500);
+
+                Turn(150, 0.5);
+                sleep(500);
+                wobble_gate.setPosition(1.0);
+                sleep(1000);
+                MoveTank(5000, 0.5);
+                sleep(500);
+                Turn(40, 0.3);
+                sleep(100000);
+
+
+                //wobble goes here
             } else if (ringposition == SkystoneDeterminationPipeline.RingPosition.ONE) {
-                telemetry.addData("Position: ", "One Ring"); // B Site
-                telemetry.addData("Detected: ", ringposition);
                 shooter.setPower(0.723);
 
 
                 telemetry.update();
-
-                //MoveTank(6400, 0.5);
-                //Strafe(2300, 0.25);
-                //MoveTank(-2000, -0.5);
+                //MoveTank(9500, 0.5);
                 MoveTank(1700, 0.5);
+
+                //wobble goes here
+                int num_flicks = 0;
+                double motorpower = 1.0;
+                while (num_flicks < 3) {
+                    flicker.setPower(motorpower);
+                    sleep(100);//180, 135, 100
+                    flicker.setPower(0);
+                    sleep(1000);//30
+                    flicker.setPower(-motorpower + 0.4);
+                    sleep(225);//300, 225
+                    flicker.setPower(0);
+                    sleep(1000);//30
+                    num_flicks += 1;
+                }
+                flicker.setPower(0.0);
+                sleep(500);
+                Turn(47, 0.5); // We need to change degrees  anay has officially poopied his pants
+                sleep(300);
+                intake.setPower(1.0);
+                sleep(100);
+                MoveTank(2500, 0.5);
+
 
                 //wobble goes here
             } else if (ringposition == SkystoneDeterminationPipeline.RingPosition.NONE) {
-                telemetry.addData("Position: ", "No Rings"); // A Site
-                telemetry.addData("Detected: ", ringposition);
                 shooter.setPower(0.723);
 
 
                 telemetry.update();
-                //MoveTank(6400, 0.5);
-                //Strafe(1500, 0.25);
+                //MoveTank(9500, 0.5);
                 MoveTank(1700, 0.5);
+
+                //wobble goes here
+                int num_flicks = 0;
+                double motorpower = 1.0;
+                while (num_flicks < 3) {
+                    flicker.setPower(motorpower);
+                    sleep(100);//180, 135, 100
+                    flicker.setPower(0);
+                    sleep(1000);//30
+                    flicker.setPower(-motorpower + 0.4);
+                    sleep(225);//300, 225
+                    flicker.setPower(0);
+                    sleep(1000);//30
+                    num_flicks += 1;
+                }
+                flicker.setPower(0.0);
+                shooter.setPower(0.0);
+                sleep(500);
+                MoveTank(4700, 0.5);
+                sleep(200);
+
+                Turn(185, 0.5);
+                sleep(200);
+                wobble_gate.setPosition(1.0);
+                sleep(500);
+                MoveTank(1000, 0.5);
+                sleep(200);
+                Turn(-55, -0.3);
+                MoveTank(4220, 0.75);
+                sleep(1000);
+                Strafe(2100, 0.25);
+                sleep(1000);
+                wobble_gate.setPosition(0.0);
+                sleep(100000);
+
 
                 //wobble goes here
             }
 
 
-            int num_flicks = 0;
-            double motorpower = 1.0;
-            while (num_flicks < 3) {
-                flicker.setPower(motorpower);
-                sleep(100);//180, 135, 100
-                flicker.setPower(0);
-                sleep(1000);//30
-                flicker.setPower(-motorpower + 0.4);
-                sleep(225);//300, 225
-                flicker.setPower(0);
-                sleep(1000);//30
-                num_flicks += 1;
-            }
 
-            //flicker.setPower(-motorpower + 0.5);
-
-            //sleep(225);
-            flicker.setPower(0.0);
-            sleep(2000);
-            Turn(44, 0.5); // We need to change degrees
+            /*(sleep(2000);
+            Turn(47, 0.5); // We need to change degrees  anay has officially poopied his pants
             sleep(1000);
             intake.setPower(-0.75);
             sleep(1000);
@@ -158,7 +218,7 @@ public class Autonomous_Ninjabots extends myblock {
             intake.setPower(1.0);
             sleep(1000);
             MoveTank(1500, 0.35);
-
+            */
 
 
             telemetry.addData("Status:", "Completed");
