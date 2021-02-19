@@ -156,6 +156,25 @@ public class Autonomous_Ninjabots extends myblock {
                 intake.setPower(1.0);
                 sleep(100);
                 MoveTank(2500, 0.5);
+                sleep(100);
+                Turn(-47, -0.5);
+
+                sleep(1000);
+                num_flicks = 0;
+                motorpower = 1.0;
+                while (num_flicks < 2) {
+                    flicker.setPower(motorpower);
+                    sleep(100);//180, 135, 100
+                    flicker.setPower(0);
+                    sleep(1000);//30
+                    flicker.setPower(-motorpower + 0.4);
+                    sleep(225);//300, 225
+                    flicker.setPower(0);
+                    sleep(1000);//30
+                    num_flicks += 1;
+                }
+                flicker.setPower(0.0);
+                sleep(10000000);
 
 
                 //wobble goes here
