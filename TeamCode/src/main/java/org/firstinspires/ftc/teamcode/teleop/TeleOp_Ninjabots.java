@@ -58,8 +58,11 @@ public class TeleOp_Ninjabots extends OpMode
     private DcMotor flicker = null;
     private DcMotor shooter = null;
 
-    private Servo wobble_gate = null;
+
+    private CRServo wobble_gate = null;
     private CRServo rack_pinion = null;
+    private CRServo intake_servo = null;
+
 
     @Override
     public void init() {
@@ -72,8 +75,9 @@ public class TeleOp_Ninjabots extends OpMode
         flicker = hardwareMap.get(DcMotor.class, "flicker");
         shooter = hardwareMap.get(DcMotor.class, "shooter");
 
-        wobble_gate = hardwareMap.get(Servo.class, "wobble_gate");
+        wobble_gate = hardwareMap.get(CRServo.class, "wobble_gate");
         rack_pinion = hardwareMap.get(CRServo.class, "rack_pinion");
+        intake_servo = hardwareMap.get(CRServo.class, "intake_servo");
 
         //voltage = hardwareMap.get(ModernRoboticsUsbDcMotorController.class, "Control Hub Portal");
         bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -135,23 +139,26 @@ public class TeleOp_Ninjabots extends OpMode
 
         if (strafe_value == 1) {
             //strafe left - LT
-            bl.setPower(0.25);
-            br.setPower(-0.25);
-            fl.setPower(-0.25);
-            fr.setPower(0.25);
+            bl.setPower(gamepad1.left_trigger);
+            br.setPower(-gamepad1.left_trigger);
+            fl.setPower(-gamepad1.left_trigger);
+            fr.setPower(gamepad1.left_trigger);
 
         } else if (strafe_value == 2) {
             //strafe right - RT
-            bl.setPower(-0.25);
-            br.setPower(0.25);
-            fl.setPower(0.25);
-            fr.setPower(-0.25);
+            bl.setPower(-gamepad1.right_trigger);
+            br.setPower(gamepad1.right_trigger);
+            fl.setPower(gamepad1.right_trigger);
+            fr.setPower(-gamepad1.right_trigger);
         } else if (strafe_value == 0) {
             //Moving
             br.setPower(-gamepad1.right_stick_y);
             fl.setPower(-gamepad1.left_stick_y);
             fr.setPower(-gamepad1.right_stick_y);
             bl.setPower(-gamepad1.left_stick_y);
+
+
+
 
         } else if (strafe_value == 4) {
             br.setPower(0.0);
@@ -176,11 +183,29 @@ public class TeleOp_Ninjabots extends OpMode
         //Wobble Goal Gate - DPAD Down to open, DPAD Up to Close
 
         if (gamepad1.x) {
-            wobble_gate.setPosition(1.0);
+            wobble_gate.setPower(1.0);
         } else if (gamepad1.b) {
-            wobble_gate.setPosition(0.0);
+            wobble_gate.setPower(0.0);
         }
 
+
+
+
+        //intake servo
+        if (gamepad1.dpad_left) //moves down
+        {
+            intake_servo.setPower(1.0);
+        }
+
+        else if (gamepad1.dpad_right) //moves up
+        {
+
+
+            intake_servo.setPower(-1.0);
+        }
+        else {  //doesn't move at all stays at 0
+            intake_servo.setPower(0.0);
+        }
 
         ///CONTROLLER 2 -----------------------------------------------------------------
 
@@ -218,13 +243,13 @@ public class TeleOp_Ninjabots extends OpMode
 
         //FLicker - LT + RT
         if (gamepad2.left_trigger > 0 /*&& current_value > -250*/) {
-            flicker.setPower(-0.75);
+            flicker.setPower(-0.6);
             flicker_override = true;
             telemetry.addData("left trigger:", "pressed");
             telemetry.update();
         }
         else if (gamepad2.right_trigger > 0 /*&& current_value < 0*/) {
-            flicker.setPower(0.75);
+            flicker.setPower(1.0);
             telemetry.addData("right trigger", "pressed");
             telemetry.update();
             flicker_override = true;
@@ -249,9 +274,6 @@ public class TeleOp_Ninjabots extends OpMode
         } else if (gamepad2.dpad_down) {
             shooter.setPower(0.0);
         }
-
-
-
 
 
 

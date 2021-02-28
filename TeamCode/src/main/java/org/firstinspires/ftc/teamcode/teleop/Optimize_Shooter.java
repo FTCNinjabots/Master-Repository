@@ -24,7 +24,7 @@ public class Optimize_Shooter extends LinearOpMode {
         shooter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         shooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        double power = -0.05;
+        double power = 0.665;
         waitForStart();
         while (opModeIsActive()){
             shooter.setPower(power);
@@ -36,9 +36,9 @@ public class Optimize_Shooter extends LinearOpMode {
             }
 
             if (gamepad2.left_trigger > 0 /*&& current_value > -250*/) {
-                flicker.setPower(-0.55);
+                flicker.setPower(-0.85);
             } else if (gamepad2.right_trigger > 0 /*&& current_value < 0*/) {
-                flicker.setPower(0.55);
+                flicker.setPower(1.0);
 
 
             } else {

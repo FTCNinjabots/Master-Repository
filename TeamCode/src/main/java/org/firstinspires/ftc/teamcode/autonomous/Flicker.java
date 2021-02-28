@@ -14,24 +14,24 @@ public class Flicker extends LinearOpMode {
         flicker.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         flicker.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        //shooter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //shooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        shooter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        shooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         waitForStart();
-        shooter.setPower(0.723);
+        shooter.setPower(0.64);
         sleep(3000);
         while (opModeIsActive()) {
 
 
             int num_flicks = 0;
             double motorpower = 1.0;
-            while (num_flicks < 3) {
+            while (num_flicks < 4) {
                 flicker.setPower(motorpower);
                 sleep(100);//180, 135, 100
                 flicker.setPower(0);
                 sleep(1000);//30
                 flicker.setPower(-motorpower + 0.4);
-                sleep(225);//300, 225
+                sleep(150);//300, 225
                 flicker.setPower(0);
                 sleep(1000);//30
                 num_flicks += 1;

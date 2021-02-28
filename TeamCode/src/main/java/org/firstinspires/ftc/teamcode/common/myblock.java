@@ -85,6 +85,7 @@ public class myblock extends LinearOpMode{
                 has_stopped = true;
             }
             telemetry.addData("Current Position: ", starting_position);
+            telemetry.addData("Target Position: ", targetposition);
             telemetry.update();
         }
 
@@ -205,8 +206,8 @@ public class myblock extends LinearOpMode{
         else{
             blpower = motorpower;
             flpower = motorpower;
-            brpower = -motorpower;
-            frpower = -motorpower;
+            brpower = -1 * motorpower;
+            frpower = -1 * motorpower;
             telemetry.addData("Going Left", "True");
             telemetry.update();
 
@@ -297,7 +298,7 @@ public class myblock extends LinearOpMode{
         });
         //pipeline.processFrame();
 
-        return SkystoneDeterminationPipeline.RingPosition.ONE;
+        return SkystoneDeterminationPipeline.RingPosition.FOUR;
 
 
 

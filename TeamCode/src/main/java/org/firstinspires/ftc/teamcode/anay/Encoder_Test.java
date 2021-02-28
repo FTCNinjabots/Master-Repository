@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 //import com.qualcomm.robotcore.hardware.DcMotorSimple;
-@Disabled
+
 @TeleOp(name = "Move Tank", group = "Move Tank Group")
 public class Encoder_Test extends LinearOpMode {
     private DcMotor bl = null;
@@ -20,6 +20,7 @@ public class Encoder_Test extends LinearOpMode {
         br = hardwareMap.get(DcMotor.class, "br");
         fl = hardwareMap.get(DcMotor.class, "fl");
         fr = hardwareMap.get(DcMotor.class, "fr");
+        DcMotor intake = hardwareMap.get(DcMotor.class, "intake");
         telemetry.addData("Status: ", "Initialized");
         telemetry.update();
         waitForStart();
@@ -38,12 +39,12 @@ public class Encoder_Test extends LinearOpMode {
         br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
+        intake.setPower(1.0);
         while (opModeIsActive()) {
-            bl.setPower(0.5);
-            fl.setPower(0.5);
-            br.setPower(0.5);
-            fr.setPower(0.5);
+            bl.setPower(0.15);
+            fl.setPower(0.15);
+            br.setPower(0.15);
+            fr.setPower(0.15);
             float bl_position = bl.getCurrentPosition();
             float br_position = br.getCurrentPosition();
             float fl_position = fl.getCurrentPosition();
