@@ -25,7 +25,7 @@ public class Jugnu_Shooting extends LinearOpMode {
 
 
         waitForStart();
-        shooter.setPower(0.65);
+        shooter.setPower(1.0);
         while (opModeIsActive()) {
 
 
@@ -33,14 +33,14 @@ public class Jugnu_Shooting extends LinearOpMode {
             {
                 while (num_flicks < 4)
                 {
-                    flicker.setPower(motorpower);
-                    sleep(100);//180, 135, 100
+                    flicker.setPower(1.0);
+                    sleep(250);//180, 135, 100
                     flicker.setPower(0);
-                    sleep(1000);//30
-                    flicker.setPower(-motorpower + 0.4);
-                    sleep(225);//300, 225
+                    sleep(250);//30
+                    flicker.setPower(-0.85);
+                    sleep(250);//300, 225
                     flicker.setPower(0);
-                    sleep(100);//30
+                    sleep(250);//30
                     num_flicks += 1;
                 }
                 num_flicks = 0;

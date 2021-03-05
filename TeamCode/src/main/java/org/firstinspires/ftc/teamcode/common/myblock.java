@@ -96,6 +96,7 @@ public class myblock extends LinearOpMode{
         // negative targetposition is left, positive is right
         // in order to strafe left, we must have the left two go towards, and the right two go away
         // Also, in order to strafe right, we must have the right two go towards, and the left two go away
+        motorpower = Math.abs(motorpower);
         double frpower;
         double blpower;
         double brpower;

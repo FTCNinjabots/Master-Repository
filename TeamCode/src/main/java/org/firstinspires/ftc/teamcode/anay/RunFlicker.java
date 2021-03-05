@@ -15,7 +15,7 @@ public class RunFlicker extends LinearOpMode {
         flicker.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         flicker.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        shooter.setPower(-1.0);
+        shooter.setPower(1.0);
         int flicker_target = -200;
         int flicker_direction = -1;
         int flicker_current = flicker.getCurrentPosition();

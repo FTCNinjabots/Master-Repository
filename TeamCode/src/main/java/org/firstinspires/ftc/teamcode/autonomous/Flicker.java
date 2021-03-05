@@ -18,8 +18,7 @@ public class Flicker extends LinearOpMode {
         shooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         waitForStart();
-        shooter.setPower(0.64);
-        sleep(3000);
+        shooter.setPower(1.0);
         while (opModeIsActive()) {
 
 
@@ -29,11 +28,11 @@ public class Flicker extends LinearOpMode {
                 flicker.setPower(motorpower);
                 sleep(100);//180, 135, 100
                 flicker.setPower(0);
-                sleep(1000);//30
+                sleep(100);//30
                 flicker.setPower(-motorpower + 0.4);
-                sleep(150);//300, 225
+                sleep(100);//300, 225
                 flicker.setPower(0);
-                sleep(1000);//30
+                sleep(100);//30
                 num_flicks += 1;
             }
 
