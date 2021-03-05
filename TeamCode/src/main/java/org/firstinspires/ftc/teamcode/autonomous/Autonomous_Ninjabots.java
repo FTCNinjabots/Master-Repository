@@ -82,7 +82,7 @@ public class Autonomous_Ninjabots extends myblock {
             boolean threehundred_passed = false;
             boolean fourhundred_passed = false;
             wobble_gate.setPower(1.0);
-            sleep(1000);
+            sleep(200);
 
 
             MoveTank(300, 0.5);
@@ -127,8 +127,8 @@ public class Autonomous_Ninjabots extends myblock {
 
                     //wobble goes here
                     flicker.setPower(motorpower);
-                    MoveTank(300, 0.5);
-                    Turn(15, 0.5);
+                    MoveTank(300, 1.0);
+                    Turn(15, 1.0);
 
 
 
@@ -152,26 +152,27 @@ public class Autonomous_Ninjabots extends myblock {
                     shooter.setPower(0);
                     flicker.setPower(0.0);
 
-                    Turn(28, 0.5); // We need to change degrees from 47 - 55
+                    Turn(28, 1.0); // We need to change degrees from 47 - 55
 
 
                     intake.setPower(1.0);
 
 
                     int q=0;
-                    while(q < 12){
-                        intake_servo.setPower(-0.07);
-                        MoveTank(50, 0.25);
-                        intake_servo.setPower(1.0);
-                        MoveTank(110, 0.25);
-                        q++;
-                    }
+                    //while(q < 3){
+                    //    intake_servo.setPower(-0.07);
+                    //    MoveTank(-0, 0.25);
+                    //    intake_servo.setPower(1.0);
+                    //    MoveTank(110, 0.25);
+                    //    q++;
+                   // }
+                    MoveTank(1600,0.15);
                     intake_servo.setPower(0.0);
 
-                    shooter.setPower(0.85);
+                    shooter.setPower(0.9);
 
-                    Turn(-46, -0.5);
-
+                    Turn(-44, -1);
+                    sleep(200);
 
                     // shooter shoots at power shots
 
@@ -186,11 +187,12 @@ public class Autonomous_Ninjabots extends myblock {
                         flicker.setPower(0);
                         num_flicks += 1;
                     }
-                    Turn(46, 0.5);
-                    MoveTank(1200, 0.15);
+                    Turn(44, 0.5);
+                    MoveTank(1200, 0.75);
 
-                    shooter.setPower(0.83);
-                    Turn(-48, -0.5);
+                    shooter.setPower(0.88);
+                    Turn(-45, -1.0);
+                    sleep(200);
                     num_flicks = 0;
                     motorpower = 1.0;
                     while (num_flicks < 3) {
@@ -206,14 +208,16 @@ public class Autonomous_Ninjabots extends myblock {
                     intake.setPower(0.0);
                     shooter.setPower(0.0);
                     MoveTank(4200, 1.0);
-                    Turn(140, 0.4);
-                    MoveTank(-2000, -0.7);
+                    Turn(150, 0.4);
+                    MoveTank(-1100, -1.0);
                     sleep(1000);
-                    Turn(20, 0.15);
+                    Turn(45, 1.0);
+                    MoveTank(-350, -0.1);
+                    Strafe(-500,-1);
                     wobble_gate.setPower(-1.0);
 
                     //wobble_gate.setPower(0.0);
-                    MoveTank(5200, 1.0);
+                    MoveTank(4400, 1.0);
 
 
                     sleep(2000);
