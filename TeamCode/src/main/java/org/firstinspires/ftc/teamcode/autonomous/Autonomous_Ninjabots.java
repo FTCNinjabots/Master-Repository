@@ -94,6 +94,7 @@ public class Autonomous_Ninjabots extends myblock {
                 if (wobble_encoder < -480 && !fourhundred_passed) {
                     wobble_power += 0.15;
                     fourhundred_passed = true;
+                    shooter.setPower(0.77);
                 } else if (wobble_encoder < -420 && !threehundred_passed) {
                     wobble_power += 0.05;
                     threehundred_passed = true;
@@ -117,8 +118,6 @@ public class Autonomous_Ninjabots extends myblock {
                     int num_flicks = 0;
                     double motorpower = 1.0;
 
-                    shooter.setPower(0.76);
-
                     telemetry.addData("Into four loop:", "True");
                     telemetry.update();
 
@@ -140,84 +139,81 @@ public class Autonomous_Ninjabots extends myblock {
                         flicker.setPower(motorpower);
                         sleep(300);//300, 225
                         flicker.setPower(0);
-
+                        sleep(200);
                         //sleep(300);//30
                         num_flicks += 1;
 
                         if (num_flicks == 2) {
                             intake_servo.setPower(1.0);
-
                         }
-                        //if (num_flicks == 4){
-                        //    flicker.setPower(1.0);
-                        //}
                     }
                     flicker.setPower(1.00);
                     intake_servo.setPower(0.0);
                     shooter.setPower(0);
                     flicker.setPower(0.0);
 
-                    Turn(29, 0.5); // We need to change degrees from 47 - 55
+                    Turn(28, 0.5); // We need to change degrees from 47 - 55
 
 
                     intake.setPower(1.0);
 
 
                     int q=0;
-                    while(q < 10){
+                    while(q < 12){
                         intake_servo.setPower(-0.07);
-                        MoveTank(200, 0.075);
-                        intake_servo.setPower(0.0);
-                        MoveTank(200, 0.075);
+                        MoveTank(50, 0.25);
+                        intake_servo.setPower(1.0);
+                        MoveTank(110, 0.25);
                         q++;
                     }
+                    intake_servo.setPower(0.0);
 
+                    shooter.setPower(0.85);
 
-                    Turn(-44, -0.5);
+                    Turn(-46, -0.5);
 
 
                     // shooter shoots at power shots
 
 
-                    shooter.setPower(0.85);
                     num_flicks = 0;
                     while (num_flicks < 4) {
                         flicker.setPower(-0.85);
                         sleep(225);//180, 135, 100
                         flicker.setPower(0);
                         flicker.setPower(motorpower);
-                        sleep(300);//300, 225
+                        sleep(400);//300, 225
                         flicker.setPower(0);
                         num_flicks += 1;
                     }
-                    Turn(44, 0.5);
-                    MoveTank(1000, 0.15);
+                    Turn(46, 0.5);
+                    MoveTank(1200, 0.15);
 
                     shooter.setPower(0.83);
-                    Turn(-42, -0.5);
+                    Turn(-48, -0.5);
                     num_flicks = 0;
                     motorpower = 1.0;
-                    while (num_flicks < 4) {
+                    while (num_flicks < 3) {
                         flicker.setPower(-0.85);
                         sleep(225);//180, 135, 100
                         flicker.setPower(0);
                         flicker.setPower(motorpower);
-                        sleep(300);//300, 225
+                        sleep(400);//300, 225
                         flicker.setPower(0);
                         num_flicks += 1;
                     }
 
                     intake.setPower(0.0);
                     shooter.setPower(0.0);
-                    MoveTank(4800, 0.5);
-                    Turn(150, 0.4);
-                    MoveTank(-2200, -0.3);
+                    MoveTank(4200, 1.0);
+                    Turn(140, 0.4);
+                    MoveTank(-2000, -0.7);
                     sleep(1000);
                     Turn(20, 0.15);
                     wobble_gate.setPower(-1.0);
 
                     //wobble_gate.setPower(0.0);
-                    MoveTank(5600, 0.5);
+                    MoveTank(5200, 1.0);
 
 
                     sleep(2000);

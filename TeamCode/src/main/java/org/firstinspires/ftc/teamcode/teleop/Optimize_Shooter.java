@@ -16,19 +16,21 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 
 
-//narkar            12 high tower       4 mid tower            1 low tower
+//narkar            12 high tower       4 mid tower            1 low tower     46.02 sec                              1 min 10 sec
 
 
-//anay               15  high tower       6  mid tower         0 low tower
+//anay               15  high tower       6  mid tower         0 low tower        54.36 sec                            1 min 19 sec
 
 
-//Maurya            22  high tower          1  mid tower           low tower
+//Maurya            22  high tower          1  mid tower           low tower         57.29 sec                          53 sec
 
 
-//McShrpie                25 high tower           3 mid tower
+//McShrpie                25 high tower           3 mid tower                     1 min 10 sec                            1 min 3 sec
 
 
-//Vasu     high tower
+//Vasu                                                                           40 sec
+
+//adit                                                                            1 min  9 sec                            1 min 3 sec
 
 
 
@@ -122,7 +124,7 @@ public class Optimize_Shooter extends LinearOpMode {
                 intake.setPower(1.0);
                 flicker.setPower(1.0);
                 sleep(250);
-                flicker.setPower(0.0);
+                flicker.setPower(0.0 );
             }
             else if(gamepad2.y){
                 intake.setPower(0.0);
