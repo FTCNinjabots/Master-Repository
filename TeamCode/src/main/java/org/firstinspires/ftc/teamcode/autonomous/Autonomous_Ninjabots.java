@@ -282,7 +282,7 @@ public class Autonomous_Ninjabots extends myblock {
                     intake.setPower(0.0);
                     //Turn(-3, -0.5);
                     MoveTank(4000, 0.5);
-                    ;
+
                     Turn(180, 0.5);
                     wobble_gate.setPower(-1.0);
                     sleep(500);
