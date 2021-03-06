@@ -85,15 +85,10 @@ public class Optimize_Shooter extends LinearOpMode {
         double power = 1.0;
 
         waitForStart();
-        shooter.setPower(power);
+
 
         while (opModeIsActive()){
-            if (gamepad2.a){
-                power -= 0.0001;
-            }
-            else if (gamepad2.b){
-                power += 0.0001;
-            }
+
 
             int num_flicks = 0;
             double motorpower = 1.0;

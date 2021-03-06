@@ -8,4 +8,5 @@ dependencies {
     implementation 'org.firstinspires.ftc:FtcCommon:5.5'
     implementation (name:'WirelessP2p-release', ext:'aar')
     implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation group: 'com.acmerobotics.dashboard', name: 'dashboard', version: '0.4.0'
 }
