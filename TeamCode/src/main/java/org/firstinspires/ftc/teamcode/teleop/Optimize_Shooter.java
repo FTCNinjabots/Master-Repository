@@ -1,13 +1,14 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-
-
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 // 0.8
 /// 0.8
 
@@ -36,16 +37,20 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 
 
-
+@Config
 @TeleOp(name = "Find Shooter Power")
 public class Optimize_Shooter extends LinearOpMode {
+    FtcDashboard dashboard = FtcDashboard.getInstance();
+    TelemetryPacket packet = new TelemetryPacket();
     private DcMotor br = null;
     private DcMotor fr = null;
     private DcMotor fl = null;
     private DcMotor bl = null;
-
-    int strafe_value = 0;
-
+    private static double power = 1.0;
+    private static int strafe_value = 0;
+    private int num_flicks = 0;
+    private double motorpower = 1.0;
+    private int strafe_value2 = 0;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -81,19 +86,10 @@ public class Optimize_Shooter extends LinearOpMode {
         fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-
-        double power = 1.0;
-
         waitForStart();
 
 
         while (opModeIsActive()){
-
-
-            int num_flicks = 0;
-            double motorpower = 1.0;
-
-
             if (gamepad2.dpad_up)
             {
                 while (num_flicks < 4)
@@ -130,7 +126,6 @@ public class Optimize_Shooter extends LinearOpMode {
              //   shooter.setPower(0.0);
            // }
 
-            int strafe_value2 = 0;
 
             if (gamepad2.left_bumper) {
                 strafe_value2 = 1;
@@ -177,9 +172,14 @@ public class Optimize_Shooter extends LinearOpMode {
                 shooter.setPower(1.0);
             }
 
-            telemetry.addData("Current Power: ", power);
-            telemetry.update();
+            //telemetry.addData("Current Power: ", power);
+            //telemetry.update();
+            packet.put("Current Power:", power);
+            dashboard.sendTelemetryPacket(packet);
 
+            packet.fieldOverlay()
+                    .setFill("blue")
+                    .fillRect(-20, -20, 40, 40);
 
         }
 
