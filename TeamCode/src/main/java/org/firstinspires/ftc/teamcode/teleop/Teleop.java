@@ -22,16 +22,15 @@ public class Teleop extends OpMode {
 
     public Teleop()
     {
-        ninjabot = new NinjaBot(hardwareMap);
-        timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
-        ElapsedTime currentTime = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+
     }
 
     @Override
     public void init()
     {
-        // Init ninjabot
-        ninjabot.init();
+        ninjabot = new NinjaBot(hardwareMap, telemetry);
+        timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+        ElapsedTime currentTime = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
     }
 
     @Override
@@ -57,15 +56,20 @@ public class Teleop extends OpMode {
             // Strafe right
             ninjabot.driveTrain.strafeRight(strafeIncrement, gamepad1.right_trigger);
         } else if ((gamepad1.left_stick_y != 0) || gamepad1.right_stick_y != 0) {
-            // Moving?
+            // Moving with left/right joy stick
             ninjabot.driveTrain.updatePosition(Math.round(-1 * gamepad1.left_stick_y * driveIncrement),
-                    Math.round(-1 * gamepad1.left_stick_x * driveIncrement),
-                    Math.round(-1 * gamepad1.left_stick_x * driveIncrement),
+                    Math.round(-1 * gamepad1.right_stick_y * driveIncrement),
+                    Math.round(-1 * gamepad1.right_stick_y * driveIncrement),
                     Math.round(-1 * gamepad1.left_stick_y * driveIncrement));
             ninjabot.driveTrain.setPower(-1 * gamepad1.left_stick_y,
-                    -1 * gamepad1.left_stick_x);
+                    -1 * gamepad1.right_stick_y);
         } else {
+            // Stop the robot and set the current position to where we are at
             ninjabot.driveTrain.stop();
+            ninjabot.driveTrain.setPosition(ninjabot.driveTrain.getFLPostion(),
+                                            ninjabot.driveTrain.getFRPosition(),
+                                            ninjabot.driveTrain.getBRPosition(),
+                                            ninjabot.driveTrain.getBLPosition());
         }
 
         // Wobble motor

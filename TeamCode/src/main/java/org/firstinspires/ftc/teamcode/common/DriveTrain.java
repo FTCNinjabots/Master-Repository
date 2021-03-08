@@ -5,6 +5,11 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
+import java.security.Policy;
+
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 public class DriveTrain {
@@ -24,17 +29,15 @@ public class DriveTrain {
     private int targetFR;
     private int targetBL;
     private int targetBR;
+    private Telemetry telemetry;
 
-    public DriveTrain(HardwareMap hardwareMap)
+    public DriveTrain(HardwareMap hardwareMap, Telemetry tele)
     {
         this.fl = hardwareMap.get(DcMotor.class, "fl");
         this.fr = hardwareMap.get(DcMotor.class, "fr");
-        this.bl = hardwareMap.get(DcMotor.class, "br");
-        this.br = hardwareMap.get(DcMotor.class, "bl");
-
-        // Right side of AndyMark drive train has direction reversed
-        this.br.setDirection(DcMotor.Direction.REVERSE);
-        this.fr.setDirection(DcMotor.Direction.REVERSE);
+        this.bl = hardwareMap.get(DcMotor.class, "bl");
+        this.br = hardwareMap.get(DcMotor.class, "br");
+        this.telemetry = tele;
 
         // Default is to run to position
         this.resetEncoders(DcMotor.RunMode.RUN_TO_POSITION);
@@ -51,21 +54,23 @@ public class DriveTrain {
 
     public void resetEncoders(DcMotor.RunMode runmode)
     {
-        // Reset encoders - set power to 0 first
-        this.setPower(0);
+        // Reset encoders
         this.bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        // Initialize target position
-        this.targetBL = 0;
-        this.targetBR = 0;
-        this.targetFL = 0;
-        this.targetFR = 0;
+        // Right side of AndyMark drive train has direction reversed
+       this.br.setDirection(DcMotor.Direction.REVERSE);
+       this.fr.setDirection(DcMotor.Direction.REVERSE);
+
+        this.setPosition(0,0, 0, 0);
 
         // Next set run mode
         this.setRunMode(runmode);
+
+        // Finally set power
+        this.setPower(0);
     }
 
     public void setPower(double flpow, double frpow, double brpow, double blpow)
@@ -136,6 +141,10 @@ public class DriveTrain {
             (0 == this.flPower) && (0 == this.frPower))
         {
             this.moving = false;
+        }
+        else
+        {
+            this.moving = true;
         }
     }
 
@@ -232,7 +241,7 @@ public class DriveTrain {
         deltaPos = Math.abs(deltaPos);
 
         // Update position equally for all motors
-        this.setPosition(deltaPos, deltaPos, deltaPos, deltaPos);
+        this.updatePosition(deltaPos, deltaPos, deltaPos, deltaPos);
 
         // Apply power equally to all motors
         this.setPower(power);
@@ -243,7 +252,7 @@ public class DriveTrain {
         deltaPos = Math.abs(deltaPos);
 
         // Update position equally for all motors. Negative value for deltaPos
-        this.setPosition(-1 * deltaPos, -1 * deltaPos, -1 * deltaPos, -1 * deltaPos);
+        this.updatePosition( -1 * deltaPos, -1 * deltaPos, -1 * deltaPos, -1 * deltaPos);
 
         // Apply power equally to all motors
         this.setPower(power);
@@ -272,19 +281,27 @@ public class DriveTrain {
                     }
                     break;
             }
-            telemetry.addData("DriveTrain:", "RunMode: " + this.runMode);
-            telemetry.addData("DriveTrain: Current ", "FL: " + this.getFLPostion() +
+            this.telemetry.addData("DriveTrain:", "RunMode: " + this.runMode);
+            this.telemetry.addData("DriveTrain: Current ", "FL: " + this.getFLPostion() +
                                 "FR: " + this.getFRPosition() + "BR: " + this.getBRPosition() +
                                "BL: " + this.getBLPosition());
-            telemetry.addData("DriveTrain: Target ", "FL: " + this.targetFL +
-                                "FR: " + this.targetFR + "BR: " + this.targetBR +
-                                "BL: " + this.targetBL);
-            telemetry.update();
+            this.telemetry.addData("DriveTrain: Target ", "FL: " + this.targetFL +
+                                 "FR: " + this.targetFR + "BR: " + this.targetBR +
+                                 "BL: " + this.targetBL);
+             this.telemetry.addData("DriveTrain: Power ", "FL: " + this.flPower +
+                     "FR: " + this.frPower + "BR: " + this.brPower + "BL: " + this.blPower);
         }
         else
         {
-            telemetry.addData("DriveTrain:", "Not Moving");
-            telemetry.update();
+            this.telemetry.addData("DriveTrain:", "Not Moving");
+            this.telemetry.addData("DriveTrain: Current ", "FL: " + this.getFLPostion() +
+                    "FR: " + this.getFRPosition() + "BR: " + this.getBRPosition() +
+                    "BL: " + this.getBLPosition());
+            this.telemetry.addData("DriveTrain: Target ", "FL: " + this.targetFL +
+                    "FR: " + this.targetFR + "BR: " + this.targetBR +
+                    "BL: " + this.targetBL);
+            this.telemetry.addData("DriveTrain: Power ", "FL: " + this.flPower +
+                    "FR: " + this.frPower + "BR: " + this.brPower + "BL: " + this.blPower);
         }
     }
 }

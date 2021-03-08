@@ -22,16 +22,15 @@ public class Autonomous extends OpMode {
 
     public Autonomous()
     {
-        ninjabot = new NinjaBot(hardwareMap);
-        timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
-        currentTime = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+
     }
 
     @Override
     public void init()
     {
-        // TODO: Init robot state
-        ninjabot.init();
+        ninjabot = new NinjaBot(hardwareMap, telemetry);
+        timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+        currentTime = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
     }
 
     @Override

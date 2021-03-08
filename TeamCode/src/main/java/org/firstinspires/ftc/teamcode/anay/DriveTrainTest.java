@@ -19,14 +19,13 @@ public class DriveTrainTest extends OpMode {
 
     public DriveTrainTest()
     {
-        ninjabot = new NinjaBot(hardwareMap);
+       // ninjabot = new NinjaBot(hardwareMap);
     }
 
     @Override
     public void init()
     {
-        // Init ninjabot
-        ninjabot.init();
+        ninjabot = new NinjaBot(hardwareMap, telemetry);
     }
 
     @Override
@@ -62,9 +61,11 @@ public class DriveTrainTest extends OpMode {
             ninjabot.driveTrain.strafeRight(100, 1.0);
         }
 
-        telemetry.addData("Test Position: ", "FL: " + ninjabot.driveTrain.getFLPostion() +
-                "FR: "  + ninjabot.driveTrain.getFRPosition() + "BR: " + ninjabot.driveTrain.getBRPosition() +
-                "BL: " + ninjabot.driveTrain.getBLPosition());
+       // telemetry.addData("Test Position: ", "FL: " + ninjabot.driveTrain.getFLPostion() +
+       //         "FR: "  + ninjabot.driveTrain.getFRPosition() + "BR: " + ninjabot.driveTrain.getBRPosition() +
+       //         "BL: " + ninjabot.driveTrain.getBLPosition());
+
+        ninjabot.update();
     }
 
 }

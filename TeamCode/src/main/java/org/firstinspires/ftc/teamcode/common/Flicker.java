@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 public class Flicker {
@@ -29,8 +31,9 @@ public class Flicker {
     private int curFlicks;
     private State flickerState;
     private ElapsedTime timer;
+    private Telemetry telemetry;
 
-    public Flicker(HardwareMap hardwareMap, Shooter robotShooter)
+    public Flicker(HardwareMap hardwareMap, Shooter robotShooter, Telemetry tele)
     {
         this.flicker = hardwareMap.get(DcMotor.class, "flicker");
         this.flicker.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -41,6 +44,7 @@ public class Flicker {
         this.timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
         this.setPower(0.0);
         this.flickerState = State.STATE_FLICKER_STOPPED;
+        this.telemetry = tele;
     }
 
     public void flick(int times)
@@ -69,8 +73,8 @@ public class Flicker {
         {
             case STATE_FLICKER_STOPPED:
                 // Flicker is stopped so nothing to do
-                telemetry.addData("Flicker: ", "Stopped: ");
-                telemetry.update();
+                this.telemetry.addData("Flicker: ", "Stopped: ");
+                this.telemetry.update();
                 break;
             case STATE_FLICKER_GOING_BACK:
                 if (this.timer.milliseconds() >= this.backDuration)
@@ -82,9 +86,9 @@ public class Flicker {
                 else
                 {
                     // Still waiting for the flicker to be going back
-                    telemetry.addData("Flicker: ", "Going Back: " + this.curFlicks +
+                    this.telemetry.addData("Flicker: ", "Going Back: " + this.curFlicks +
                                         "/" + this.maxFlicks);
-                    telemetry.update();
+                    this.telemetry.update();
                 }
                 break;
             case STATE_FLICKER_BACK:
@@ -111,9 +115,9 @@ public class Flicker {
                 else
                 {
                     // Keep waiting till flywheel has expanded (idleDuration)
-                    telemetry.addData("Flicker: ", "Back: " + this.curFlicks +
+                    this.telemetry.addData("Flicker: ", "Back: " + this.curFlicks +
                             "/" + this.maxFlicks);
-                    telemetry.update();
+                    this.telemetry.update();
                 }
                 break;
             case STATE_FLICKER_GOING_FORWARD:
@@ -128,9 +132,9 @@ public class Flicker {
                 else
                 {
                     // Keep waiting till flicker has reached forward position
-                    telemetry.addData("Flicker: ", "Going Forward: " + this.curFlicks +
+                    this.telemetry.addData("Flicker: ", "Going Forward: " + this.curFlicks +
                             "/" + this.maxFlicks);
-                    telemetry.update();
+                    this.telemetry.update();
                 }
                 break;
             case STATE_FLICKER_FORWARD:
