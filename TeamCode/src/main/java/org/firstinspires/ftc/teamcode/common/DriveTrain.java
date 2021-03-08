@@ -1,0 +1,290 @@
+package org.firstinspires.ftc.teamcode.common;
+
+import com.qualcomm.robotcore.BuildConfig;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorController;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
+public class DriveTrain {
+
+    private DcMotor fl;
+    private DcMotor fr;
+    private DcMotor br;
+    private DcMotor bl;
+    private DcMotor.RunMode runMode;
+    private double currentPower;
+    private double flPower;
+    private double frPower;
+    private double blPower;
+    private double brPower;
+    private boolean moving;
+    private int targetFL;
+    private int targetFR;
+    private int targetBL;
+    private int targetBR;
+
+    public DriveTrain(HardwareMap hardwareMap)
+    {
+        this.fl = hardwareMap.get(DcMotor.class, "fl");
+        this.fr = hardwareMap.get(DcMotor.class, "fr");
+        this.bl = hardwareMap.get(DcMotor.class, "br");
+        this.br = hardwareMap.get(DcMotor.class, "bl");
+
+        // Right side of AndyMark drive train has direction reversed
+        this.br.setDirection(DcMotor.Direction.REVERSE);
+        this.fr.setDirection(DcMotor.Direction.REVERSE);
+
+        // Default is to run to position
+        this.resetEncoders(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
+    public void setRunMode(DcMotor.RunMode mode)
+    {
+        this.runMode = mode;
+        this.bl.setMode(this.runMode);
+        this.br.setMode(this.runMode);
+        this.fl.setMode(this.runMode);
+        this.fr.setMode(this.runMode);
+    }
+
+    public void resetEncoders(DcMotor.RunMode runmode)
+    {
+        // Reset encoders - set power to 0 first
+        this.setPower(0);
+        this.bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        // Initialize target position
+        this.targetBL = 0;
+        this.targetBR = 0;
+        this.targetFL = 0;
+        this.targetFR = 0;
+
+        // Next set run mode
+        this.setRunMode(runmode);
+    }
+
+    public void setPower(double flpow, double frpow, double brpow, double blpow)
+    {
+        // If we are running without encoder then we need to adjust the power based on
+        // current and target position else with run to position/encoder power does not need
+        // to be adjusted
+
+        switch(this.runMode)
+        {
+            case RUN_TO_POSITION:
+                // Power direction does not matter
+                this.flPower = flpow;
+                this.frPower = frpow;
+                this.brPower = brpow;
+                this.blPower = blpow;
+                break;
+            case RUN_USING_ENCODER:
+                // Power direction is dependent on current and target position
+                if (this.getBRPosition() < this.targetBR)
+                {
+                    this.brPower = brpow;
+                }
+                else {
+                    this.brPower = -1 * brpow;
+                }
+
+                if (this.getBLPosition() < this.targetBL)
+                {
+                    this.blPower = blpow;
+                }
+                else
+                {
+                    this.blPower = -1 * blpow;
+                }
+
+                if (this.getFRPosition() < this.targetFR)
+                {
+                    this.frPower = frpow;
+                }
+                else
+                {
+                    this.frPower = -1 * frpow;
+                }
+
+                if (this.getFLPostion() < this.targetFL)
+                {
+                    this.flPower = flpow;
+                }
+                else
+                {
+                    this.flPower = -1 * flpow;
+                }
+                break;
+            case RUN_WITHOUT_ENCODER:
+                break;
+        }
+
+        // Apply power to the left motors
+        bl.setPower(this.blPower);
+        fl.setPower(this.flPower);
+
+        // Now apply power to the right motors
+        br.setPower(this.brPower);
+        fr.setPower(this.frPower);
+
+        if ((0 == this.blPower) && (0 == this.brPower) &&
+            (0 == this.flPower) && (0 == this.frPower))
+        {
+            this.moving = false;
+        }
+    }
+
+    public void setPower(double lPower, double rPower)
+    {
+        this.setPower(lPower, rPower, rPower, lPower);
+    }
+
+    public void setPower(double power)
+    {
+        this.setPower(power, power);
+    }
+
+    public void stop()
+    {
+        // Simply set the power to 0
+        this.setPower(0);
+    }
+
+    public int getBLPosition()
+    {
+        return bl.getCurrentPosition();
+    }
+
+    public int getBRPosition()
+    {
+        return br.getCurrentPosition();
+    }
+
+    public int getFLPostion()
+    {
+        return fl.getCurrentPosition();
+    }
+
+    public int getFRPosition()
+    {
+        return fr.getCurrentPosition();
+    }
+
+    public void setPosition(int flpos, int frpos, int brpos, int blpos)
+    {
+        this.targetFL = flpos;
+        this.targetFR = frpos;
+        this.targetBR = brpos;
+        this.targetBL = blpos;
+
+        bl.setTargetPosition(this.targetBL);
+        fl.setTargetPosition(this.targetFL);
+        br.setTargetPosition(this.targetBR);
+        fr.setTargetPosition(this.targetFR);
+    }
+
+    public void setPosition(int left, int right)
+    {
+        this.setPosition(left, right, right, left);
+    }
+
+    public void setPosition(int pos)
+    {
+        this.setPosition(pos, pos, pos, pos);
+    }
+
+    public void updatePosition(int flpos, int frpos, int brpos, int blpos)
+    {
+        // Read current position and update target position by delta
+        setPosition(this.targetFL + flpos, this.targetFR + frpos,
+                this.targetBR + brpos, this.targetBL + blpos);
+    }
+
+    public void strafeLeft(int deltaPos, double power)
+    {
+        deltaPos = Math.abs(deltaPos);
+
+        // Update position - FL & BR go back and BL & FR go forward
+        this.updatePosition(-1 * deltaPos, deltaPos, -1 * deltaPos, deltaPos);
+
+        // Apply power for strafing equally to all motors
+        this.setPower(power);
+    }
+
+    public void strafeRight(int deltaPos, double power)
+    {
+        deltaPos = Math.abs(deltaPos);
+
+        // Update position - FL & BR go forward and BL & FR go back
+        this.updatePosition(deltaPos, -1 * deltaPos, deltaPos, -1 * deltaPos);
+
+        // Apply power for strafing equally to all motors
+        this.setPower(power);
+    }
+
+    public void goForward(int deltaPos, double power)
+    {
+        deltaPos = Math.abs(deltaPos);
+
+        // Update position equally for all motors
+        this.setPosition(deltaPos, deltaPos, deltaPos, deltaPos);
+
+        // Apply power equally to all motors
+        this.setPower(power);
+    }
+
+    public void goBack(int deltaPos, double power)
+    {
+        deltaPos = Math.abs(deltaPos);
+
+        // Update position equally for all motors. Negative value for deltaPos
+        this.setPosition(-1 * deltaPos, -1 * deltaPos, -1 * deltaPos, -1 * deltaPos);
+
+        // Apply power equally to all motors
+        this.setPower(power);
+    }
+
+    public void update()
+    {
+        // If robot is moving then update current position
+        if (this.moving)
+        {
+            switch (this.runMode)
+            {
+                case RUN_USING_ENCODER:
+                    if ((this.getBLPosition() >= this.targetBL) &&
+                        (this.getBRPosition() >= this.targetBR) &&
+                        (this.getFLPostion() >= this.targetFL) &&
+                        (this.getFRPosition() >= this.targetFR))
+                    {
+                        this.stop();
+                    }
+                    break;
+                case RUN_TO_POSITION:
+                    if (!bl.isBusy() && !br.isBusy() && !fl.isBusy() && !fr.isBusy())
+                    {
+                        this.stop();
+                    }
+                    break;
+            }
+            telemetry.addData("DriveTrain:", "RunMode: " + this.runMode);
+            telemetry.addData("DriveTrain: Current ", "FL: " + this.getFLPostion() +
+                                "FR: " + this.getFRPosition() + "BR: " + this.getBRPosition() +
+                               "BL: " + this.getBLPosition());
+            telemetry.addData("DriveTrain: Target ", "FL: " + this.targetFL +
+                                "FR: " + this.targetFR + "BR: " + this.targetBR +
+                                "BL: " + this.targetBL);
+            telemetry.update();
+        }
+        else
+        {
+            telemetry.addData("DriveTrain:", "Not Moving");
+            telemetry.update();
+        }
+    }
+}
