@@ -10,26 +10,32 @@ import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.tel
 
 public class Flicker {
 
-    private enum State
+    public enum State
     {
         STATE_FLICKER_STOPPED,
         STATE_FLICKER_GOING_BACK,
         STATE_FLICKER_BACK,
+        STATE_FLICKER_PARTIAL,
         STATE_FLICKER_GOING_FORWARD,
         STATE_FLICKER_FORWARD
     };
+
+    public State flickerState;
 
     private DcMotor flicker;
     private Shooter shooter;
     private double backPower = 1.0;
     private double fwdPower = -0.85;
+    private double partialPower = -0.5;
     private double backDuration = 300; // Duration to wait in msec going back (GOING_BACK)
-    private double fwdDuration = 200; // Duration to wait in msec going forward (GOING_FWD)
+    private double fwdDuration = 145; // Duration to wait in msec going forward (GOING_FWD)
+    private double fwdPartial = 50; // Move forward partial
     private double idleDuration = 300; // Duration to wait for flywheel to expand
+    private double shooterEncoderRotations = Shooter.countPerRotation * 70;
     private double currentPower;
+    private int shooterEncoderPosition;
     private int maxFlicks;
     private int curFlicks;
-    private State flickerState;
     private ElapsedTime timer;
     private Telemetry telemetry;
 
@@ -43,7 +49,7 @@ public class Flicker {
         this.curFlicks = 0;
         this.timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
         this.setPower(0.0);
-        this.flickerState = State.STATE_FLICKER_STOPPED;
+        this.flickerState = State.STATE_FLICKER_GOING_BACK;
         this.telemetry = tele;
     }
 
@@ -51,8 +57,24 @@ public class Flicker {
     {
         this.maxFlicks = times;
         this.curFlicks = 0;
-        this.flickerState = State.STATE_FLICKER_GOING_BACK;
         this.timer.reset();
+        /*
+        this.shooterEncoderPosition = this.shooter.getCurrentPosition();
+        if ((this.flickerState != State.STATE_FLICKER_STOPPED) &&
+            (this.flickerState != State.STATE_FLICKER_PARTIAL))
+        {
+            this.flickerState = State.STATE_FLICKER_GOING_BACK;
+            this.setPower(this.backPower);
+        }
+       else
+        { // Flicker is already at the back/partial so go forward and start flicking
+          // TODO: Need to reduce going forward if partial
+            this.flickerState = State.STATE_FLICKER_GOING_FORWARD;
+            this.setPower(this.fwdPower);
+            this.curFlicks = 1;
+        }
+         */
+        this.flickerState = State.STATE_FLICKER_GOING_BACK;
         this.setPower(this.backPower);
     }
 
@@ -64,17 +86,31 @@ public class Flicker {
         this.curFlicks = 0;
         this.setPower(this.backPower);
         this.timer.reset();
+        this.shooterEncoderPosition = this.shooter.getCurrentPosition();
+    }
+
+    // Push first ring partial
+    public void push_partial()
+    {
+       if (this.flickerState == State.STATE_FLICKER_STOPPED)
+        {
+            this.flickerState = State.STATE_FLICKER_PARTIAL;
+            this.timer.reset();
+            this.shooterEncoderPosition = this.shooter.getCurrentPosition();
+            this.setPower(this.partialPower);
+        }
     }
 
     public void update()
     {
+        int shooterPosition;
+
         // Depending on current flicker state move to next proposed state
         switch(this.flickerState)
         {
             case STATE_FLICKER_STOPPED:
                 // Flicker is stopped so nothing to do
                 this.telemetry.addData("Flicker: ", "Stopped: ");
-                this.telemetry.update();
                 break;
             case STATE_FLICKER_GOING_BACK:
                 if (this.timer.milliseconds() >= this.backDuration)
@@ -88,13 +124,14 @@ public class Flicker {
                     // Still waiting for the flicker to be going back
                     this.telemetry.addData("Flicker: ", "Going Back: " + this.curFlicks +
                                         "/" + this.maxFlicks);
-                    this.telemetry.update();
                 }
                 break;
             case STATE_FLICKER_BACK:
                 // If currently flicking see if sufficient time has passed to start going fwd
-                // TODO: Read shooter encoder speed to flick forward again
-                if (this.timer.milliseconds() >= this.idleDuration)
+                shooterPosition = this.shooter.getCurrentPosition();
+
+                if ((shooterPosition - this.shooterEncoderPosition) > this.shooterEncoderRotations)
+//                if (this.timer.milliseconds() >= this.idleDuration)
                 {
                     if (this.maxFlicks != 0) {
                         // Start moving flicker forward as sufficient time has passed
@@ -117,14 +154,21 @@ public class Flicker {
                     // Keep waiting till flywheel has expanded (idleDuration)
                     this.telemetry.addData("Flicker: ", "Back: " + this.curFlicks +
                             "/" + this.maxFlicks);
-                    this.telemetry.update();
+                }
+                break;
+            case STATE_FLICKER_PARTIAL:
+                if (this.timer.milliseconds() >= this.fwdPartial)
+                {  // Reached partial so move to STOPPED
+                    this.timer.reset();
+                    this.setPower(0.0);
+                    this.flickerState = State.STATE_FLICKER_STOPPED;
                 }
                 break;
             case STATE_FLICKER_GOING_FORWARD:
                 // See if sufficient has passed to start going forward
                 if (this.timer.milliseconds() >= this.fwdDuration)
                 {
-                    // Foward position reached - should have flicked a ring
+                    // Forward position reached - should have flicked a ring
                     this.setPower(0.0);
                     this.timer.reset();
                     this.flickerState = State.STATE_FLICKER_FORWARD;
@@ -134,7 +178,6 @@ public class Flicker {
                     // Keep waiting till flicker has reached forward position
                     this.telemetry.addData("Flicker: ", "Going Forward: " + this.curFlicks +
                             "/" + this.maxFlicks);
-                    this.telemetry.update();
                 }
                 break;
             case STATE_FLICKER_FORWARD:
@@ -149,6 +192,7 @@ public class Flicker {
                     this.timer.reset();
                     this.setPower(this.backPower);
                     this.flickerState = State.STATE_FLICKER_GOING_BACK;
+                    this.shooterEncoderPosition = this.shooter.getCurrentPosition();
                 }
                 break;
         }

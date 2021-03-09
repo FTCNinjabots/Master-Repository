@@ -7,8 +7,11 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Shooter {
 
+    public static int countPerRotation = 28; // From Gobilda yellow jacket website
+
     private DcMotor shooter;
     private double currentPower;
+    private double defaultPower = 1.0;
     private Telemetry telemetry;
 
     public Shooter(HardwareMap hardwareMap, Telemetry tele)
@@ -31,8 +34,19 @@ public class Shooter {
         this.setPower(0);
     }
 
+    public void start(double power)
+    {
+        this.setPower(power);
+    }
+
+    // Start with default power
     public void start()
     {
-        this.setPower(1.0);
+        this.start(this.defaultPower);
+    }
+
+    public int getCurrentPosition()
+    {
+        return this.shooter.getCurrentPosition();
     }
 }

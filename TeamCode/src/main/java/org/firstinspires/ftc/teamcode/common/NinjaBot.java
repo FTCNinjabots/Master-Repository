@@ -35,6 +35,7 @@ public class NinjaBot {
     {
         // Initialize the drive train incase it's moved during init
         driveTrain.resetEncoders(DcMotor.RunMode.RUN_TO_POSITION);
+        this.intakeGate.lower();
     }
 
     public void stop()
@@ -52,8 +53,7 @@ public class NinjaBot {
         driveTrain.update();
         wobbleMotor.update();
         wobbleGate.update();
-        //intakeGate.update();
+        intakeGate.update();
         flicker.update();
-        this.telemetry.update();
     }
 }

@@ -14,6 +14,8 @@ import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.tel
 
 public class DriveTrain {
 
+    public boolean moving;
+
     private DcMotor fl;
     private DcMotor fr;
     private DcMotor br;
@@ -24,11 +26,12 @@ public class DriveTrain {
     private double frPower;
     private double blPower;
     private double brPower;
-    private boolean moving;
     private int targetFL;
     private int targetFR;
     private int targetBL;
     private int targetBR;
+    private int motorTolerance = 10; // Encoder count
+    private double ticksPerInch = 93.023; // Computed emperically
     private Telemetry telemetry;
 
     public DriveTrain(HardwareMap hardwareMap, Telemetry tele)
@@ -258,6 +261,45 @@ public class DriveTrain {
         this.setPower(power);
     }
 
+    public void drive(double leftInches, double rightInches, double power)
+    {
+        // Convert inches to position and update left/right position
+        this.updatePosition((int) Math.round(leftInches * this.ticksPerInch),
+                            (int) Math.round(rightInches * this.ticksPerInch),
+                            (int) Math.round(rightInches * this.ticksPerInch),
+                            (int) Math.round(leftInches * this.ticksPerInch));
+
+        // Apply power equally to all motors
+        this.setPower(power);
+    }
+
+    public void clockwiseTurn(int deltaPos, double power)
+    {
+        deltaPos = Math.abs(deltaPos);
+
+        // Clock wise turn: FL & BL go forward and FR & BR go backward by equal amount
+        this.updatePosition(deltaPos, -1 * deltaPos, -1 * deltaPos, deltaPos);
+
+        // Apply power equally to all motors
+        this.setPower(power);
+    }
+
+    public void counterClockWiseTurn(int deltaPos, double power)
+    {
+        deltaPos = Math.abs(deltaPos);
+
+        // Counter clock wise turn: FL & BL go backward and FR & BR go forward by equal amount
+        this.updatePosition(-1 * deltaPos, deltaPos, deltaPos, -1 * deltaPos);
+
+        // Apply power equally to all motors
+        this.setPower(power);
+    }
+
+    public boolean isMoving()
+    {
+        return this.moving;
+    }
+
     public void update()
     {
         // If robot is moving then update current position
@@ -275,7 +317,11 @@ public class DriveTrain {
                     }
                     break;
                 case RUN_TO_POSITION:
-                    if (!bl.isBusy() && !br.isBusy() && !fl.isBusy() && !fr.isBusy())
+                    if ((!bl.isBusy() && !br.isBusy() && !fl.isBusy() && !fr.isBusy()) ||
+                        ((Math.abs(this.getBLPosition() - this.targetBL) < this.motorTolerance) &&
+                         (Math.abs(this.getBRPosition() - this.targetBR) < this.motorTolerance) &&
+                         (Math.abs(this.getFLPostion() - this.targetFL) < this.motorTolerance) &&
+                         (Math.abs(this.getFRPosition() - this.targetFR) < this.motorTolerance)))
                     {
                         this.stop();
                     }

@@ -56,9 +56,16 @@ public class DriveTrainTest extends OpMode {
         { // Stafe drivetrain left
             ninjabot.driveTrain.strafeLeft(100, 1.0);
         }
-        else if (gamepad1.y)
-        { // Strafe drivetrain right
+        else if (gamepad1.y) { // Strafe drivetrain right
             ninjabot.driveTrain.strafeRight(100, 1.0);
+        }
+        else if (gamepad1.right_bumper)
+        {
+            ninjabot.driveTrain.clockwiseTurn(100, 1.0);
+        }
+        else if (gamepad1.left_bumper)
+        {
+            ninjabot.driveTrain.counterClockWiseTurn(100, 1);
         }
 
        // telemetry.addData("Test Position: ", "FL: " + ninjabot.driveTrain.getFLPostion() +

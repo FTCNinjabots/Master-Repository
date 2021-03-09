@@ -2,9 +2,11 @@ package org.firstinspires.ftc.teamcode.common;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+import static java.lang.Thread.sleep;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 public class WobbleMotor {
@@ -22,13 +24,9 @@ public class WobbleMotor {
 
     private DcMotor wobble;
     private double curPos;
-    private double wobblePowerDown = -0.45;
-    private double wobblePowerRaise = 0.8;
-    private double targetDownPhase1 = -420;
-    private double targetDownPhase2 = -480;
-    private double targetDown = -500;
-    private double targetUpPhase1 = 100;
-    private double targetUp = 10;
+    private double wobblePowerDown = -0.6;
+    private double wobblePowerRaise = 0.7;
+    private ElapsedTime timer;
     private double currentPower;
     private Telemetry telemetry;
 
@@ -40,24 +38,34 @@ public class WobbleMotor {
         this.curPos = wobble.getCurrentPosition();
         this.state = State.STATE_WOBBLE_IDLE;
         this.telemetry = tele;
+        this.timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
     }
 
     private void setPower(double power)
     {
+        this.wobble.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.wobble.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         this.currentPower = power;
         this.wobble.setPower(this.currentPower);
+        this.timer.reset();
     }
 
     public void down()
     {
+        if (this.state != State.STATE_WOBBLE_IDLE)
+            return;
+
         this.state = State.STATE_WOBBLE_GOING_DOWN;
         this.setPower(this.wobblePowerDown);
     }
 
     public void raise()
     {
+        if (this.state != State.STATE_WOBBLE_IDLE)
+            return;
+
         this.state = State.STATE_WOBBLE_GOING_UP;
-        this.wobble.setPower(this.wobblePowerRaise);
+        this.setPower(this.wobblePowerRaise);
     }
 
     public void update()
@@ -70,15 +78,17 @@ public class WobbleMotor {
             case STATE_WOBBLE_GOING_DOWN:
                 currentPosition = this.wobble.getCurrentPosition();
                 this.telemetry.addData("WobbleMotor: ", "Going Down: " + currentPosition);
-                if (currentPosition <= this.targetDownPhase1) {
+                if (this.timer.milliseconds() > 300)
+                {
                     this.state = State.STATE_WOBBLE_GOING_DOWN_PHASE1;
-                    this.setPower(this.currentPower + 0.05);
+                    this.setPower(this.currentPower + 0.15);
                 }
                 break;
             case STATE_WOBBLE_GOING_DOWN_PHASE1:
                 currentPosition = this.wobble.getCurrentPosition();
                 this.telemetry.addData("WobbleMotor: ", "Down Phase1: " + currentPosition);
-                if (currentPosition <= this.targetDownPhase2) {
+                if (this.timer.milliseconds() > 200)
+                {
                     this.state = State.STATE_WOBBLE_GOING_DOWN_PHASE2;
                     this.setPower(this.currentPower + 0.15);
                 }
@@ -86,14 +96,16 @@ public class WobbleMotor {
             case STATE_WOBBLE_GOING_DOWN_PHASE2:
                 currentPosition = this.wobble.getCurrentPosition();
                 this.telemetry.addData("WobbleMotor: ", "Down Phase2: " + currentPosition);
-                if (currentPosition <= this.targetDown) {
+                if (this.timer.milliseconds() > 50)
+                {
                     this.state = State.STATE_WOBBLE_IDLE;
                 }
                 break;
             case STATE_WOBBLE_GOING_UP:
                 currentPosition = this.wobble.getCurrentPosition();
                 this.telemetry.addData("WobbleMotor: ", "Going Up: " + currentPosition);
-                if (currentPosition >= this.targetUpPhase1) {
+                if (this.timer.milliseconds() >= 200)
+                {
                     this.state = State.STATE_WOBBLE_GOING_UP_PHASE1;
                     this.setPower(this.currentPower - 0.15);
                 }
@@ -101,7 +113,8 @@ public class WobbleMotor {
             case STATE_WOBBLE_GOING_UP_PHASE1:
                 currentPosition = this.wobble.getCurrentPosition();
                 this.telemetry.addData("WobbleMotor: ", "Up Phase1: " + currentPosition);
-                if (currentPosition >= this.targetUp) {
+                if (this.timer.milliseconds() >= 200)
+                {
                     this.state = State.STATE_WOBBLE_IDLE;
                 }
                 break;
