@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -17,19 +18,33 @@ import static java.lang.Thread.sleep;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 
+
 @Config
 @TeleOp(name="TeleOp4Real")
 public class Teleop extends OpMode {
+
+    private enum PowerState
+    {
+        STATE_POWER_0,
+        STATE_POWER_0_5,
+        STATE_POWER_1,
+        STATE_POWER_2,
+        STATE_POWER_3,
+        STATE_POWER_4,
+        STATE_POWER_5,
+    }
 
     private NinjaBot ninjabot;
     private ElapsedTime timer;
     public static int strafeIncrement = 100;
     public static int driveIncrement = 100;
     public static double shooterControl = 0.6;
-    public static double powerShotPower = 0.75;
+    public static double powerShotPower = 0.74;
     private boolean strafing = false;
     private FtcDashboard dashboard;
     private TelemetryPacket packet;
+    private boolean powershot;
+    private PowerState powerState;
 
     public Teleop()
     {
@@ -39,13 +54,14 @@ public class Teleop extends OpMode {
     @Override
     public void init()
     {
-       // this.dashboard = FtcDashboard.getInstance();
-      //  this.dashboard.setTelemetryTransmissionInterval(25);
-      //  this.packet = new TelemetryPacket();
-       // telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+       this.dashboard = FtcDashboard.getInstance();
+       this.dashboard.setTelemetryTransmissionInterval(25);
+       this.packet = new TelemetryPacket();
+       telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         ninjabot = new NinjaBot(hardwareMap, telemetry);
         timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
         ElapsedTime currentTime = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+        powerState = PowerState.STATE_POWER_0;
     }
 
     @Override
@@ -68,7 +84,7 @@ public class Teleop extends OpMode {
         {  // Strafe left
             if (gamepad2.left_trigger > 0.5)
             {
-                ninjabot.driveTrain.strafeLeft(strafeIncrement, this.shooterControl * gamepad2.left_trigger);
+                ninjabot.driveTrain.strafeLeft(strafeIncrement, Teleop.shooterControl * gamepad2.left_trigger);
             }
             else
             {
@@ -80,7 +96,7 @@ public class Teleop extends OpMode {
         {
             // Strafe right
             if (gamepad2.right_trigger > 0.5) {
-                ninjabot.driveTrain.strafeRight(strafeIncrement, this.shooterControl * gamepad2.right_trigger);
+                ninjabot.driveTrain.strafeRight(strafeIncrement, Teleop.shooterControl * gamepad2.right_trigger);
             }
             else
             {
@@ -101,10 +117,10 @@ public class Teleop extends OpMode {
                         ninjabot.driveTrain.getBLPosition());
             }
 
-            ninjabot.driveTrain.updatePosition((int) Math.round(-1 * this.shooterControl * gamepad2.left_stick_y * driveIncrement),
-                    (int) Math.round(-1 * this.shooterControl * gamepad2.right_stick_y * driveIncrement),
-                    (int) Math.round(-1 * this.shooterControl * gamepad2.right_stick_y * driveIncrement),
-                    (int) Math.round(-1 * this.shooterControl * gamepad2.left_stick_y * driveIncrement));
+            ninjabot.driveTrain.updatePosition((int) Math.round(-1 * Teleop.shooterControl * gamepad2.left_stick_y * Teleop.driveIncrement),
+                    (int) Math.round(-1 * Teleop.shooterControl * gamepad2.right_stick_y * Teleop.driveIncrement),
+                    (int) Math.round(-1 * Teleop.shooterControl * gamepad2.right_stick_y * Teleop.driveIncrement),
+                    (int) Math.round(-1 * Teleop.shooterControl * gamepad2.left_stick_y * Teleop.driveIncrement));
             ninjabot.driveTrain.setPower(-1 * gamepad2.left_stick_y,
                     -1 * gamepad2.right_stick_y);
 
@@ -136,7 +152,7 @@ public class Teleop extends OpMode {
         if ((gamepad1.left_trigger < 0.5) && (gamepad2.left_trigger < 0.5) &&
             (gamepad1.right_trigger < 0.5) && (gamepad2.right_trigger < 0.5) &&
             (gamepad2.left_stick_y == 0) && (gamepad2.right_stick_y == 0) &&
-            (gamepad1.left_stick_y == 0) && (gamepad1.right_stick_y == 0))
+            (gamepad1.left_stick_y == 0) && (gamepad1.right_stick_y == 0) && !powershot)
         {
             // Stop the robot and set the current position to where we are at
             ninjabot.driveTrain.stop();
@@ -227,8 +243,9 @@ public class Teleop extends OpMode {
             ninjabot.flicker.flick(4);
         }
         else if (gamepad2.b)
-        {  // Emergency stop for flicker
+        {  // Emergency stop for flicker/powershot
             ninjabot.flicker.stop();
+            stopPowerShot();
         }
 
         // Flicker manual
@@ -253,6 +270,12 @@ public class Teleop extends OpMode {
             ninjabot.flicker.stop();
         }
 
+        /* If powershot is ongoing then update the powershot state machine */
+        if (powershot)
+        {
+            powerShotUpdate();
+        }
+
         // Update ninjabot
         ninjabot.update();
         this.telemetry.update();
@@ -265,46 +288,87 @@ public class Teleop extends OpMode {
         ninjabot.stop();
     }
 
+    private void powerShotUpdate()
+    {
+        /* If powershot is not active then return */
+        if (!powershot)
+            return;
+
+        switch (powerState)
+        {
+            case STATE_POWER_0:
+                ninjabot.shooter.setPower(Teleop.powerShotPower);
+                powerState = PowerState.STATE_POWER_0_5;
+                this.timer.reset();
+            break;
+
+            case STATE_POWER_0_5:
+                if (this.timer.milliseconds() > 1000)
+                {
+                    ninjabot.flicker.flick(1);
+                    powerState = PowerState.STATE_POWER_1;
+                    this.timer.reset();
+                }
+                break;
+
+            case STATE_POWER_1:
+                if (ninjabot.flicker.isStopped())
+                {
+                    ninjabot.shooter.setPower(Teleop.powerShotPower);
+                    ninjabot.driveTrain.clockwiseTurn(230, 1);
+                    powerState = PowerState.STATE_POWER_2;
+                    this.timer.reset();
+                }
+            break;
+            case STATE_POWER_2:
+                if (!ninjabot.driveTrain.isMoving())
+                {
+                    ninjabot.flicker.flick(1);
+                    powerState = PowerState.STATE_POWER_3;
+                    this.timer.reset();
+                }
+            break;
+            case STATE_POWER_3:
+                if (ninjabot.flicker.isStopped())
+                {
+                    ninjabot.driveTrain.clockwiseTurn(75, 1);
+                    powerState = PowerState.STATE_POWER_4;
+                    this.timer.reset();
+                }
+            break;
+            case STATE_POWER_4:
+                if (!ninjabot.driveTrain.isMoving())
+                {
+                    ninjabot.flicker.flick(2);
+                    powerState = PowerState.STATE_POWER_5;
+                    this.timer.reset();
+                }
+            break;
+            case STATE_POWER_5:
+                if (ninjabot.flicker.isStopped())
+                {
+                    ninjabot.shooter.stop();
+                    powerState = PowerState.STATE_POWER_0;
+                    powershot = false;
+                }
+            break;
+        }
+
+        telemetry.addData("PowerShot State: ", powerState);
+    }
+
     private void powerShot()
     {
-       try {
-           // ninjabot.flicker.stop();
-            ninjabot.shooter.setPower(this.powerShotPower);
-           // while (ninjabot.flicker.flickerState != Flicker.State.STATE_FLICKER_STOPPED)
-           // {
-            //    ninjabot.flicker.update();
-           // }
-            this.ninjaSleep(3000);
-            ninjabot.flicker.flick(1);
-            while (ninjabot.flicker.flickerState != Flicker.State.STATE_FLICKER_STOPPED) {
-                ninjabot.flicker.update();
-            }
+        /* Start the powershot state machine */
+        powershot = true;
+        powerShotUpdate();
 
-            this.timer.reset();
-            ninjabot.driveTrain.clockwiseTurn(230, 1);
-            if (!gamepad2.b) {
-                while (ninjabot.driveTrain.moving && (this.timer.milliseconds() < 200)){
-                    ninjabot.driveTrain.update();
-                }
-                ninjabot.flicker.flick(1);
-                while (ninjabot.flicker.flickerState != Flicker.State.STATE_FLICKER_STOPPED) {
-                    ninjabot.flicker.update();
-                }
-                this.timer.reset();
-                ninjabot.shooter.setPower(this.powerShotPower + 0.15);
-                ninjabot.driveTrain.clockwiseTurn(105, 1);
-                if (!gamepad2.b) {
-                   /* while (ninjabot.driveTrain.moving && (this.timer.milliseconds() < 200)){
-                        ninjabot.driveTrain.update();
-                    }
-                    */
-                    sleep(200);
-                    ninjabot.flicker.flick(2);
-                }
-            }
-            ninjabot.shooter.stop();
-        }
-       catch (InterruptedException e){}
+    }
+
+    private void stopPowerShot()
+    {
+        powerState = PowerState.STATE_POWER_0;
+        powershot = false;
     }
 
     private void ninjaSleep(long msec)
@@ -312,6 +376,9 @@ public class Teleop extends OpMode {
         try {
             sleep(msec);
         }
-        catch (InterruptedException e){}
+        catch (InterruptedException e)
+        {
+            telemetry.addData("Sleep exception: " , e);
+        }
     }
 }

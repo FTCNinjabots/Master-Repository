@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.common.Flicker;
 import org.firstinspires.ftc.teamcode.common.NinjaBot;
 import org.firstinspires.ftc.teamcode.common.Path;
 import org.firstinspires.ftc.teamcode.common.PathSeg;
+import org.firstinspires.ftc.teamcode.vasu.Auto;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
@@ -54,7 +55,7 @@ public class Autonomous extends OpMode {
         STATE_RING4_COLLECT3,      // Collect 3 rings from field
         STATE_RING4_COLLECT4,      // Collect 4th ring from field
         STATE_RING4_WOBBLE_DROPOFF, // Ring 4 drop wobble goal into square
-    };
+    }
 
     // ******************************** CONSTANTS FOR COMMON STATE *********************************
     // Path for ninjabot from start line to shooting stack
@@ -150,23 +151,14 @@ public class Autonomous extends OpMode {
     // Drive to drop off wobble goal in square
     final PathSeg[] ring4WobbleDropSeg =
     {
-     //   new PathSeg(PathSeg.PathSegType.PATH_SEG_TYPE_TURN_COUNTER_CLOCKWISE, 120, 0, 1),
         new PathSeg(PathSeg.PathSegType.PATH_SEG_TYPE_DRIVE, 5, 5, 1),
         new PathSeg(PathSeg.PathSegType.PATH_SEG_TYPE_DRIVE, 37, 100, 1),
-    //    new PathSeg(PathSeg.PathSegType.PATH_SEG_TYPE_DRIVE, 54, 54, 1),
-    //    new PathSeg(PathSeg.PathSegType.PATH_SEG_TYPE_TURN_COUNTER_CLOCKWISE, 4000, 0, 1),
-      //  new PathSeg(PathSeg.PathSegType.PATH_SEG_TYPE_DRIVE, 64, 64, 1)
-      //  new PathSeg(PathSeg.PathSegType.PATH_SEG_TYPE_TURN_CLOCKWISE, 0, 3400, 1),
-       // new PathSeg(PathSeg.PathSegType.PATH_SEG_TYPE_DRIVE, -4, -4, 1),
-
     };
     final Path ring4WobbleDropPath = new Path(ring4WobbleDropSeg);
 
     // Path from drop of square to center line (after dropping of wobble goal)
     final PathSeg[] ring4TermSeg =
     {
-     //   new PathSeg(PathSeg.PathSegType.PATH_SEG_TYPE_DRIVE, 32, 32, 1),
-     //   new PathSeg(PathSeg.PathSegType.PATH_SEG_TYPE_STRAFE_LEFT, 3000, 3000, 1),
         new PathSeg(PathSeg.PathSegType.PATH_SEG_TYPE_DRIVE, 4, 30, 1),
         new PathSeg(PathSeg.PathSegType.PATH_SEG_TYPE_DRIVE, 10, 10, 1),
     };
@@ -312,11 +304,11 @@ public class Autonomous extends OpMode {
                 }
                 else
                 {  // Robot is still moving to position - if robot has been in the current path
-                    // for atleast wobbleDownMsec then drop down wobble goal and turn on the shooter
-                    //  so we are ready to shoot when we get there
-                    if (!this.wobbleDown && (this.pathTimer.milliseconds() > this.wobbleDownMsec))
+                    //for atleast wobbleDownMsec then drop down wobble goal and turn on the shooter
+                    //so we are ready to shoot when we get there
+                    if (!this.wobbleDown && (this.pathTimer.milliseconds() > Autonomous.wobbleDownMsec))
                     {
-                        dropWobbleAndPowerShooter(this.ring0shooterPower);
+                        dropWobbleAndPowerShooter(Autonomous.ring0shooterPower);
                     }
 
                     telemetry.addData("Ring 0:", "Drive2Shoot: " +
@@ -327,7 +319,8 @@ public class Autonomous extends OpMode {
             case STATE_WAIT_FOR_FLICKER:
                 // Ninjabot is currently flicking - wait for all flicks to be complete before
                 // stopping the shooter and moving to the next state
-                if (ninjabot.flicker.flickerState == Flicker.State.STATE_FLICKER_STOPPED)
+               // if (ninjabot.flicker.flickerState == Flicker.State.STATE_FLICKER_STOPPED)
+                if (ninjabot.flicker.isStopped())
                 { // Flicker has stopped
                     if (this.numRings == SkystoneDeterminationPipeline.RingPosition.FOUR)
                     {
@@ -370,7 +363,7 @@ public class Autonomous extends OpMode {
                             this.loadPath(this.ring1CollectPath);
                             this.newState(State.STATE_RING1_COLLECT);
                             ninjabot.intake.start();
-                            ninjabot.shooter.setPower(this.ring4shooterPowerInitial - 0.01);
+                            ninjabot.shooter.setPower(Autonomous.ring4shooterPowerInitial - 0.01);
                             this.ring1collect = true;
                         }
                         else
@@ -424,7 +417,7 @@ public class Autonomous extends OpMode {
                     if (!this.wobbleDown)
                     {
                         // Drop wobble goal down as we have already reached position
-                        dropWobbleAndPowerShooter(this.ring4shooterPowerInitial);
+                        dropWobbleAndPowerShooter(Autonomous.ring4shooterPowerInitial);
 
                         // For 4 rings also need to drop down the intake gate so we can push the
                         // rings
@@ -439,9 +432,9 @@ public class Autonomous extends OpMode {
                 {   // Robot is still moving to stack - if robot has been in the current path
                     // for atleast wobbleDownMsec then drop down wobble goal and turn on the shooter
                     //  so we are ready to shoot when we get there
-                    if (!this.wobbleDown && (this.pathTimer.milliseconds() > this.wobbleDownMsec))
+                    if (!this.wobbleDown && (this.pathTimer.milliseconds() > Autonomous.wobbleDownMsec))
                     {
-                        dropWobbleAndPowerShooter(this.ring4shooterPowerInitial);
+                        dropWobbleAndPowerShooter(Autonomous.ring4shooterPowerInitial);
 
                         // For 4 rings also need to drop down the intake gate so we can push the
                         // rings
@@ -460,7 +453,7 @@ public class Autonomous extends OpMode {
                 if (this.isPathComplete())
                 {
                     // Sleep for 1200 msec for rings to intake
-                    this.ninjaSleep(this.intakeDelay + 1000);
+                    this.ninjaSleep(Autonomous.intakeDelay + 1000);
 
                     // Ninjabot can start shooting the fourth ring - shoot 2 times
                     ninjabot.flicker.flick(2);
@@ -704,7 +697,10 @@ public class Autonomous extends OpMode {
         try {
             sleep(msec);
         }
-        catch (InterruptedException e){}
+        catch (InterruptedException e)
+        {
+            telemetry.addData("NinjaSleep Exception: ", e);
+        }
     }
 
     // Drop wobble goal and power shooter on way to shooting
@@ -775,9 +771,6 @@ public class Autonomous extends OpMode {
 
         final int FOUR_RING_THRESHOLD = 133;
         final int ONE_RING_THRESHOLD = 129;
-
-        //final int FOUR_RING_THRESHOLD = 150;
-        //final int ONE_RING_THRESHOLD = 135;
 
         Point region1_pointA = new Point(
                 REGION1_TOPLEFT_ANCHOR_POINT.x,

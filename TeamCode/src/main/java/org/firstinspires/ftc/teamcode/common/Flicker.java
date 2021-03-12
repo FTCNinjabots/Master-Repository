@@ -18,7 +18,7 @@ public class Flicker {
         STATE_FLICKER_PARTIAL,
         STATE_FLICKER_GOING_FORWARD,
         STATE_FLICKER_FORWARD
-    };
+    }
 
     public State flickerState;
 
@@ -34,8 +34,8 @@ public class Flicker {
     private double shooterEncoderRotations = Shooter.countPerRotation * 70;
     private double currentPower;
     private int shooterEncoderPosition;
-    private int maxFlicks;
     private int curFlicks;
+    private int maxFlicks;
     private ElapsedTime timer;
     private Telemetry telemetry;
 
@@ -58,22 +58,6 @@ public class Flicker {
         this.maxFlicks = times;
         this.curFlicks = 0;
         this.timer.reset();
-        /*
-        this.shooterEncoderPosition = this.shooter.getCurrentPosition();
-        if ((this.flickerState != State.STATE_FLICKER_STOPPED) &&
-            (this.flickerState != State.STATE_FLICKER_PARTIAL))
-        {
-            this.flickerState = State.STATE_FLICKER_GOING_BACK;
-            this.setPower(this.backPower);
-        }
-       else
-        { // Flicker is already at the back/partial so go forward and start flicking
-          // TODO: Need to reduce going forward if partial
-            this.flickerState = State.STATE_FLICKER_GOING_FORWARD;
-            this.setPower(this.fwdPower);
-            this.curFlicks = 1;
-        }
-         */
         if (this.flickerState == State.STATE_FLICKER_STOPPED)
         {
             this.flickerState = State.STATE_FLICKER_GOING_FORWARD;
@@ -98,6 +82,16 @@ public class Flicker {
             this.timer.reset();
             this.shooterEncoderPosition = this.shooter.getCurrentPosition();
         }
+    }
+
+    public boolean isStopped()
+    {
+        /* Shooter is stopped if the following conditions are met:
+         *
+         * (1) Max flicks is set to 0 (set in stop or when curFlocks == maxFlicks)
+         * (2) Flicker has moved to the STOPPED state (all the way back)
+         */
+        return ((this.maxFlicks == 0) && (this.flickerState == State.STATE_FLICKER_STOPPED));
     }
 
     // Push first ring partial
@@ -142,7 +136,6 @@ public class Flicker {
                 shooterPosition = this.shooter.getCurrentPosition();
 
                 if ((shooterPosition - this.shooterEncoderPosition) > this.shooterEncoderRotations)
-//                if (this.timer.milliseconds() >= this.idleDuration)
                 {
                     if (this.maxFlicks != 0) {
                         // Start moving flicker forward as sufficient time has passed

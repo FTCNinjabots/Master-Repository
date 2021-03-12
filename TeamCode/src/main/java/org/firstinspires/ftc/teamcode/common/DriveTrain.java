@@ -140,15 +140,8 @@ public class DriveTrain {
         br.setPower(this.brPower);
         fr.setPower(this.frPower);
 
-        if ((0 == this.blPower) && (0 == this.brPower) &&
-            (0 == this.flPower) && (0 == this.frPower))
-        {
-            this.moving = false;
-        }
-        else
-        {
-            this.moving = true;
-        }
+        this.moving = (0 != this.blPower) || (0 != this.brPower) ||
+                (0 != this.flPower) || (0 != this.frPower);
     }
 
     public void setPower(double lPower, double rPower)
@@ -380,6 +373,7 @@ public class DriveTrain {
                                  "BL: " + this.targetBL);
              this.telemetry.addData("DriveTrain: Power ", "FL: " + this.flPower +
                      "FR: " + this.frPower + "BR: " + this.brPower + "BL: " + this.blPower);
+
         }
         else
         {
