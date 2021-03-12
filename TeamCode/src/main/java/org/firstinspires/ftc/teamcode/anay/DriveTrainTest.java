@@ -68,6 +68,23 @@ public class DriveTrainTest extends OpMode {
             ninjabot.driveTrain.counterClockWiseTurn(100, 1);
         }
 
+        if (gamepad2.a)
+        {
+            ninjabot.driveTrain.strafeNE(100, 1);
+        }
+        else if (gamepad2.b)
+        {
+            ninjabot.driveTrain.strafeSE(100, 1);
+        }
+        else if (gamepad2.x)
+        {
+            ninjabot.driveTrain.strafeSW(100, 1);
+        }
+        else if (gamepad2.y)
+        {
+            ninjabot.driveTrain.strafeNW(100, 1);
+        }
+
        // telemetry.addData("Test Position: ", "FL: " + ninjabot.driveTrain.getFLPostion() +
        //         "FR: "  + ninjabot.driveTrain.getFRPosition() + "BR: " + ninjabot.driveTrain.getBRPosition() +
        //         "BL: " + ninjabot.driveTrain.getBLPosition());

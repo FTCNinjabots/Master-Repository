@@ -24,11 +24,11 @@ public class Flicker {
 
     private DcMotor flicker;
     private Shooter shooter;
-    private double backPower = 1.0;
-    private double fwdPower = -0.85;
+    private double backPower = 0.5; // 1.0
+    private double fwdPower = -0.80; // -0.85
     private double partialPower = -0.5;
-    private double backDuration = 300; // Duration to wait in msec going back (GOING_BACK)
-    private double fwdDuration = 145; // Duration to wait in msec going forward (GOING_FWD)
+    private double backDuration = 175; // 300 Duration to wait in msec going back (GOING_BACK)
+    private double fwdDuration = 125; // 145 Duration to wait in msec going forward (GOING_FWD)
     private double fwdPartial = 50; // Move forward partial
     private double idleDuration = 300; // Duration to wait for flywheel to expand
     private double shooterEncoderRotations = Shooter.countPerRotation * 70;
@@ -74,19 +74,30 @@ public class Flicker {
             this.curFlicks = 1;
         }
          */
-        this.flickerState = State.STATE_FLICKER_GOING_BACK;
-        this.setPower(this.backPower);
+        if (this.flickerState == State.STATE_FLICKER_STOPPED)
+        {
+            this.flickerState = State.STATE_FLICKER_GOING_FORWARD;
+            this.setPower(this.fwdPower);
+            this.curFlicks = 1;
+        }
+        else if (this.flickerState != State.STATE_FLICKER_GOING_BACK)
+        {
+            this.flickerState = State.STATE_FLICKER_GOING_BACK;
+            this.setPower(this.backPower);
+        }
     }
 
     public void stop()
     {
         // Stopping the flicker always makes it go to the back position first
-        this.flickerState = State.STATE_FLICKER_GOING_BACK;
-        this.maxFlicks = 0;
-        this.curFlicks = 0;
-        this.setPower(this.backPower);
-        this.timer.reset();
-        this.shooterEncoderPosition = this.shooter.getCurrentPosition();
+        if (this.flickerState != State.STATE_FLICKER_STOPPED) {
+            this.flickerState = State.STATE_FLICKER_GOING_BACK;
+            this.maxFlicks = 0;
+            this.curFlicks = 0;
+            this.setPower(this.backPower);
+            this.timer.reset();
+            this.shooterEncoderPosition = this.shooter.getCurrentPosition();
+        }
     }
 
     // Push first ring partial
@@ -183,7 +194,7 @@ public class Flicker {
             case STATE_FLICKER_FORWARD:
                 // If curFlicks == maxFlicks then we are done else continue shooting and move
                 // flicker backwards
-                if (this.curFlicks == this.maxFlicks)
+                if (this.curFlicks >= this.maxFlicks)
                 {
                     this.stop();
                 }

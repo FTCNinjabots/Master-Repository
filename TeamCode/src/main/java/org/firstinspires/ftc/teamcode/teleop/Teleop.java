@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -8,6 +11,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.common.Flicker;
 import org.firstinspires.ftc.teamcode.common.NinjaBot;
+import org.firstinspires.ftc.teamcode.common.WobbleGate;
 
 import static java.lang.Thread.sleep;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
@@ -19,11 +23,13 @@ public class Teleop extends OpMode {
 
     private NinjaBot ninjabot;
     private ElapsedTime timer;
-    private int strafeIncrement = 100;
-    private int driveIncrement = 100;
-    private double shooterControl = 0.6;
-    private double powerShotPower = 0.75;
+    public static int strafeIncrement = 100;
+    public static int driveIncrement = 100;
+    public static double shooterControl = 0.6;
+    public static double powerShotPower = 0.75;
     private boolean strafing = false;
+    private FtcDashboard dashboard;
+    private TelemetryPacket packet;
 
     public Teleop()
     {
@@ -33,6 +39,10 @@ public class Teleop extends OpMode {
     @Override
     public void init()
     {
+       // this.dashboard = FtcDashboard.getInstance();
+      //  this.dashboard.setTelemetryTransmissionInterval(25);
+      //  this.packet = new TelemetryPacket();
+       // telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         ninjabot = new NinjaBot(hardwareMap, telemetry);
         timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
         ElapsedTime currentTime = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
@@ -142,7 +152,11 @@ public class Teleop extends OpMode {
         // Wobble motor
         if (gamepad1.left_bumper)
         {
-            ninjabot.wobbleMotor.raise();
+            // Don't allow raising the wobble motor till wobble gate is closed
+            if (ninjabot.wobbleGate.state == WobbleGate.State.STATE_GATE_CLOSED)
+            {
+                ninjabot.wobbleMotor.raise();
+            }
         }
         else if (gamepad1.right_bumper)
         {
@@ -254,8 +268,13 @@ public class Teleop extends OpMode {
     private void powerShot()
     {
        try {
-            ninjabot.flicker.stop();
+           // ninjabot.flicker.stop();
             ninjabot.shooter.setPower(this.powerShotPower);
+           // while (ninjabot.flicker.flickerState != Flicker.State.STATE_FLICKER_STOPPED)
+           // {
+            //    ninjabot.flicker.update();
+           // }
+            this.ninjaSleep(3000);
             ninjabot.flicker.flick(1);
             while (ninjabot.flicker.flickerState != Flicker.State.STATE_FLICKER_STOPPED) {
                 ninjabot.flicker.update();
@@ -286,5 +305,13 @@ public class Teleop extends OpMode {
             ninjabot.shooter.stop();
         }
        catch (InterruptedException e){}
+    }
+
+    private void ninjaSleep(long msec)
+    {
+        try {
+            sleep(msec);
+        }
+        catch (InterruptedException e){}
     }
 }

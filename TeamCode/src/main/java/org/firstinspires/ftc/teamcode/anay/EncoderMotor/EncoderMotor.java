@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.anay.EncoderMotor;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @TeleOp(name = "Move Tank Encoder", group = "Move Tank Group")
+@Disabled
 public class EncoderMotor extends LinearOpMode {
     private DcMotor bl = null;
     private DcMotor br = null;

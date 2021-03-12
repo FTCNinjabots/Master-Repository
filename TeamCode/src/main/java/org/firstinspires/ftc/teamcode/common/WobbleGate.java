@@ -20,8 +20,8 @@ public class WobbleGate {
 
     private Servo wobbleGate;
     private ElapsedTime timer;
-    private double closeDuration = 1200; // Duration in msec to close gate
-    private double openDuration = 1200; // Duration in msec to open gate
+    private double closeDuration = 300; // Duration in msec to close gate
+    private double openDuration = 300; // Duration in msec to open gate
     private Telemetry telemetry;
 
     public WobbleGate(HardwareMap hardwareMap, Telemetry tele)

@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 //import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @TeleOp(name = "Move Tank", group = "Move Tank Group")
+@Disabled
 public class Encoder_Test extends LinearOpMode {
     private DcMotor bl = null;
     private DcMotor br = null;

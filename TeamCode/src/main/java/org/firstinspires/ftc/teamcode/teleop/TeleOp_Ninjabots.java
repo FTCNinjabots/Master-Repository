@@ -50,6 +50,7 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 
 @Config
 @TeleOp(name="TeleOp Release")
+@Disabled
 public class TeleOp_Ninjabots extends OpMode
 {
     private DcMotor br = null;

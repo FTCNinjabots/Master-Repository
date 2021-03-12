@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -10,7 +11,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import org.firstinspires.ftc.teamcode.common.myblock;
 import org.firstinspires.ftc.teamcode.common.myblock.SkystoneDeterminationPipeline;
 @Autonomous(name="Autonomous Ninjabots")
-
+@Disabled
 public class Autonomous_Ninjabots extends myblock {
 
 

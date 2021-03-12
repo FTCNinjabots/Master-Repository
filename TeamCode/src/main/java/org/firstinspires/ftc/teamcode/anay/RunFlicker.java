@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.anay;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 @TeleOp(name = "Run Flicker")
+@Disabled
 public class RunFlicker extends LinearOpMode {
     private DcMotor shooter = null;
     private DcMotor flicker = null;

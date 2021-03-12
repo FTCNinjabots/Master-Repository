@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.common.myblock;
 
 @Autonomous(name="AS", group="AS")
+@Disabled
 public class A_Site extends myblock {
     DcMotor bl;
     DcMotor fr;

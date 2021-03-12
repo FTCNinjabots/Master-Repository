@@ -239,6 +239,50 @@ public class DriveTrain {
         this.setPower(power);
     }
 
+    public void strafeNE(int deltaPos, double power)
+    {
+        deltaPos = Math.abs(deltaPos);
+
+        // Update position - FL & BR go forward and BL & FR stay at current position
+        this.updatePosition(deltaPos, 0, deltaPos, 0);
+
+        // Apply power for strafing equally to all motors
+        this.setPower(power);
+    }
+
+    public void strafeSE(int deltaPos, double power)
+    {
+        deltaPos = Math.abs(deltaPos);
+
+        // Update position - FL & BR stay at current position and BL & FR go back
+        this.updatePosition(0, -1 * deltaPos, 0, -1 * deltaPos);
+
+        // Apply power for strafing equally to all motors
+        this.setPower(power);
+    }
+
+    public void strafeSW(int deltaPos, double power)
+    {
+        deltaPos = Math.abs(deltaPos);
+
+        // Update position - FL & BR go back and BL & FR stay at current position
+        this.updatePosition(-1 * deltaPos, 0, -1 * deltaPos, 0);
+
+        // Apply power for strafing equally to all motors
+        this.setPower(power);
+    }
+
+    public void strafeNW(int deltaPos, double power)
+    {
+        deltaPos = Math.abs(deltaPos);
+
+        // Update position - FL & BR stay at current position and BL & FR go forward
+        this.updatePosition(0, deltaPos, 0, deltaPos);
+
+        // Apply power for strafing equally to all motors
+        this.setPower(power);
+    }
+
     public void goForward(int deltaPos, double power)
     {
         deltaPos = Math.abs(deltaPos);

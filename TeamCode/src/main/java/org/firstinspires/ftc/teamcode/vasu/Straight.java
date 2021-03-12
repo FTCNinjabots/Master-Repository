@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 @Autonomous(name="Straight ", group="Straight")
+@Disabled
 public class Straight  extends LinearOpMode {
 
     private DcMotor bl = null;
