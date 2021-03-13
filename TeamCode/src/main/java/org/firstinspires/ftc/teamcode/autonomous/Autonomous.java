@@ -164,7 +164,7 @@ public class Autonomous extends OpMode {
     };
     final Path ring4TermPath = new Path(ring4TermSeg);
 
-    public static double ring4shooterPowerInitial = 0.79; // Shooter power for initial 3 rings
+    public static double ring4shooterPowerInitial = 0.78; // Shooter power for initial 3 rings - Changed from 0.79
     private boolean ring4collect3 = false;
     private boolean ring4collect4 = false;
     public double ring4shooterPowerSecondary = 0.81; // Shooter power for 3 field rings
@@ -431,7 +431,7 @@ public class Autonomous extends OpMode {
                         // Anay + Vasu : Strafe a bit because the intake is not aligned
 
                         if (numRings != SkystoneDeterminationPipeline.RingPosition.NONE){
-                            this.ninjabot.driveTrain.strafeRight(400, 1.0);
+                            this.ninjabot.driveTrain.strafeRight(700, 1.0);
                         }
                     }
 
