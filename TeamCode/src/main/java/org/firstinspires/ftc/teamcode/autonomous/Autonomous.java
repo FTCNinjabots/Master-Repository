@@ -414,6 +414,8 @@ public class Autonomous extends OpMode {
                     // Wait for the shooter to complete shooting
                     this.newState(State.STATE_WAIT_FOR_FLICKER);
 
+
+
                     if (!this.wobbleDown)
                     {
                         // Drop wobble goal down as we have already reached position
@@ -421,8 +423,15 @@ public class Autonomous extends OpMode {
 
                         // For 4 rings also need to drop down the intake gate so we can push the
                         // rings
+
                         if (this.numRings == SkystoneDeterminationPipeline.RingPosition.FOUR) {
                             ninjabot.intakeGate.lower();
+                        }
+
+                        // Anay + Vasu : Strafe a bit because the intake is not aligned
+
+                        if (numRings != SkystoneDeterminationPipeline.RingPosition.NONE){
+                            this.ninjabot.driveTrain.strafeRight(400, 1.0);
                         }
                     }
 
