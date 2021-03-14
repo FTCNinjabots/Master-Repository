@@ -50,6 +50,12 @@ public class WobbleMotor {
         this.timer.reset();
     }
 
+    public void stop()
+    {
+        this.setPower(0);
+        this.state = State.STATE_WOBBLE_IDLE;
+    }
+
     public void down()
     {
         if (this.state != State.STATE_WOBBLE_IDLE)

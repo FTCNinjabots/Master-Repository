@@ -24,11 +24,11 @@ public class Flicker {
 
     private DcMotor flicker;
     private Shooter shooter;
-    private double backPower = 0.5; // 1.0
-    private double fwdPower = -0.80; // -0.85
+    private double backPower = 0.75; // 1.0
+    private double fwdPower = -0.85; // -0.85
     private double partialPower = -0.5;
-    private double backDuration = 175; // 300 Duration to wait in msec going back (GOING_BACK)
-    private double fwdDuration = 125; // 145 Duration to wait in msec going forward (GOING_FWD)
+    private double backDuration = 200; // 300 Duration to wait in msec going back (GOING_BACK)
+    private double fwdDuration = 140; // 145 Duration to wait in msec going forward (GOING_FWD)
     private double fwdPartial = 50; // Move forward partial
     private double idleDuration = 300; // Duration to wait for flywheel to expand
     private double shooterEncoderRotations = Shooter.countPerRotation * 70;
@@ -60,9 +60,10 @@ public class Flicker {
         this.timer.reset();
         if (this.flickerState == State.STATE_FLICKER_STOPPED)
         {
-            this.flickerState = State.STATE_FLICKER_GOING_FORWARD;
-            this.setPower(this.fwdPower);
-            this.curFlicks = 1;
+            // FLicker is already stopped. Capture current encoder position and move state to
+            // back so flicker can resume in the next update.
+            this.shooterEncoderPosition = this.shooter.getCurrentPosition();
+            this.flickerState = State.STATE_FLICKER_BACK;
         }
         else if (this.flickerState != State.STATE_FLICKER_GOING_BACK)
         {

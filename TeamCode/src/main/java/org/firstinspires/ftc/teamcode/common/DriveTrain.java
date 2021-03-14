@@ -219,6 +219,7 @@ public class DriveTrain {
 
         // Apply power for strafing equally to all motors
         this.setPower(power);
+
     }
 
     public void strafeRight(int deltaPos, double power)

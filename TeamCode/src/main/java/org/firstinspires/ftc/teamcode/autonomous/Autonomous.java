@@ -109,7 +109,7 @@ public class Autonomous extends OpMode {
     // Path for ninjabot to collect 1 ring from the field
     final PathSeg[] ring1CollectSeg =
     {
-        new PathSeg(PathSeg.PathSegType.PATH_SEG_TYPE_TURN_COUNTER_CLOCKWISE, 160, 0, 1),
+        //new PathSeg(PathSeg.PathSegType.PATH_SEG_TYPE_TURN_COUNTER_CLOCKWISE, 45, 0, 1),
         new PathSeg(PathSeg.PathSegType.PATH_SEG_TYPE_DRIVE, 10, 10, 1)
     };
     final Path ring1CollectPath = new Path(ring1CollectSeg);
@@ -136,8 +136,8 @@ public class Autonomous extends OpMode {
     // Drive to collect 3 rings from the field with intake gate
     final PathSeg[] ring4CollectSeg =
     {
-        new PathSeg(PathSeg.PathSegType.PATH_SEG_TYPE_TURN_COUNTER_CLOCKWISE, 155, 0, 1),
-        new PathSeg(PathSeg.PathSegType.PATH_SEG_TYPE_DRIVE, 21, 21, 0.20),
+        new PathSeg(PathSeg.PathSegType.PATH_SEG_TYPE_TURN_COUNTER_CLOCKWISE, 50, 0, 1),
+        new PathSeg(PathSeg.PathSegType.PATH_SEG_TYPE_DRIVE, 17, 17, 0.17),
     };
     final Path ring4CollectPath = new Path(ring4CollectSeg);
 
@@ -167,8 +167,8 @@ public class Autonomous extends OpMode {
     public static double ring4shooterPowerInitial = 0.79; // Shooter power for initial 3 rings
     private boolean ring4collect3 = false;
     private boolean ring4collect4 = false;
-    public double ring4shooterPowerSecondary = 0.81; // Shooter power for 3 field rings
-    public double ring4shooterPowerTertiary = 0.79; // Shooter power for last field ring
+    public double ring4shooterPowerSecondary = 0.77; // Shooter power for 3 field rings
+    public double ring4shooterPowerTertiary = 0.78; // Shooter power for last field ring
 
     // *********************************** AUTONOMOUS STATE **************************************
     private NinjaBot ninjabot;
@@ -189,7 +189,8 @@ public class Autonomous extends OpMode {
     @Override
     public void init()
     {
-        this.ninjabot = new NinjaBot(hardwareMap, telemetry);
+        // Ninjabot has a drive train
+        this.ninjabot = new NinjaBot(hardwareMap, telemetry, true);
         this.timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
         this.pathTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
         this.currentTime = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
@@ -528,7 +529,7 @@ public class Autonomous extends OpMode {
                 if (this.isPathComplete())
                 {
                     // Sleep for 1200 msec for rings to intake
-                    this.ninjaSleep(1200);
+                    this.ninjaSleep(1000);
 
                     // Ninjabot can start shooting the fourth ring - shoot 2 times
                     ninjabot.flicker.flick(2);

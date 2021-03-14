@@ -18,9 +18,12 @@ public class NinjaBot {
     public org.firstinspires.ftc.teamcode.common.Flicker flicker;
     private Telemetry telemetry;
 
-    public  NinjaBot(HardwareMap hardwareMap, Telemetry tele)
+    public  NinjaBot(HardwareMap hardwareMap, Telemetry tele, boolean haveDriveTrain)
     {
-        driveTrain = new DriveTrain(hardwareMap, tele);
+        if (haveDriveTrain)
+            driveTrain = new DriveTrain(hardwareMap, tele);
+        else
+            driveTrain = null;
         wobbleMotor = new WobbleMotor(hardwareMap, tele);
         wobbleGate = new WobbleGate(hardwareMap, tele);
         intake = new Intake(hardwareMap, tele);
@@ -34,14 +37,19 @@ public class NinjaBot {
     public void init()
     {
         // Initialize the drive train incase it's moved during init
-        driveTrain.resetEncoders(DcMotor.RunMode.RUN_TO_POSITION);
+        if (driveTrain != null) {
+            driveTrain.resetEncoders(DcMotor.RunMode.RUN_TO_POSITION);
+        }
+
         this.intakeGate.lower();
     }
 
     public void stop()
     {
         // Stop all motors
-        driveTrain.stop();
+        if (driveTrain != null) {
+            driveTrain.stop();
+        }
         intake.stop();
         shooter.stop();
         flicker.stop();
@@ -50,7 +58,9 @@ public class NinjaBot {
     public void update()
     {
         // Update all robot components
-        driveTrain.update();
+        if (driveTrain != null) {
+            driveTrain.update();
+        }
         wobbleMotor.update();
         wobbleGate.update();
         intakeGate.update();

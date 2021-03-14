@@ -25,7 +25,7 @@ public class DriveTrainTest extends OpMode {
     @Override
     public void init()
     {
-        ninjabot = new NinjaBot(hardwareMap, telemetry);
+        ninjabot = new NinjaBot(hardwareMap, telemetry, true);
     }
 
     @Override

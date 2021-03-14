@@ -20,8 +20,8 @@ public class WobbleGate {
 
     private Servo wobbleGate;
     private ElapsedTime timer;
-    private double closeDuration = 300; // Duration in msec to close gate
-    private double openDuration = 300; // Duration in msec to open gate
+    private double closeDuration = 150; // Duration in msec to close gate
+    private double openDuration = 150; // Duration in msec to open gate
     private Telemetry telemetry;
 
     public WobbleGate(HardwareMap hardwareMap, Telemetry tele)
@@ -44,6 +44,16 @@ public class WobbleGate {
         this.wobbleGate.setPosition(Servo.MIN_POSITION);
         this.state = State.STATE_GATE_OPENING;
         this.timer.reset();
+    }
+
+    public boolean isOpen()
+    {
+        return this.state == State.STATE_GATE_IDLE;
+    }
+
+    public boolean isClosed()
+    {
+        return this.state == State.STATE_GATE_CLOSED;
     }
 
     public void update()
