@@ -36,19 +36,6 @@ public class Autonomous_Ninjabots extends myblock {
         //shooter power 0.82
 
 
-        //vasu is smelling anay's poopies
-
-        //anay has done the POOPIES
-
-        //SHARVA FARTED
-
-        //MAURYA IS VERY SAD
-
-        //AUM IS CALLING GIRLFRIEND'S MOTHER
-
-        //Adit is sad
-
-
         bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

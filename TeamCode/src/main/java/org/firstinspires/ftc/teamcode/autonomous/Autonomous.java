@@ -164,7 +164,7 @@ public class Autonomous extends OpMode {
     };
     final Path ring4TermPath = new Path(ring4TermSeg);
 
-    public static double ring4shooterPowerInitial = 0.79; // Shooter power for initial 3 rings
+    public static double ring4shooterPowerInitial = 0.78; // Shooter power for initial 3 rings - Changed from 0.79
     private boolean ring4collect3 = false;
     private boolean ring4collect4 = false;
     public double ring4shooterPowerSecondary = 0.77; // Shooter power for 3 field rings
@@ -415,6 +415,8 @@ public class Autonomous extends OpMode {
                     // Wait for the shooter to complete shooting
                     this.newState(State.STATE_WAIT_FOR_FLICKER);
 
+
+
                     if (!this.wobbleDown)
                     {
                         // Drop wobble goal down as we have already reached position
@@ -422,8 +424,15 @@ public class Autonomous extends OpMode {
 
                         // For 4 rings also need to drop down the intake gate so we can push the
                         // rings
+
                         if (this.numRings == SkystoneDeterminationPipeline.RingPosition.FOUR) {
                             ninjabot.intakeGate.lower();
+                        }
+
+                        // Anay + Vasu : Strafe a bit because the intake is not aligned
+
+                        if (numRings != SkystoneDeterminationPipeline.RingPosition.NONE){
+                            this.ninjabot.driveTrain.strafeRight(700, 1.0);
                         }
                     }
 
