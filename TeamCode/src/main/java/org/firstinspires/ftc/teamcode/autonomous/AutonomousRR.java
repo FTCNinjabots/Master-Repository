@@ -258,7 +258,7 @@ public class AutonomousRR extends LinearOpMode
         // Traverse picking up rings - shooter is still on
         drive.followTrajectory(ring1Intake);
 
-        // Wait for 1 second for rings to complete intake
+        // Wait for 1.2 second for rings to complete intake
         this.ninjaSleep(1200);
 
         // Turn off intake and start shooting
@@ -328,8 +328,14 @@ public class AutonomousRR extends LinearOpMode
             ninjabot.wobbleGate.update();
         }
 
+        // Raise wobble goal motor
+        ninjabot.wobbleMotor.raise();
+
         // Traverse to center line
         drive.followTrajectory(ring1Term);
+
+        // Stop wobblemotor
+        ninjabot.wobbleMotor.stop();
     }
 
     public void runRing4Program()
@@ -467,7 +473,7 @@ public class AutonomousRR extends LinearOpMode
     {
         // -------------------------> Ring 1 trajectories
         ring1D2S = drive.trajectoryBuilder(this.startPose)
-                .splineTo(new Vector2d(-40, 37), -0.0767944870877505)
+                .splineTo(new Vector2d(-40, 37), -0.07592182246175333)
                 .addTemporalMarker(1.45, () ->
                 {
                     // Wait for wobble gate to close. Should be closed by now
@@ -498,17 +504,17 @@ public class AutonomousRR extends LinearOpMode
 
         // Drop off wobble goal in square
         ring1DropWobbleWPt1 = drive.trajectoryBuilder(ring1Intake.end())
-                .splineTo(new Vector2d(47, 43),  0)
+                .splineTo(new Vector2d(47, 42),  0)
                 .build();
 
         // Pick up wobble goal 2
         ring1PickupWobble = drive.trajectoryBuilder(ring1DropWobbleWPt1.end(), true)
-                .splineTo(new Vector2d(-51, 36.75), 3.14159265358979)
+                .splineTo(new Vector2d(-51, 37.75), 3.14159265358979)
                 .build();
 
         // Drop off wobble goal 2
         ring1DropWobble2 = drive.trajectoryBuilder((ring1PickupWobble.end()))
-                .splineTo(new Vector2d(36, 57), 0)
+                .splineTo(new Vector2d(44, 54), 0)
                 .addTemporalMarker(0.5, () ->
                 {
                     // TUrn off wobble motor
@@ -575,7 +581,7 @@ public class AutonomousRR extends LinearOpMode
 
         // Drop off wobble goal
         ring4DropWobble = drive.trajectoryBuilder(ring4Intake1.end())
-                .splineTo(new Vector2d(50, 53), 1.5707963267948966)
+                .splineTo(new Vector2d(50, 55), 1.5707963267948966)
                 .build();
 
         // Traverse to center line
