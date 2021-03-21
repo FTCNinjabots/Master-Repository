@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
@@ -13,12 +14,16 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.teamcode.R;
 import org.firstinspires.ftc.teamcode.common.NinjaBot;
 import org.firstinspires.ftc.teamcode.common.WobbleGate;
 import org.firstinspires.ftc.teamcode.common.WobbleMotor;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.util.DashboardUtil;
 import org.firstinspires.ftc.teamcode.vasu.Auto;
 import org.jetbrains.annotations.NotNull;
 import org.opencv.core.Core;
@@ -82,6 +87,9 @@ public class AutonomousRR extends LinearOpMode
     public AutonomousRR.SkyStoneDeterminationPipeline pipeline;
     public AutonomousRR.SkyStoneDeterminationPipeline.RingPosition numRings = SkyStoneDeterminationPipeline.RingPosition.UNKNOWN;
     OpenCvWebcam webcam;
+    public static final String VUFORIA_LICENSE_KEY = "AVf/E1n/////AAABmdmpK/BSpk2CsqjNWH2CbgJ3vzF4yBNs8E23FuAgf6bxJDLaISLFPXcVK2zFti6+PvQexl9t9tSP87VXP8rCgkgVzsMEfKLrU1/Lw37iyCp0ItD+DgXoRE0vEIEML77Zpl5Y3FifVaR5iZ4iVrpQ1T1tX2vIBndVAZmLxaTNZkcgDxwl/f5lxdJZ0ukhi2SRB8xc2MAMzJN4Sh0jUDGzncgajNXg6qJqwLGdEDrogl3lKc8/ddVZk4ELZ/5Ws+VDAM8lvJHWMFzc8sALnJtQfGKA4cIxfy25hTFwIu6KgjVypQgQKj2TgEyBKPwHdDdXuPm8M4Da1a3T7h/NTDXrmxi4YMz0wiZZ0ft4+4BiL3Az";
+
+
 
     @Override
     public void runOpMode() throws InterruptedException
@@ -89,12 +97,21 @@ public class AutonomousRR extends LinearOpMode
         AutonomousRR.SkyStoneDeterminationPipeline.RingPosition lastRing;
         int detectCount = 0;
 
+
         drive = new SampleMecanumDrive(hardwareMap);
         // Ninjabot does not have a drivetrain as we use the SameMecanumDrive train from RR
         ninjabot = new NinjaBot(hardwareMap, telemetry, false);
         timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
         startPose = new Pose2d(-60, 50, 0);
         drive.setPoseEstimate(startPose);
+        FtcDashboard dashboard;
+        dashboard = FtcDashboard.getInstance();
+        dashboard.setTelemetryTransmissionInterval(25);
+        VuforiaLocalizer.Parameters vuforiaParams = new VuforiaLocalizer.Parameters(R.id.cameraMonitorViewId);
+        VuforiaLocalizer vuforia = ClassFactory.getInstance().createVuforia(vuforiaParams);
+        vuforiaParams.vuforiaLicenseKey = VUFORIA_LICENSE_KEY;
+
+
 
         // Detect ring for autonomous
         this.detect();
@@ -146,10 +163,15 @@ public class AutonomousRR extends LinearOpMode
             telemetry.update();
             this.ninjaSleep(1000);
         }
+        dashboard.startCameraStream(vuforia, 45);
+
 
         // Wait for start to be pressed
         waitForStart();
+        while(opModeIsActive())
+        {
 
+        }
         if (isStopRequested()) return;
 
         // Close wobble gate first
@@ -617,7 +639,6 @@ public class AutonomousRR extends LinearOpMode
 
         pipeline.getAnalysis();
 
-        //dashboard.startCameraStream();
         return AutonomousRR.SkyStoneDeterminationPipeline.position;
     }
 
