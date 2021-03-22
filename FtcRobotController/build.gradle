@@ -29,6 +29,9 @@ dependencies {
     implementation 'org.tensorflow:tensorflow-lite-metadata:0.1.0-rc1'
 }
 
+dependencies {
+}
+
 repositories {
     maven { url = "https://dl.bintray.com/first-tech-challenge/ftcsdk/" }
     maven { url = 'https://maven.brott.dev/' }

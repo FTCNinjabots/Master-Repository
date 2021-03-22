@@ -126,6 +126,7 @@ public class ConceptVuforiaNavigation extends LinearOpMode {
          */
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
 
+
         /**
          * Instantiate the Vuforia engine
          */
@@ -250,9 +251,9 @@ public class ConceptVuforiaNavigation extends LinearOpMode {
          * choice of BACK camera above) and in landscape mode. Starting from alignment between the
          * robot's and phone's axes, this is a rotation of -90deg along the Y axis.
          *
-         * When determining whether a rotation is positive or negative, consider yourself as looking
+         * When deturself as looking
          * down the (positive) axis of rotation from the positive towards the origin. Positive rotations
-         * are then CCW, and negative rotations CW. An example: consider looking down the positive Z
+         * are then CCW, and negative rotations CW. An example: consider looking down theermining whether a rotation is positive or negative, consider yo positive Z
          * axis towards the origin. A positive rotation about Z (ie: a rotation parallel to the the X-Y
          * plane) is then CCW, as one would normally expect from the usual classic 2D geometry.
          */

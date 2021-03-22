@@ -29,7 +29,7 @@
 
 package org.firstinspires.ftc.robotcontroller.external.samples;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import java.util.List;
@@ -68,7 +68,7 @@ public class ConceptTensorFlowObjectDetectionWebcam extends LinearOpMode {
      * and paste it in to your code on the next line, between the double quotes.
      */
     private static final String VUFORIA_KEY =
-            "AVf/E1n/////AAABmdmpK/BSpk2CsqjNWH2CbgJ3vzF4yBNs8E23FuAgf6bxJDLaISLFPXcVK2zFti6+PvQexl9t9tSP87VXP8rCgkgVzsMEfKLrU1/Lw37iyCp0ItD+DgXoRE0vEIEML77Zpl5Y3FifVaR5iZ4iVrpQ1T1tX2vIBndVAZmLxaTNZkcgDxwl/f5lxdJZ0ukhi2SRB8xc2MAMzJN4Sh0jUDGzncgajNXg6qJqwLGdEDrogl3lKc8/ddVZk4ELZ/5Ws+VDAM8lvJHWMFzc8sALnJtQfGKA4cIxfy25hTFwIu6KgjVypQgQKj2TgEyBKPwHdDdXuPm8M4Da1a3T7h/NTDXrmxi4YMz0wiZZ0ft4+4BiL3Az";
+            "AQe+9fb/////AAABmROBsZ/F0UMyud7D/EVc5vsgUyoOerSwc/ezXcf5K5BhgPP734+wZNvMD5dLeQrmgUt4Mb74CpYc2RcEbZSTiFgoShurU9gGxvfsb29fLq0rCEd2YKGjaO3qqyF0VxTwPXzLTJoWTV5s4XqleSO7dNajCel9TVI7EoxU8dE0w8pHK9r7inc94Xvnpf/GDanpwqf/0Z7gu0qTutmWryJfj5p9I4BhvWmgNUGtz0cZGUXl9JzSk7zHdCQk7US9f4A5/SK0tC/1spxAqtYyTgbQY0kupMdmzW/zsusE20UVt6hf625rOzmkNomsHdApnXeN2YjhatIIHdM4QNs1yzqUZBFfBGk59Q5KGvff1QLEgMON";
 
     /**
      * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
@@ -86,8 +86,12 @@ public class ConceptTensorFlowObjectDetectionWebcam extends LinearOpMode {
     public void runOpMode() {
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
+        FtcDashboard dashboard = FtcDashboard.getInstance();
+        dashboard.setTelemetryTransmissionInterval(25);
         initVuforia();
         initTfod();
+        VisionNavigator vn = new VisionNavigator();
+
 
         /**
          * Activate TensorFlow Object Detection before we wait for the start command.
@@ -95,12 +99,14 @@ public class ConceptTensorFlowObjectDetectionWebcam extends LinearOpMode {
          **/
         if (tfod != null) {
             tfod.activate();
+            tfod.setZoom(2.5, 16.0/9.0);
         }
 
         /** Wait for the game to begin */
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
         waitForStart();
+        dashboard.startCameraStream(tfod, 0);
 
         if (opModeIsActive()) {
             while (opModeIsActive()) {
@@ -112,13 +118,23 @@ public class ConceptTensorFlowObjectDetectionWebcam extends LinearOpMode {
                       telemetry.addData("# Object Detected", updatedRecognitions.size());
                       // step through the list of recognitions and display boundary info.
                       int i = 0;
+
                       for (Recognition recognition : updatedRecognitions) {
                         telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
                         telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
                                 recognition.getLeft(), recognition.getTop());
                         telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
                                 recognition.getRight(), recognition.getBottom());
+                             double center_x = (recognition.getLeft() + recognition.getRight() / 2);
+                             double center_y = (recognition.getTop() + recognition.getBottom() / 2);
+                             int coords[] = vn.calculate_world_coords(center_x, center_y);
+
+
+                             telemetry.addData(String.format(String.valueOf(coords[0]), i), coords[1]);
                       }
+                      telemetry.update();
+
+
                     }
                 }
             }
