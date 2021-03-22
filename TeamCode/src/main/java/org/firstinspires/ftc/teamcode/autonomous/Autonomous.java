@@ -15,7 +15,6 @@ import org.firstinspires.ftc.teamcode.common.Flicker;
 import org.firstinspires.ftc.teamcode.common.NinjaBot;
 import org.firstinspires.ftc.teamcode.common.Path;
 import org.firstinspires.ftc.teamcode.common.PathSeg;
-import org.firstinspires.ftc.teamcode.vasu.Auto;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
@@ -178,7 +177,7 @@ public class Autonomous extends OpMode {
     private State state;
     private Path currentPath;
     private boolean wobbleDown = false;
-    private boolean detected = false;
+    private final boolean detected = false;
     private FtcDashboard dashboard;
     private TelemetryPacket packet;
 

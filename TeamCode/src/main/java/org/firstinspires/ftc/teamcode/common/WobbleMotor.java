@@ -19,16 +19,17 @@ public class WobbleMotor {
         STATE_WOBBLE_GOING_DOWN_PHASE2,
         STATE_WOBBLE_GOING_UP,
         STATE_WOBBLE_GOING_UP_PHASE1
-    };
+    }
+
     public State state;
 
-    private DcMotor wobble;
-    private double curPos;
-    private double wobblePowerDown = -0.6;
-    private double wobblePowerRaise = 0.7;
-    private ElapsedTime timer;
+    private final DcMotor wobble;
+    private final double curPos;
+    private final double wobblePowerDown = -0.6;
+    private final double wobblePowerRaise = 0.7;
+    private final ElapsedTime timer;
     private double currentPower;
-    private Telemetry telemetry;
+    private final Telemetry telemetry;
 
     public WobbleMotor(HardwareMap hardwareMap, Telemetry tele)
     {

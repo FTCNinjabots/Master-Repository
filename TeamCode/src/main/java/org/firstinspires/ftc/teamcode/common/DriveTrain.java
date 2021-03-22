@@ -16,10 +16,10 @@ public class DriveTrain {
 
     public boolean moving;
 
-    private DcMotor fl;
-    private DcMotor fr;
-    private DcMotor br;
-    private DcMotor bl;
+    private final DcMotor fl;
+    private final DcMotor fr;
+    private final DcMotor br;
+    private final DcMotor bl;
     private DcMotor.RunMode runMode;
     private double currentPower;
     private double flPower;
@@ -30,9 +30,9 @@ public class DriveTrain {
     private int targetFR;
     private int targetBL;
     private int targetBR;
-    private int motorTolerance = 10; // Encoder count
-    private double ticksPerInch = 93.023; // Computed emperically
-    private Telemetry telemetry;
+    private final int motorTolerance = 10; // Encoder count
+    private final double ticksPerInch = 93.023; // Computed emperically
+    private final Telemetry telemetry;
 
     public DriveTrain(HardwareMap hardwareMap, Telemetry tele)
     {

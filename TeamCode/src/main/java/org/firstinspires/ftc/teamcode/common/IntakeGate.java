@@ -14,16 +14,16 @@ public class IntakeGate {
         STATE_GATE_LOWER,
         STATE_GATE_RAISE,
         STATE_GATE_MID
-    };
+    }
 
-    private CRServo intakeGate;
-    private ElapsedTime timer;
+    private final CRServo intakeGate;
+    private final ElapsedTime timer;
     private boolean moving;
-    private double moveDuration = 5000;  // Time taken to lower/raise intake in milliseconds
-    private double lowerGatePower = 1.0;
-    private double raiseGatePower = -1.0;
-    private double midGatePower = 0.0;
-    private Telemetry telemetry;
+    private final double moveDuration = 5000;  // Time taken to lower/raise intake in milliseconds
+    private final double lowerGatePower = 1.0;
+    private final double raiseGatePower = -1.0;
+    private final double midGatePower = 0.0;
+    private final Telemetry telemetry;
     private State state;
 
     public IntakeGate(HardwareMap hardwareMap, Telemetry tele)

@@ -9,10 +9,10 @@ public class Shooter {
 
     public static int countPerRotation = 28; // From Gobilda yellow jacket website
 
-    private DcMotor shooter;
+    private final DcMotor shooter;
     private double currentPower;
-    private double defaultPower = 1.0;
-    private Telemetry telemetry;
+    private final double defaultPower = 1.0;
+    private final Telemetry telemetry;
 
     public Shooter(HardwareMap hardwareMap, Telemetry tele)
     {

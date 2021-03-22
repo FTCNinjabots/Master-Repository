@@ -12,7 +12,7 @@ public class PathSeg {
         PATH_SEG_TYPE_STRAFE_SE,
         PATH_SEG_TYPE_STRAFE_SW,
         PATH_SEG_TYPE_STRAFE_NW,
-    };
+    }
 
     public PathSeg.PathSegType type;
     public double lpos;

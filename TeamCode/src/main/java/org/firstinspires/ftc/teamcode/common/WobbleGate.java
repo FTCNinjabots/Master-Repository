@@ -15,14 +15,15 @@ public class WobbleGate {
       STATE_GATE_CLOSED,
       STATE_GATE_OPENING,
       STATE_GATE_IDLE
-    };
+    }
+
     public State state;
 
-    private Servo wobbleGate;
-    private ElapsedTime timer;
-    private double closeDuration = 150; // Duration in msec to close gate
-    private double openDuration = 150; // Duration in msec to open gate
-    private Telemetry telemetry;
+    private final Servo wobbleGate;
+    private final ElapsedTime timer;
+    private final double closeDuration = 150; // Duration in msec to close gate
+    private final double openDuration = 150; // Duration in msec to open gate
+    private final Telemetry telemetry;
 
     public WobbleGate(HardwareMap hardwareMap, Telemetry tele)
     {

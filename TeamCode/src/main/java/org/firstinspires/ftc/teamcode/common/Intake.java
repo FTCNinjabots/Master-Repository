@@ -7,8 +7,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Intake {
 
-    private DcMotor intake;
-    private Telemetry telemetry;
+    private final DcMotor intake;
+    private final Telemetry telemetry;
 
     public Intake(HardwareMap hardwareMap, Telemetry tele)
     {

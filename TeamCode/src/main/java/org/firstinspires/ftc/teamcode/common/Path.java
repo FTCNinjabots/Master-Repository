@@ -8,7 +8,7 @@ public class Path {
     List<PathSeg> segments;
     private int curIndex;
 
-    public Path(PathSeg seg[])
+    public Path(PathSeg[] seg)
     {
         // Allocate a dynamic array of segments and add path to segment
         this.segments = new ArrayList<>();

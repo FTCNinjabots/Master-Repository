@@ -16,7 +16,7 @@ public class NinjaBot {
     public IntakeGate intakeGate;
     public Shooter shooter;
     public org.firstinspires.ftc.teamcode.common.Flicker flicker;
-    private Telemetry telemetry;
+    private final Telemetry telemetry;
 
     public  NinjaBot(HardwareMap hardwareMap, Telemetry tele, boolean haveDriveTrain)
     {

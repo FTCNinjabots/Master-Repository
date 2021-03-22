@@ -24,7 +24,6 @@ import org.firstinspires.ftc.teamcode.common.WobbleMotor;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.util.DashboardUtil;
-import org.firstinspires.ftc.teamcode.vasu.Auto;
 import org.jetbrains.annotations.NotNull;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
