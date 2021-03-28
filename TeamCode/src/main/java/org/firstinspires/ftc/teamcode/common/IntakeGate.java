@@ -29,7 +29,6 @@ public class IntakeGate {
     public IntakeGate(HardwareMap hardwareMap, Telemetry tele)
     {
         this.intakeGate = hardwareMap.get(CRServo.class, "intake_servo");
-        this.timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
         this.moving = false;
         this.telemetry = tele;
         this.state = State.STATE_GATE_UNKNOWN;

@@ -231,10 +231,7 @@ public class Teleop extends OpMode {
         }
 
         // Flick partial
-        if (gamepad2.right_bumper)
-        {
-           ninjabot.flicker.push_partial();
-        }
+
 
         // Flicker
         if (gamepad2.x)
@@ -261,7 +258,8 @@ public class Teleop extends OpMode {
         }
         else if (gamepad2.dpad_left)
         { // Shooter for power shot
-            this.powerShot();
+            //this.powerShot();
+            ninjabot.elevator.lift();
         }
         else if (gamepad2.dpad_down)
         { // When the shooter is stopped then the intake is turned on and flicker is pushed back
@@ -272,7 +270,8 @@ public class Teleop extends OpMode {
 
         if (gamepad2.dpad_right)
         {
-            ninjabot.shooter.setPower(powerShotPower);
+            //ninjabot.shooter.setPower(powerShotPower);
+            ninjabot.elevator.drop();
         }
         /* If powershot is ongoing then update the powershot state machine */
         if (powershot)

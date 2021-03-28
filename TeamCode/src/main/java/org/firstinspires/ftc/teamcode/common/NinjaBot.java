@@ -15,8 +15,9 @@ public class NinjaBot {
     public Intake intake;
     public IntakeGate intakeGate;
     public Shooter shooter;
-    public org.firstinspires.ftc.teamcode.common.Flicker flicker;
-    private final Telemetry telemetry;
+    public FlickerServo flicker;
+    public Elevator elevator;
+    private Telemetry telemetry;
 
     public  NinjaBot(HardwareMap hardwareMap, Telemetry tele, boolean haveDriveTrain)
     {
@@ -29,7 +30,8 @@ public class NinjaBot {
         intake = new Intake(hardwareMap, tele);
         intakeGate = new IntakeGate(hardwareMap, tele);
         shooter = new Shooter(hardwareMap, tele);
-        flicker = new org.firstinspires.ftc.teamcode.common.Flicker(hardwareMap, shooter, tele);
+        flicker = new FlickerServo(hardwareMap, tele);
+        elevator = new Elevator(hardwareMap, tele);
 
         this.telemetry = tele;
     }
@@ -65,5 +67,6 @@ public class NinjaBot {
         wobbleGate.update();
         intakeGate.update();
         flicker.update();
+        elevator.update();
     }
 }
