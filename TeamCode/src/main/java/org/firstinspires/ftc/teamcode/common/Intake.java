@@ -16,12 +16,12 @@ public class Intake {
         // Note: We are not running the intake with encoder
         this.intake = hardwareMap.get(DcMotor.class, "intake");
         this.telemetry = tele;
-        this.intake.setDirection(DcMotorSimple.Direction.REVERSE);
+        //this.intake.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     public void start()
     {
-        this.intake.setPower(1.0);
+        this.intake.setPower(0.91);
     }
 
     public void stop()

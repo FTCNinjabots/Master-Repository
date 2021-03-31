@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.common;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -25,11 +26,13 @@ public class WobbleMotor {
 
     private final DcMotor wobble;
     private final double curPos;
-    private final double wobblePowerDown = -0.6;
-    private final double wobblePowerRaise = 0.7;
+    private final double wobblePowerDown = -0.3;
+    private final double wobblePowerRaise = 0.5;
     private final ElapsedTime timer;
     private double currentPower;
     private final Telemetry telemetry;
+    private final int UpTime = 500;
+    private final int DownTime = 300;
 
     public WobbleMotor(HardwareMap hardwareMap, Telemetry tele)
     {
@@ -39,6 +42,7 @@ public class WobbleMotor {
         this.curPos = wobble.getCurrentPosition();
         this.state = State.STATE_WOBBLE_IDLE;
         this.telemetry = tele;
+        this.wobble.setDirection(DcMotorSimple.Direction.REVERSE);
         this.timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
     }
 
@@ -61,7 +65,7 @@ public class WobbleMotor {
     {
         if (this.state != State.STATE_WOBBLE_IDLE)
             return;
-
+        this.timer.reset();
         this.state = State.STATE_WOBBLE_GOING_DOWN;
         this.setPower(this.wobblePowerDown);
     }
@@ -70,13 +74,35 @@ public class WobbleMotor {
     {
         if (this.state != State.STATE_WOBBLE_IDLE)
             return;
-
+        this.timer.reset();
         this.state = State.STATE_WOBBLE_GOING_UP;
         this.setPower(this.wobblePowerRaise);
     }
 
     public void update()
     {
+
+        switch (this.state){
+            case STATE_WOBBLE_GOING_UP:
+                if (this.timer.milliseconds() > UpTime){
+                    stop();                }
+                break;
+
+            case STATE_WOBBLE_GOING_DOWN:
+                if (this.timer.milliseconds() > DownTime){
+                    stop();
+
+                }
+                break;
+        }
+        this.telemetry.addData("Timer: ", timer.milliseconds());
+        this.telemetry.update();
+
+
+        //Old Code
+
+        /*
+
         int currentPosition;
 
         // TODO: Check if wobble goal is moving down/up and has reached target. Also perform
@@ -131,5 +157,6 @@ public class WobbleMotor {
                 this.setPower(0.0);
                 break;
         }
+        */
     }
 }
