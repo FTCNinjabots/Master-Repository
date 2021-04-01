@@ -35,7 +35,7 @@ public class RingDetector {
 
     public RingDetector(LinearOpMode op){
         int cameraMonitorViewId = op.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", op.hardwareMap.appContext.getPackageName());
-        cam = OpenCvCameraFactory.getInstance().createWebcam(op.hardwareMap.get(WebcamName.class, "webacam1"), cameraMonitorViewId);
+        cam = OpenCvCameraFactory.getInstance().createWebcam(op.hardwareMap.get(WebcamName.class, "webacam"), cameraMonitorViewId);
         this.telemetry = op.telemetry;
         setPipeline(pipeline);
     }
