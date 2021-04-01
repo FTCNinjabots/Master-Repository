@@ -31,7 +31,7 @@ public class RingDetector {
     private Telemetry telemetry;
     private Ring_Pipeline pipeline;
     public static TelemetryPacket packet = new TelemetryPacket();
-
+    public static ArrayList<Ring> seen_rings;
 
     public RingDetector(LinearOpMode op){
         int cameraMonitorViewId = op.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", op.hardwareMap.appContext.getPackageName());
@@ -55,7 +55,7 @@ public class RingDetector {
         cam.setPipeline(Pipeline);
     }
     public void drawRings(){
-        ArrayList<Ring> seen_rings = pipeline.getRings();
+        seen_rings = pipeline.getRings();
         int i = 0;
         while(i < seen_rings.size()){
             drawRing(seen_rings.get(i));
