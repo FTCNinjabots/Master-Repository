@@ -21,6 +21,7 @@ import org.openftc.easyopencv.OpenCvWebcam;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class RingDetector {
     public static final double minX = 0;
     public static final double maxX = 240;
