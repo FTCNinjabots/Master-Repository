@@ -30,8 +30,8 @@ public class NinjaBot {
         intake = new Intake(hardwareMap, tele);
         intakeGate = new IntakeGate(hardwareMap, tele);
         shooter = new Shooter(hardwareMap, tele);
-        flicker = new FlickerServo(hardwareMap, tele);
         elevator = new Elevator(hardwareMap, tele);
+        flicker = new FlickerServo(hardwareMap, elevator, tele);
 
         this.telemetry = tele;
     }

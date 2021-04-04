@@ -3,30 +3,57 @@ package org.firstinspires.ftc.teamcode.common;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Elevator {
+
+    /* Class constants */
+    public static int elevTime = 1200;
+    public static int dropTime = 600;
+    public static int swivelTime = 200;
+    public static int unswivelTime = swivelTime + 50;
+    public static double elevPowerLeft = 1.0;
+    public static double elevPowerRight = elevPowerLeft;
+    public static double swivelPosition = 0.85;
+    public static double swivelBasePosition = 0.90;
+
     public enum State
     {
         STATE_ELEVATOR_TOP,
         STATE_ELEVATOR_BOTTOM,
         STATE_ELEVATOR_LIFTING,
         STATE_ELEVATOR_DROPPING,
+        STATE_ELEVATOR_SWIVELING,
+        STATE_ELEVATOR_SWIVELED,
+        STATE_ELEVATOR_UNSWIVELED,
         STATE_ELEVATOR_IDLE
     }
 
     public State eleState = State.STATE_ELEVATOR_IDLE;
     private CRServo elevatorServoLeft;
     private CRServo elevatorServoRight;
-
+    private Servo elevSwivel;
     private Telemetry telemetry;
     private ElapsedTime timer;
-    private int elevTime = 1500;
-    private int dropTime = 600;
-    private double elevPower = 1.0;
-    private double dropPower = -1.0;
+    private TouchSensor touch;
+
+    public Elevator(HardwareMap hardwareMap, Telemetry telemetry){
+        elevatorServoLeft = hardwareMap.get(CRServo.class, "elevServoLeft");
+        elevatorServoRight = hardwareMap.get(CRServo.class, "elevServoRight");
+        elevSwivel = hardwareMap.get(Servo.class, "elevSwivel");
+        touch = hardwareMap.get(TouchSensor.class, "elevTouch");
+
+        elevatorServoLeft.setDirection(CRServo.Direction.REVERSE);
+        this.stopElevator();
+        this.elevSwivel.setPosition(Elevator.swivelBasePosition);
+
+        this.telemetry = telemetry;
+        this.timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+    }
 
     private void stopElevator()
     {
@@ -36,62 +63,90 @@ public class Elevator {
 
     private void startElevator()
     {
+        this.timer.reset();
         switch (eleState)
         {
             case STATE_ELEVATOR_LIFTING:
-                elevatorServoLeft.setPower(elevPower);
-                elevatorServoRight.setPower(elevPower);
-                break;
+                elevatorServoLeft.setPower(Elevator.elevPowerLeft);
+                elevatorServoRight.setPower(Elevator.elevPowerRight);
+            break;
 
             case STATE_ELEVATOR_DROPPING:
-                elevatorServoLeft.setPower(dropPower);
-                elevatorServoRight.setPower(dropPower);
-                break;
+                elevatorServoLeft.setPower(-1 * Elevator.elevPowerLeft);
+                elevatorServoRight.setPower(-1 * Elevator.elevPowerRight);
+            break;
         }
-    }
-
-    public Elevator(HardwareMap hardwareMap, Telemetry telemetry){
-        elevatorServoLeft = hardwareMap.get(CRServo.class, "elevServoLeft");
-        elevatorServoRight = hardwareMap.get(CRServo.class, "elevServoRight");
-        elevatorServoLeft.setDirection(CRServo.Direction.REVERSE);
-
-        this.telemetry = telemetry;
-        this.timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
     }
 
     public void lift(){
         // Lift elevator for desired amount of time
-        this.timer.reset();
         eleState = State.STATE_ELEVATOR_LIFTING;
         this.startElevator();
     }
 
     public void drop(){
+
         //drop elevator for desired amount of time
-        this.timer.reset();
-        eleState = State.STATE_ELEVATOR_DROPPING;
-        this.startElevator();
+        switch(eleState)
+        {
+            case STATE_ELEVATOR_SWIVELED:
+                eleState = State.STATE_ELEVATOR_UNSWIVELED;
+                this.elevSwivel.setPosition(Elevator.swivelBasePosition);
+                this.timer.reset();
+            break;
+            default:
+                eleState = State.STATE_ELEVATOR_DROPPING;
+                this.startElevator();
+        }
     }
 
     public void update(){
         //updates state based on idleness
         switch (eleState){
             case STATE_ELEVATOR_TOP:
-                this.stopElevator();
+                eleState = State.STATE_ELEVATOR_SWIVELING;
+                this.elevSwivel.setPosition(Elevator.swivelPosition);
+                this.timer.reset();
             break;
             case STATE_ELEVATOR_BOTTOM:
-                this.stopElevator();
+                this.telemetry.addData("Elevator is stopped", "Time: " + this.timer.milliseconds());
             break;
             case STATE_ELEVATOR_LIFTING:
-                if (timer.milliseconds() >= elevTime){
+                /* if (timer.milliseconds() >= Elevator.elevTime) */
+                if (this.touch.isPressed())
+                {
                     eleState = State.STATE_ELEVATOR_TOP;
+                    this.stopElevator();
                 }
             break;
             case STATE_ELEVATOR_DROPPING:
-                if (timer.milliseconds() >= dropTime){
+                if (timer.milliseconds() >= Elevator.dropTime){
                     eleState = State.STATE_ELEVATOR_BOTTOM;
+                    this.stopElevator();
+                }
+            break;
+            case STATE_ELEVATOR_SWIVELING:
+                /* Wait for Elevator to complete swiveling */
+                if (this.timer.milliseconds() >= Elevator.swivelTime)
+                {
+                    eleState = State.STATE_ELEVATOR_SWIVELED;
+                }
+            break;
+            case STATE_ELEVATOR_SWIVELED:
+                /* On top and swiveled - ready to shoot */
+                this.telemetry.addData("Elevator swiveled", "Ready to shoot. Time: " + this.timer.milliseconds());
+                this.stopElevator();
+            break;
+            case STATE_ELEVATOR_UNSWIVELED:
+                /* Wait to unswivel and then start dropping */
+                if (this.timer.milliseconds() >= Elevator.unswivelTime)
+                {
+                    eleState = State.STATE_ELEVATOR_DROPPING;
+                    this.startElevator();
                 }
             break;
         }
+
+        this.telemetry.addData("Elevator State", eleState + "Button: " + this.touch.isPressed());
     }
 }

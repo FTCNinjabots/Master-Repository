@@ -32,6 +32,7 @@ public class IntakeGate {
         this.moving = false;
         this.telemetry = tele;
         this.state = State.STATE_GATE_UNKNOWN;
+        this.timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
     }
 
     public void lower()

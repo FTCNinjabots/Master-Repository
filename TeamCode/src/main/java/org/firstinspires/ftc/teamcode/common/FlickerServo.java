@@ -12,106 +12,124 @@ public class FlickerServo {
     public enum State
     {
         STATE_FLICKER_STOPPED,
-        STATE_FLICKER_FLICKING,
-        STATE_FLICKER_RESET
+        STATE_FLICKER_ELEVATOR,
+        STATE_FLICKER_FWD,
+        STATE_FLICKER_BACK
     }
 
-    public State flickerState = State.STATE_FLICKER_STOPPED;
-
-    private double servo_pos;
-
-    /*
-    private double backPower = 0.75; // 1.0
-    private double fwdPower = -0.85; // -0.85
-    private double partialPower = -0.5;
-    private double backDuration = 200; // 300 Duration to wait in msec going back (GOING_BACK)
-    private double fwdDuration = 140; // 145 Duration to wait in msec going forward (GOING_FWD)
-    private double fwdPartial = 50; // Move forward partial
-    private double idleDuration = 300; // Duration to wait for flywheel to expand
-    private double shooterEncoderRotations = Shooter.countPerRotation * 70;
-    private double currentPower;
-    private int shooterEncoderPosition;
-    */
-
+    public State flickerState;
     private int maxFlicks;
+    private int curFlicks;
     private ElapsedTime timer;
     private Telemetry telemetry;
     private Servo flicker;
 
-    public FlickerServo(HardwareMap hardwareMap, Telemetry tele)
+    //degrees for going foward starts at 1.0
+    private double flickPosition = 0.75;
+    private double basePosition = 1.0;
+    //time between each flick
+    private double fwdTime = 120;
+    private double backTime = 135;
+    private double pauseTime = 50;
+    private Elevator elevator;
+
+    public FlickerServo(HardwareMap hardwareMap, Elevator elev, Telemetry tele)
     {
         flicker = hardwareMap.get(Servo.class, "flicker");
         this.telemetry = tele;
+        this.flicker.setPosition(this.basePosition);
+        this.flickerState = State.STATE_FLICKER_STOPPED;
+        this.maxFlicks = 0;
+        this.timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+        this.elevator = elev;
     }
-
-
 
     public void flick(int times)
     {
-        int curFlicks = 0;
-
-        // Convert max flicks to degrees, current flicks to 0
-
-        if (flickerState != State.STATE_FLICKER_STOPPED){
+        if (this.flickerState != State.STATE_FLICKER_STOPPED)
+        {
+            this.maxFlicks += times;
             return;
         }
 
-        switch (times){
-            case 1:
-                servo_pos = 0.66;
-            case 2:
-                servo_pos = 0.33;
-            default:
-                servo_pos = 0.0;
+        /* Set maxflicks and initialize current flicks to 0 */
+        this.maxFlicks = times;
+        this.curFlicks = 0;
 
-        }
-        flicker.setPosition(servo_pos);
-        flickerState = State.STATE_FLICKER_FLICKING;
-
-
-
+        /* Lift the elevator */
+        this.elevator.lift();
+        this.flickerState = State.STATE_FLICKER_ELEVATOR;
     }
 
     public void stop()
     {
-
+        /* Set the position to 0 and update maxflicks and curflicks to 0 */
+        //position backwards
+        this.flicker.setPosition(this.basePosition);
+        this.maxFlicks = 0;
+        this.curFlicks = 0;
+        this.flickerState = State.STATE_FLICKER_BACK;
+        this.timer.reset();
     }
 
     public boolean isStopped()
     {
-        /* Shooter is stopped if the following conditions are met:
-         *
-         * (1) Max flicks is set to 0 (set in stop or when curFlocks == maxFlicks)
-         * (2) Flicker has moved to the STOPPED state (all the way back)
-         */
-
-
         return flickerState == State.STATE_FLICKER_STOPPED;
     }
-
-    // Push first ring partial
-
 
     public void update()
     {
         switch(flickerState){
-            case STATE_FLICKER_FLICKING:
-                if (flicker.getPosition() == servo_pos)
+            case STATE_FLICKER_ELEVATOR:
+                if (this.elevator.eleState == Elevator.State.STATE_ELEVATOR_SWIVELED) {
+                    /* Set flicker state to FWD and set position */
+                    this.flickerState = State.STATE_FLICKER_FWD;
+                    this.flicker.setPosition(this.flickPosition);
+                    this.timer.reset();
+                }
+            break;
+
+            case STATE_FLICKER_FWD:
+                if (this.timer.milliseconds() >= this.fwdTime)
                 {
-                    // Stop the flicker
-                    servo_pos = 1.0;
-                    flicker.setPosition(servo_pos);
-                    flickerState = State.STATE_FLICKER_RESET;
+                    /* Increment current flick count */
+                    this.curFlicks = this.curFlicks + 1;
+
+                    /* Move flicker back */
+                    this.flickerState = State.STATE_FLICKER_BACK;
+                    this.flicker.setPosition(this.basePosition);
+                    this.timer.reset();
                 }
-            case STATE_FLICKER_RESET:
-                if (flicker.getPosition() == servo_pos){
-                    flickerState = State.STATE_FLICKER_STOPPED;
+            break;
+
+            case STATE_FLICKER_BACK:
+                if (this.timer.milliseconds() >= this.backTime)
+                {
+                    if (this.curFlicks != this.maxFlicks)
+                    {
+                        /* Still have flicks to do - start going forward */
+                        this.flicker.setPosition(this.flickPosition);
+                        this.flickerState = State.STATE_FLICKER_FWD;
+                        this.timer.reset();
+                    }
+                    else
+                    {
+                        this.maxFlicks = 0;
+                        this.curFlicks = 0;
+                        this.flickerState = State.STATE_FLICKER_STOPPED;
+                    }
                 }
+            break;
+
+            case STATE_FLICKER_STOPPED:
+                /* Flicker is stopped - nothing to do. Move the elevator down */
+                if (this.elevator.eleState == Elevator.State.STATE_ELEVATOR_SWIVELED)
+                {
+                    this.elevator.drop();
+                }
+            break;
         }
-        this.telemetry.addData("Flicker State: ", flickerState);
+        this.telemetry.addData("Flicker: ", "State " + flickerState + "Flick " + this.curFlicks + "/" + this.maxFlicks);
     }
 
-    private void setPower(double power)
-    {
-    }
 }
