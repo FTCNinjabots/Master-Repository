@@ -21,7 +21,7 @@ public class Intake {
 
     public void start()
     {
-        this.intake.setPower(1.0);
+        this.intake.setPower(0.91);
     }
 
     public void stop()
