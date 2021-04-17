@@ -18,7 +18,9 @@ import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.R;
+import org.firstinspires.ftc.teamcode.common.Elevator;
 import org.firstinspires.ftc.teamcode.common.NinjaBot;
+import org.firstinspires.ftc.teamcode.common.PoseStorage;
 import org.firstinspires.ftc.teamcode.common.WobbleGate;
 import org.firstinspires.ftc.teamcode.common.WobbleMotor;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
@@ -40,7 +42,7 @@ import java.util.Arrays;
 import java.util.Vector;
 
 @Config
-@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name="AutonomousRR")
+@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name="AAutonomousRR")
 public class AutonomousRR extends LinearOpMode
 {
     private NinjaBot ninjabot;
@@ -52,6 +54,7 @@ public class AutonomousRR extends LinearOpMode
     // Trajectories for ring 0
     Trajectory    ring0Shoot;  // 5.54 seconds
     Trajectory    ring0DropWobble; // 3.12
+    Trajectory    ring0Drive2PickupWobble;
     Trajectory    ring0PickupWobble; // 3.26
     Trajectory    ring0DropWobble2; //
     Trajectory    ring0Term;
@@ -64,12 +67,12 @@ public class AutonomousRR extends LinearOpMode
     Trajectory    ring1D2S;    // Drive to shoot
     Trajectory    ring1Intake; // Intake 1 ring from field
     Trajectory    ring1DropWobbleWPt1; // Waypoint for drop wobble
-    Trajectory    ring1DropWobbleWPt2; // Drop off the wobble
+    Trajectory    ring1Drive2PickupWobble; // Drive to pickup wobble goal
     Trajectory    ring1PickupWobble; // Pickup wobble
     Trajectory    ring1DropWobble2; // Drop 2nd wobble goal
     Trajectory    ring1Term;  // Traverse to center line
 
-    public static double ring1shooterPower = 0.78; // Shooter power
+    public static double ring1shooterPower = 0.72; // Shooter power
 
     // *************************** RING4 TRAJECTORIES & CONSTANTS *********************************
     // Trajectories for ring 4
@@ -78,16 +81,18 @@ public class AutonomousRR extends LinearOpMode
     Trajectory    ring4Intake1; // Ring4 intake 1
     Trajectory    ring4DropWobble; // Drop off wobble goal
     Trajectory    ring4Term;     // Traverse to center line
+    Trajectory    ring4Drive2PickupWobble;
+    Trajectory    ring4PickupWobble;
+    Trajectory    ring4DropWobble2;
 
-    public static double ring4shooterPower = 0.79; // Shooter power
+    public static double ring4shooterPower = 0.8; // Shooter power
     public static double ring4shooterPowerSecondary = 0.78;
 
     // Common state
     public AutonomousRR.SkyStoneDeterminationPipeline pipeline;
     public AutonomousRR.SkyStoneDeterminationPipeline.RingPosition numRings = SkyStoneDeterminationPipeline.RingPosition.UNKNOWN;
     OpenCvWebcam webcam;
-    public static final String VUFORIA_LICENSE_KEY = "AVf/E1n/////AAABmdmpK/BSpk2CsqjNWH2CbgJ3vzF4yBNs8E23FuAgf6bxJDLaISLFPXcVK2zFti6+PvQexl9t9tSP87VXP8rCgkgVzsMEfKLrU1/Lw37iyCp0ItD+DgXoRE0vEIEML77Zpl5Y3FifVaR5iZ4iVrpQ1T1tX2vIBndVAZmLxaTNZkcgDxwl/f5lxdJZ0ukhi2SRB8xc2MAMzJN4Sh0jUDGzncgajNXg6qJqwLGdEDrogl3lKc8/ddVZk4ELZ/5Ws+VDAM8lvJHWMFzc8sALnJtQfGKA4cIxfy25hTFwIu6KgjVypQgQKj2TgEyBKPwHdDdXuPm8M4Da1a3T7h/NTDXrmxi4YMz0wiZZ0ft4+4BiL3Az";
-
+    public static final String VUFORIA_LICENSE_KEY = "AQe+9fb/////AAABmROBsZ/F0UMyud7D/EVc5vsgUyoOerSwc/ezXcf5K5BhgPP734+wZNvMD5dLeQrmgUt4Mb74CpYc2RcEbZSTiFgoShurU9gGxvfsb29fLq0rCEd2YKGjaO3qqyF0VxTwPXzLTJoWTV5s4XqleSO7dNajCel9TVI7EoxU8dE0w8pHK9r7inc94Xvnpf/GDanpwqf/0Z7gu0qTutmWryJfj5p9I4BhvWmgNUGtz0cZGUXl9JzSk7zHdCQk7US9f4A5/SK0tC/1spxAqtYyTgbQY0kupMdmzW/zsusE20UVt6hf625rOzmkNomsHdApnXeN2YjhatIIHdM4QNs1yzqUZBFfBGk59Q5KGvff1QLEgMON";
 
 
     @Override
@@ -106,10 +111,9 @@ public class AutonomousRR extends LinearOpMode
         FtcDashboard dashboard;
         dashboard = FtcDashboard.getInstance();
         dashboard.setTelemetryTransmissionInterval(25);
-        VuforiaLocalizer.Parameters vuforiaParams = new VuforiaLocalizer.Parameters(R.id.cameraMonitorViewId);
-        VuforiaLocalizer vuforia = ClassFactory.getInstance().createVuforia(vuforiaParams);
-        vuforiaParams.vuforiaLicenseKey = VUFORIA_LICENSE_KEY;
-
+        //VuforiaLocalizer.Parameters vuforiaParams = new VuforiaLocalizer.Parameters(R.id.cameraMonitorViewId);
+        //vuforiaParams.vuforiaLicenseKey = VUFORIA_LICENSE_KEY;
+        //VuforiaLocalizer vuforia = ClassFactory.getInstance().createVuforia(vuforiaParams);
 
 
         // Detect ring for autonomous
@@ -122,11 +126,15 @@ public class AutonomousRR extends LinearOpMode
         buildRing1Trajectory();
         buildRing4Trajectory();
 
+        // Raise wobble goal and close wobble gate first
+        ninjabot.wobbleGate.close();
+
         // Detect rings - must get 3 seconds of same ring
         this.ninjaSleep(1000);
         this.numRings = AutonomousRR.SkyStoneDeterminationPipeline.position;
         while ((numRings != lastRing) || (detectCount < 3) ||
-               (numRings == SkyStoneDeterminationPipeline.RingPosition.UNKNOWN))
+               (numRings == AutonomousRR.SkyStoneDeterminationPipeline.RingPosition.UNKNOWN) ||
+                (pipeline.getAnalysis() == 0))
         {
             switch (numRings) {
                 case NONE:
@@ -145,36 +153,36 @@ public class AutonomousRR extends LinearOpMode
                     telemetry.addData("Rings Detected: ", "UNKNOWN");
                     break;
             }
-            if ((numRings == lastRing) && (numRings != SkyStoneDeterminationPipeline.RingPosition.UNKNOWN))
+
+            if ((this.numRings != AutonomousRR.SkyStoneDeterminationPipeline.RingPosition.UNKNOWN) &&
+                (this.numRings == lastRing) &&
+                (this.numRings == AutonomousRR.SkyStoneDeterminationPipeline.position) &&
+                (AutonomousRR.SkyStoneDeterminationPipeline.position != AutonomousRR.SkyStoneDeterminationPipeline.RingPosition.UNKNOWN) &&
+                (pipeline.getAnalysis() != 0))
             {
                 detectCount++;
             }
             else
             {
-                lastRing = numRings;
+                lastRing = this.numRings;
                 this.numRings = AutonomousRR.SkyStoneDeterminationPipeline.position;
                 detectCount = 0;
             }
 
             telemetry.addData("Detect Count: ", detectCount);
             telemetry.addData("Analysis: ", pipeline.getAnalysis());
-            telemetry.addData("Rings: ", Autonomous.SkystoneDeterminationPipeline.position);
+            telemetry.addData("Rings: ", AutonomousRR.SkyStoneDeterminationPipeline.position);
             telemetry.update();
             this.ninjaSleep(1000);
+            this.ninjabot.update();
         }
-        dashboard.startCameraStream(vuforia, 45);
-
+        dashboard.startCameraStream(webcam, 45);
 
         // Wait for start to be pressed
         waitForStart();
-        while(opModeIsActive())
-        {
 
-        }
         if (isStopRequested()) return;
 
-        // Close wobble gate first
-        ninjabot.wobbleGate.close();
 
         switch (this.numRings)
         {
@@ -190,6 +198,14 @@ public class AutonomousRR extends LinearOpMode
                 runRing4Program();
             break;
         }
+
+        // Store current pose
+        PoseStorage.currentPose = drive.getPoseEstimate();
+
+        this.telemetry.addData("x", PoseStorage.currentPose.getX());
+        this.telemetry.addData("y", PoseStorage.currentPose.getY());
+        this.telemetry.addData("heading", PoseStorage.currentPose.getHeading());
+        this.telemetry.update();
     }
 
     // Ring 0 program
@@ -198,65 +214,46 @@ public class AutonomousRR extends LinearOpMode
         // Traverse to shoot 3 rings in robot
         drive.followTrajectory(ring0Shoot);
 
-        // Make sure wobble motor is stopped
-        ninjabot.wobbleMotor.stop();
-
         // Shoot the 3 rings to high tower goal
+        this.ninjaSleep(1000);
         this.flickRing(4);
 
         // Traverse to drop off the wobble goal
         drive.followTrajectory(ring0DropWobble);
 
-        // Open the wobble gate
-        ninjabot.wobbleGate.open();
+        // Drop the wobble motor and wait for it to go idle
+        dropWobble();
 
-        // Wait for gate to open
-        while (!ninjabot.wobbleGate.isOpen()) {
-            ninjabot.wobbleGate.update();
-        }
+        // Wait for wobble gate to open
+        openWobbleGate();
 
         // Raise the wobble motor
         ninjabot.wobbleMotor.raise();
 
-        // Wait for motor to go up
-        this.ninjaSleep(100);
+        // Drive towards the wobble goal
+        drive.followTrajectory(ring0Drive2PickupWobble);
 
-        // Drive to pick up wobble goal
+        // Drop down the wobble goal
+        dropWobble();
+
+        // Open the wobble gate
+        openWobbleGate();
+
+        // Drive to the wobble goal itself
         drive.followTrajectory(ring0PickupWobble);
 
-        // Drop down wobble goal
-        ninjabot.wobbleMotor.down();
+        // Close wobble gate
+        closeWobblegate();
 
-        // Wait for the wobble motor to close
-        this.ninjaSleep(400);
-        ninjabot.wobbleMotor.stop();
-
-        // Pick up wobble goal
-        ninjabot.wobbleGate.close();
-
-        // Wait for the wobble gate to close
-        // TODO: can have a autofunction that does a wobblegate.open/close followed by isOpen/Closed
-        while (!ninjabot.wobbleGate.isClosed()) {
-            ninjabot.wobbleGate.update();
-        }
-
-        // Drive to drop off wobble goal in square
-        // TODO: Could also raise the wobble goal if its dragging
+        // Drive to drop off wobble goal in square - raise the wobble goal
+        raiseWobble();
         drive.followTrajectory(ring0DropWobble2);
 
-        // Open wobble gate
-        ninjabot.wobbleGate.open();
+        // Drop the wobble goal on the square
+        dropWobble();
 
-        // Wait for gate to open
-        while (!ninjabot.wobbleGate.isOpen()) {
-            ninjabot.wobbleGate.update();
-        }
-
-        // Raise wobble mote
-        ninjabot.wobbleMotor.raise();
-
-        // Wait for motor to go up
-        this.ninjaSleep(100);
+        // Open the wobble gate
+        openWobbleGate();
 
         // Drive to center line
         drive.followTrajectory(ring0Term);
@@ -267,11 +264,16 @@ public class AutonomousRR extends LinearOpMode
         // Traverse to just before the ring
         drive.followTrajectory(ring1D2S);
 
-        // Make sure wobble motor is stopped
-        ninjabot.wobbleMotor.stop();
-
         // Shoot the 3 rings to high tower goal
+        this.ninjaSleep(1000);
         this.flickRing(4);
+
+        // Drop the elevator
+        this.ninjabot.elevator.drop();
+        while (this.ninjabot.elevator.eleState != Elevator.State.STATE_ELEVATOR_BOTTOM)
+        {
+            this.ninjabot.update();
+        }
 
         // Start the intake
         ninjabot.intake.start();
@@ -279,8 +281,8 @@ public class AutonomousRR extends LinearOpMode
         // Traverse picking up rings - shooter is still on
         drive.followTrajectory(ring1Intake);
 
-        // Wait for 1.2 second for rings to complete intake
-        this.ninjaSleep(1200);
+        // Wait for 1000 msec for rings to complete intake
+        this.ninjaSleep(1000);
 
         // Turn off intake and start shooting
         ninjabot.intake.stop();
@@ -291,72 +293,42 @@ public class AutonomousRR extends LinearOpMode
         // Traverse to drop the wobble goal
         drive.followTrajectory(ring1DropWobbleWPt1);
 
-        // Open the wobble gate
-        ninjabot.wobbleGate.open();
+        // Drop the wobble motor
+        dropWobble();
 
-        // Wait for gate to open
-        while (!ninjabot.wobbleGate.isOpen())
-        {
-            ninjabot.wobbleGate.update();
-        }
+        // Open the wobble gate
+        openWobbleGate();
 
         // Raise the wobble motor
         ninjabot.wobbleMotor.raise();
 
-        // Wait 50 msec before moving
-        this.ninjaSleep(50);
+        // Drive towards the wobble goal
+        drive.followTrajectory(ring1Drive2PickupWobble);
+
+        // Drop the wobble motor
+        dropWobble();
+
+        // Open the wobble gate
+        openWobbleGate();
 
         // Drive to pickup second wobble goal
         drive.followTrajectory(ring1PickupWobble);
 
-        // Drop the wobble gate
-        ninjabot.wobbleMotor.stop();
-        ninjabot.wobbleMotor.down();
+        // Close the wobble gate
+        closeWobblegate();
 
-        // Wait for 400 msec
-        this.ninjaSleep(800);
-
-        // Stop wobblemotor
-        ninjabot.wobbleMotor.stop();
-
-        this.ninjaSleep(100);
-
-        // Pick up wobble goal
-        ninjabot.wobbleGate.close();
-
-        // Wait for gate to close
-        while (!ninjabot.wobbleGate.isClosed())
-        {
-            ninjabot.wobbleGate.update();
-        }
-
-        // Traverse to drop off wobble goal
+        // Drive to drop off wobble goal in square - raise the wobble goal
+        raiseWobble();
         drive.followTrajectory(ring1DropWobble2);
 
-        // Drop the wobble motor and open gate
-        ninjabot.wobbleMotor.down();
+        // Drop the wobble motor
+        dropWobble();;
 
-        // Stop the wobble motor and open gate
-        this.ninjaSleep(350);
-        ninjabot.wobbleMotor.stop();
+        // open the wobble gate
+        openWobbleGate();
 
-        // Open the wobble gate
-        ninjabot.wobbleGate.open();
-
-        // Wait for gate to open
-        while (!ninjabot.wobbleGate.isOpen())
-        {
-            ninjabot.wobbleGate.update();
-        }
-
-        // Raise wobble goal motor
-        ninjabot.wobbleMotor.raise();
-
-        // Traverse to center line
+        // Traverse to right two inche - we are on center line
         drive.followTrajectory(ring1Term);
-
-        // Stop wobblemotor
-        ninjabot.wobbleMotor.stop();
     }
 
     public void runRing4Program()
@@ -364,47 +336,47 @@ public class AutonomousRR extends LinearOpMode
         // Traverse to just before the ring
         drive.followTrajectory(ring4D2S);
 
-        // Make sure wobble motor is stopped
-        ninjabot.wobbleMotor.stop();
-
         // Shoot the 3 rings to high tower goal
+        this.ninjaSleep(1000);
         this.flickRing(4);
-
-        // Start the intake
-        ninjabot.intake.start();
-
-        // Move forward to collect 3 rings
-        drive.followTrajectory(ring4Intake3);
-
-        // Wait for 1 second to collect rings
-        this.ninjaSleep(1200);
-
-        // Flick the collected rings
-        this.flickRing(3);
-
-        // Move forward to collect 1 ring
-        drive.followTrajectory(ring4Intake1);
-
-        // Wait to intake ring
-        this.ninjaSleep(700);
-
-        // Flick ring (2 times)
-        this.flickRing(2);
+        this.ninjabot.shooter.stop();
 
         // Drop off the wobble goal
         drive.followTrajectory(ring4DropWobble);
 
-        // Open the wobble gate
-        ninjabot.wobbleGate.open();
+        // Drop the wobble goal
+        dropWobble();
 
         // Wait for wobble gate to open
-        while (!ninjabot.wobbleGate.isOpen())
-        {
-            ninjabot.wobbleGate.update();
-        }
+        openWobbleGate();
 
         // Raise the wobble motor
         ninjabot.wobbleMotor.raise();
+
+        // Drive towards the second wobble goal
+        drive.followTrajectory(ring4Drive2PickupWobble);
+
+        // Drop down the wobble goal
+        dropWobble();
+
+        // Open the wobble gate
+        openWobbleGate();
+
+        // Drive to the wobble goal itself
+        drive.followTrajectory(ring4PickupWobble);
+
+        // Close wobble gate
+        closeWobblegate();
+
+        // Drive to drop off the wobble goal in square
+        raiseWobble();
+        drive.followTrajectory(ring4DropWobble2);
+
+        // Drop the wobble goal into the square
+        dropWobble();
+
+        // OPen the wobble gate
+        openWobbleGate();
 
         // Go to center line
         drive.followTrajectory(ring4Term);
@@ -422,7 +394,7 @@ public class AutonomousRR extends LinearOpMode
 
         while (!ninjabot.flicker.isStopped())
         {
-            ninjabot.flicker.update();
+            this.ninjabot.update();
         }
     }
 
@@ -431,61 +403,61 @@ public class AutonomousRR extends LinearOpMode
         // ----------------> Ring 0 Trajectories
         // Trajectory to drive to shoot
         ring0Shoot = drive.trajectoryBuilder(this.startPose)
-                .splineTo(new Vector2d(0, 30), 0.017453292519943295)
-                .addTemporalMarker(1.75, () ->
+                .splineTo(new Vector2d(-5, 32),  0.06981317007977318)
+                .addTemporalMarker(0.25, () ->
                 {
                     // Wait for wobble gate to close. Should be closed by now
-                    while (!ninjabot.wobbleGate.isClosed()) {
-                        ninjabot.wobbleGate.update();
+                   while (!ninjabot.wobbleGate.isClosed())
+                   {
+                       ninjabot.wobbleGate.update();
                     }
 
                     // Turn on the shooter before getting ready to flick
                     ninjabot.shooter.start(AutonomousRR.ring0shooterPower);
-                    ninjabot.wobbleMotor.down();
-                })
-                .addTemporalMarker(2.2, ()->
-                {   // Turn off wobble motor
-                    ninjabot.wobbleMotor.stop();
                 })
                 .build();
 
         // Trajectory to drop off wobble goal
         ring0DropWobble = drive.trajectoryBuilder(ring0Shoot.end())
-                .splineTo(new Vector2d(10, 50), 3.3161255787892263)
+                .splineTo(new Vector2d(16, 37), 4.71238898038469)
                 .addTemporalMarker(1, () ->
                 {
                     // Turn off the shooter
                     ninjabot.shooter.stop();
+                    // Elevator drop will trigger here
+                    ninjabot.update();
+                })
+                .build();
+
+        // Trajectory to drive to pick up wobble goal 2
+        ring0Drive2PickupWobble = drive.trajectoryBuilder(ring0DropWobble.end())
+                .splineTo(new Vector2d(-8,  16), 0)
+                .addTemporalMarker(1, () ->
+                {
+                    // Stop the wobble motor as it was up
+                    ninjabot.wobbleMotor.stop();
                 })
                 .build();
 
         // Trajectory to pick up wobble goal 2
-        ring0PickupWobble = drive.trajectoryBuilder(ring0DropWobble.end())
-                .splineTo(new Vector2d(-45, 12.5), 3.3161255787892263)
-                .addTemporalMarker(1, () ->
-                {
-                    // Stop the wobble motor as it was up
-                    ninjabot.wobbleMotor.stop();
-                })
+        ring0PickupWobble = drive.trajectoryBuilder(ring0Drive2PickupWobble.end())
+                .back(21, new MinVelocityConstraint(
+                                Arrays.asList(
+                                        new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
+                                        new MecanumVelocityConstraint(20, DriveConstants.TRACK_WIDTH)
+                                )
+                        ),
+                        new ProfileAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
+
 
         // Trajectory to drop off wobble goal 2
         ring0DropWobble2 = drive.trajectoryBuilder(ring0PickupWobble.end())
-                .splineTo(new Vector2d(15, 48), 3.3161255787892263)
-                .addTemporalMarker(1, () ->
-                {
-                    // Ensure wobble gate is closed
-                    ninjabot.wobbleGate.update();
-                })
+                .splineTo(new Vector2d(9, 29), 4.71238898038469)
                 .build();
 
         ring0Term = drive.trajectoryBuilder(ring0DropWobble2.end())
-                .splineTo(new Vector2d(10, 20), 0)
-                .addTemporalMarker(1, () ->
-                {
-                    // Stop the wobble motor as it was up
-                    ninjabot.wobbleMotor.stop();
-                })
+                .splineToConstantHeading(new Vector2d(9, 25), 0)
                 .build();
 
     }
@@ -494,27 +466,17 @@ public class AutonomousRR extends LinearOpMode
     {
         // -------------------------> Ring 1 trajectories
         ring1D2S = drive.trajectoryBuilder(this.startPose)
-                .splineTo(new Vector2d(-40, 37), -0.07592182246175333)
-                .addTemporalMarker(1.45, () ->
+                .splineTo(new Vector2d(-40, 36), 0.008726646259971648)
+                .addTemporalMarker(0.15, () ->
                 {
-                    // Wait for wobble gate to close. Should be closed by now
-                    while (!ninjabot.wobbleGate.isClosed()) {
-                        ninjabot.wobbleGate.update();
-                    }
-
                     // Turn on the shooter before getting ready to flick
                     ninjabot.shooter.start(AutonomousRR.ring1shooterPower);
-                    ninjabot.wobbleMotor.down();
-                })
-                .addTemporalMarker(1.9, ()->
-                {   // Turn off wobble motor
-                    ninjabot.wobbleMotor.stop();
                 })
                 .build();
 
         // Intake rings so go at a slower speed
         ring1Intake = drive.trajectoryBuilder(ring1D2S.end())
-                .forward(16, new MinVelocityConstraint(
+                .forward(26, new MinVelocityConstraint(
                                 Arrays.asList(
                                         new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
                                         new MecanumVelocityConstraint(20, DriveConstants.TRACK_WIDTH)
@@ -525,27 +487,38 @@ public class AutonomousRR extends LinearOpMode
 
         // Drop off wobble goal in square
         ring1DropWobbleWPt1 = drive.trajectoryBuilder(ring1Intake.end())
-                .splineTo(new Vector2d(47, 42),  0)
+                .splineTo(new Vector2d(26, 45),  3.141592653589793)
                 .build();
 
-        // Pick up wobble goal 2
-        ring1PickupWobble = drive.trajectoryBuilder(ring1DropWobbleWPt1.end(), true)
-                .splineTo(new Vector2d(-51, 37.75), 3.14159265358979)
-                .build();
-
-        // Drop off wobble goal 2
-        ring1DropWobble2 = drive.trajectoryBuilder((ring1PickupWobble.end()))
-                .splineTo(new Vector2d(44, 54), 0)
+        // Drive to pickup wobble goal 2
+        ring1Drive2PickupWobble = drive.trajectoryBuilder(ring1DropWobbleWPt1.end())
+                .splineTo(new Vector2d(-8, 14.25), 0)
                 .addTemporalMarker(0.5, () ->
                 {
-                    // TUrn off wobble motor
+                    // Turn off wobble motor
                     ninjabot.wobbleMotor.stop();
                 })
                 .build();
 
+        // Pick up wobble goal 2
+        ring1PickupWobble = drive.trajectoryBuilder(ring1Drive2PickupWobble.end())
+                .back(29, new MinVelocityConstraint(
+                                Arrays.asList(
+                                        new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
+                                        new MecanumVelocityConstraint(20, DriveConstants.TRACK_WIDTH)
+                                )
+                        ),
+                        new ProfileAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .build();
+
+        // Drop off wobble goal 2
+        ring1DropWobble2 = drive.trajectoryBuilder((ring1PickupWobble.end()))
+                .splineTo(new Vector2d(24, 39), 3.141592653589793)
+                .build();
+
         // Drive to center line
         ring1Term = drive.trajectoryBuilder(ring1DropWobble2.end(), true)
-                .splineTo(new Vector2d(10, 57), 3.141592653589793)
+                .splineToConstantHeading(new Vector2d(12, 39), 0)
                 .build();
     }
 
@@ -554,66 +527,98 @@ public class AutonomousRR extends LinearOpMode
         // -------------------------> Ring 4 trajectories
         // Same as ring1D2S
         ring4D2S = drive.trajectoryBuilder(this.startPose)
-                .splineTo(new Vector2d(-40, 37),  -0.061086523819801536)
+                .splineTo(new Vector2d(0, 50),  -0.17453292519943295)
                 .addTemporalMarker(1.45, () ->
                 {
-                    // Wait for wobble gate to close. Should be closed by now
-                    while (!ninjabot.wobbleGate.isClosed()) {
-                        ninjabot.wobbleGate.update();
-                    }
-
                     // Turn on the shooter before getting ready to flick
                     ninjabot.shooter.start(AutonomousRR.ring4shooterPower);
-                    ninjabot.wobbleMotor.down();
-                    ninjabot.intakeGate.lower();
                 })
-                .addTemporalMarker(1.9, ()->
-                {   // Turn off wobble motor
-                    ninjabot.wobbleMotor.stop();
-                })
-                .build();
-
-        // Intake 3 rings so go at a slower speed
-        ring4Intake3 = drive.trajectoryBuilder(ring4D2S.end())
-                .forward(16, new MinVelocityConstraint(
-                                Arrays.asList(
-                                        new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
-                                        new MecanumVelocityConstraint(3.5, DriveConstants.TRACK_WIDTH)
-                                )
-                        ),
-                        new ProfileAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .addTemporalMarker(0.5, () ->
-                {
-                    // Reduce power before shooting
-                    ninjabot.shooter.start(AutonomousRR.ring4shooterPowerSecondary);
-                })
-                .build();
-
-        // Intake 1 ring so can go faster
-        ring4Intake1 = drive.trajectoryBuilder(ring4Intake3.end())
-                .forward(14, new MinVelocityConstraint(
-                                Arrays.asList(
-                                        new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
-                                        new MecanumVelocityConstraint(30, DriveConstants.TRACK_WIDTH)
-                                )
-                        ),
-                        new ProfileAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
         // Drop off wobble goal
-        ring4DropWobble = drive.trajectoryBuilder(ring4Intake1.end())
-                .splineTo(new Vector2d(50, 55), 1.5707963267948966)
+        ring4DropWobble = drive.trajectoryBuilder(ring4D2S.end())
+                .splineTo(new Vector2d(54, 45), -2.0943951023931953)
                 .build();
 
-        // Traverse to center line
-        ring4Term = drive.trajectoryBuilder(ring4DropWobble.end())
-                .splineTo(new Vector2d(10, 53), 1.5707963267948966)
-                .addTemporalMarker(1, () ->
+        // Drive to pickup wobble goal
+        ring4Drive2PickupWobble = drive.trajectoryBuilder(ring4DropWobble.end())
+                .splineTo(new Vector2d(-24, 7), -0.3490658503988659)
+                .addTemporalMarker(0.6, () ->
                 {
-                    // shudown wobblemotor
+                    // Turn off wobble motor
                     ninjabot.wobbleMotor.stop();
                 })
                 .build();
+
+        // Pickup wobble goal 2
+        ring4PickupWobble = drive.trajectoryBuilder(ring4Drive2PickupWobble.end())
+                .back(15.5, new MinVelocityConstraint(
+                                Arrays.asList(
+                                        new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
+                                        new MecanumVelocityConstraint(20, DriveConstants.TRACK_WIDTH)
+                                )
+                        ),
+                        new ProfileAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .build();
+
+        // Drop off wobble goal 2
+        ring4DropWobble2 = drive.trajectoryBuilder((ring4PickupWobble.end()))
+                .splineTo(new Vector2d(45, 40), -2.0943951023931953)
+                .build();
+
+        // Traverse to center line
+        ring4Term = drive.trajectoryBuilder(ring4DropWobble2.end())
+                .splineTo(new Vector2d(12, 24), -2.0943951023931953)
+                .build();
+    }
+
+    private void dropWobble()
+    {
+        // Drop down wobble goal
+        ninjabot.wobbleMotor.down();
+
+        // Wait for the wobble motor to close
+        while (ninjabot.wobbleMotor.state != WobbleMotor.State.STATE_WOBBLE_IDLE)
+        {
+            ninjabot.update();
+        }
+
+        this.ninjaSleep(300);
+    }
+
+    private void raiseWobble()
+    {
+        // Drop down wobble goal
+        ninjabot.wobbleMotor.raise();
+
+        // Wait for the wobble motor to close
+        while (ninjabot.wobbleMotor.state != WobbleMotor.State.STATE_WOBBLE_IDLE)
+        {
+            ninjabot.update();
+        }
+    }
+
+    private void closeWobblegate()
+    {
+        // Pick up wobble goal
+        ninjabot.wobbleGate.close();
+
+        // Wait for the wobble gate to close
+        while (!ninjabot.wobbleGate.isClosed())
+        {
+            ninjabot.update();
+        }
+    }
+
+    private void openWobbleGate()
+    {
+        ninjabot.wobbleGate.open();
+
+        // Wait for gate to open
+        while (!ninjabot.wobbleGate.isOpen())
+        {
+            ninjabot.update();
+        }
     }
 
     private AutonomousRR.SkyStoneDeterminationPipeline.RingPosition detect() {
@@ -662,13 +667,13 @@ public class AutonomousRR extends LinearOpMode
         /*
          * The core values which define the location and size of the sample regions
          */
-        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(130, 40);
+        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(115, 75);
         //static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(181, 98);
 
         static final int REGION_WIDTH = 50;
         static final int REGION_HEIGHT = 50;
 
-        final int FOUR_RING_THRESHOLD = 133;
+        final int FOUR_RING_THRESHOLD = 138;
         final int ONE_RING_THRESHOLD = 129;
 
         Point region1_pointA = new Point(

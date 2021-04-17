@@ -307,7 +307,7 @@ public class Teleop extends OpMode {
         switch (powerState)
         {
             case STATE_POWER_0:
-                ninjabot.shooter.setPower(Teleop.powerShotPower + 0.04);
+                ninjabot.shooter.start(Teleop.powerShotPower + 0.04);
                 powerState = PowerState.STATE_POWER_0_5;
                 this.timer.reset();
             break;
@@ -324,7 +324,7 @@ public class Teleop extends OpMode {
             case STATE_POWER_1:
                 if (ninjabot.flicker.isStopped())
                 {
-                    ninjabot.shooter.setPower(Teleop.powerShotPower + 0.04);
+                    ninjabot.shooter.start(Teleop.powerShotPower + 0.04);
                    // ninjabot.driveTrain.clockwiseTurn(230, 1);
                     ninjabot.driveTrain.strafeNE(2000, 1);
                     powerState = PowerState.STATE_POWER_2;
@@ -342,7 +342,7 @@ public class Teleop extends OpMode {
             case STATE_POWER_3:
                 if (ninjabot.flicker.isStopped())
                 {
-                    ninjabot.shooter.setPower(Teleop.powerShotPower + 0.03);
+                    ninjabot.shooter.start(Teleop.powerShotPower + 0.03);
                     //ninjabot.driveTrain.clockwiseTurn(75, 1);
                     ninjabot.driveTrain.strafeNE(1700, 1);
                     powerState = PowerState.STATE_POWER_4;

@@ -10,6 +10,7 @@ public class Intake {
 
     private final DcMotor intake;
     private final Telemetry telemetry;
+    private final double intakePower = 1.0;
 
     public Intake(HardwareMap hardwareMap, Telemetry tele)
     {
@@ -21,7 +22,7 @@ public class Intake {
 
     public void start()
     {
-        this.intake.setPower(0.91);
+        this.intake.setPower(intakePower);
     }
 
     public void stop()

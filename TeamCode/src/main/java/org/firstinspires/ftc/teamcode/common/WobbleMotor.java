@@ -32,14 +32,14 @@ public class WobbleMotor {
     private final ElapsedTime timer;
     private double currentPower;
     private final Telemetry telemetry;
-    private final int UpTime = 500;
-    private final int DownTime = 300;
+    private final int UpTime = 400;
+    private final int DownTime = 400;
 
     public WobbleMotor(HardwareMap hardwareMap, Telemetry tele)
     {
         this.wobble = hardwareMap.get(DcMotor.class, "wobble");
-        this.wobble.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        this.wobble.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+       // this.wobble.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+       // this.wobble.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         this.curPos = wobble.getCurrentPosition();
         this.state = State.STATE_WOBBLE_IDLE;
         this.telemetry = tele;
@@ -61,6 +61,8 @@ public class WobbleMotor {
         this.setPower(0);
         this.state = State.STATE_WOBBLE_IDLE;
     }
+
+
 
     public void down()
     {
@@ -85,20 +87,19 @@ public class WobbleMotor {
 
         switch (this.state){
             case STATE_WOBBLE_GOING_UP:
-                if (this.timer.milliseconds() > UpTime){
-                    stop();                }
+                if (this.timer.milliseconds() > UpTime)
+                {
+                    stop();
+                }
                 break;
 
             case STATE_WOBBLE_GOING_DOWN:
                 if (this.timer.milliseconds() > DownTime){
                     stop();
-
                 }
                 break;
         }
-        this.telemetry.addData("Timer: ", timer.milliseconds());
-        this.telemetry.update();
-
+        this.telemetry.addData("Wobble Motor: ", "State: " + this.state + "Timer " + timer.milliseconds());
 
         //Old Code
 

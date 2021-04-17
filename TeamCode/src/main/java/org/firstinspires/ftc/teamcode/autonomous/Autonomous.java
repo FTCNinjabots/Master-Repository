@@ -330,7 +330,7 @@ public class Autonomous extends OpMode {
                             this.newState(State.STATE_RING4_COLLECT3);
                             this.ring4collect3 = true;
                             // Turn down shooter power
-                            ninjabot.shooter.setPower(this.ring4shooterPowerSecondary);
+                            ninjabot.shooter.start(this.ring4shooterPowerSecondary);
 
                             // Start the intake
                             ninjabot.intake.start();
@@ -341,7 +341,7 @@ public class Autonomous extends OpMode {
                             this.newState(State.STATE_RING4_COLLECT4);
                             this.ring4collect4 = true;
                             // Turn down shooter power for 4th ring
-                            ninjabot.shooter.setPower(this.ring4shooterPowerTertiary);
+                            ninjabot.shooter.start(this.ring4shooterPowerTertiary);
                         }
                         else
                         {
@@ -363,7 +363,7 @@ public class Autonomous extends OpMode {
                             this.loadPath(this.ring1CollectPath);
                             this.newState(State.STATE_RING1_COLLECT);
                             ninjabot.intake.start();
-                            ninjabot.shooter.setPower(Autonomous.ring4shooterPowerInitial - 0.01);
+                            ninjabot.shooter.start(Autonomous.ring4shooterPowerInitial - 0.01);
                             this.ring1collect = true;
                         }
                         else
@@ -718,7 +718,7 @@ public class Autonomous extends OpMode {
         // Lower wobble goal
         ninjabot.wobbleMotor.down();
         // Start shooter
-        ninjabot.shooter.setPower(power);
+        ninjabot.shooter.start(power);
         // Move flicker back
         ninjabot.flicker.stop();
 
@@ -772,7 +772,7 @@ public class Autonomous extends OpMode {
         /*
          * The core values which define the location and size of the sample regions
          */
-        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(130, 40);
+        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(115, 75);
         //static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(181, 98);
 
         static final int REGION_WIDTH = 50;
